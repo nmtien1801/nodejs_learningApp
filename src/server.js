@@ -7,6 +7,10 @@ const app = express();
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
+//-------------------------------------------------------------------------------------
+// share localHost BE & FE
+configCORS(app);
+
 // đây là midleware(chạy từ trên xuống và xoay hoài nếu không có next)
 // nếu đúng authenticate thì trang web hiện (bởi next) thường đặt ở giữa
 // Cannot get/(link...) -> 404 not found
