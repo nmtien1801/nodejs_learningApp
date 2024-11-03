@@ -1,0 +1,30 @@
+npm init (create package.JSON)
+npm outdated
+
+npm i --save-exact express@4.17.2 dotenv@10.0.0 body-parser@1.19.1 ejs@3.1.6
+
+npm i --save-exact @babel/core@7.15.4 @babel/node@7.15.4 @babel/preset-env@7.15.4 nodemon@2.0.15
+
+npm install --save-exact mysql2@2.3.3 
+
+npm install --save-exact bcryptjs@2.4.3
+
+npm install --save-exact bluebird@3.7.2 (để chạy connect DB ngắn gọn)
+
+npm install --save-exact sequelize@6.13.0 sequelize-cli@6.3.0
+
+npm install --save-exact jsonwebtoken@8.5.1 cookie-parser@1.4.6
+
+npm install --save-exact lodash@4.17.21
+
+npm install --save-exact pg@8.7.1 pg-hstore@2.3.4
+
+npm install --save-exact nodemailer@6.9.14   (gửi về email)
+npm install --save-exact uuid@8.3.2 (tạo token)
+ 
+npm install --save-exact pg@8.12.0 pg-hstore@2.3.4 (dùng môi trường postgress -> server)
+
+Logout - roles
+
+lOGIN(FE) -> BE -> token(BE) -> cookie(BE) -> FE -> session_rotes(FE*) -> cookie_middleware(BE) -> context_redux(FE)  
+		
