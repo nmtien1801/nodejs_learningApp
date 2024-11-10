@@ -8,15 +8,37 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      firstName: {
-        type: Sequelize.STRING
-      },
-      lastName: {
+      userName: {
         type: Sequelize.STRING
       },
       email: {
         type: Sequelize.STRING
       },
+      password: {
+        type: Sequelize.STRING
+      },
+      image: {
+        type: Sequelize.BLOB("long")
+      },
+      description: {
+        type: Sequelize.STRING
+      },
+      phone:{
+        type: Sequelize.STRING
+      },
+      address:{
+        type: Sequelize.STRING
+      },
+      title:{
+        type: Sequelize.STRING    // tiểu sử của người dùng
+      },
+      roleID: {
+        type: Sequelize.INTEGER
+      },
+      projectID: {
+        type: Sequelize.INTEGER
+      },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -31,3 +53,5 @@ module.exports = {
     await queryInterface.dropTable('Users');
   }
 };
+
+// npx sequelize-cli db:migrate --to migrate_users.js  
