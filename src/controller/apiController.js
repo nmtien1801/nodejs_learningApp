@@ -64,24 +64,24 @@ const handleLogin = async (req, res) => {
   }
 };
 
-// const handleLogout = async (req, res) => {
-//   try {
-//     // search: express delete cookie
-//     res.clearCookie("jwt");
-//     return res.status(200).json({
-//       EM: "clear cookies - logout",
-//       EC: 0,
-//       DT: "",
-//     });
-//   } catch (error) {
-//     console.log("check control login", req.body);
-//     return res.status(500).json({
-//       EM: "error from sever", //error message
-//       EC: 2, //error code
-//       DT: "", // data
-//     });
-//   }
-// };
+const handleLogout = async (req, res) => {
+  try {
+    // search: express delete cookie
+    // res.clearCookie("jwt");
+    return res.status(200).json({
+      EM: "clear cookies - logout",
+      EC: 0,
+      DT: "",
+    });
+  } catch (error) {
+    console.log("check control login: ", req.body);
+    return res.status(500).json({
+      EM: "error from sever", //error message
+      EC: 2, //error code
+      DT: "", // data
+    });
+  }
+};
 
 // const getRefreshToken = (req) => {
 //   let cookies = req.cookies;
@@ -100,5 +100,5 @@ const handleLogin = async (req, res) => {
 module.exports = {
 //   handleRegister,
   handleLogin,
-//   handleLogout,
+  handleLogout,
 };

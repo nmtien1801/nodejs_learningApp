@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { raw } from "body-parser";
 // import { getGroupWithRoles } from "./jwtService";
 import { Op } from "sequelize";
-// import { createJwt, refreshToken } from "../middleware/jwtAction";
+import { createJwt, refreshToken } from "../middleware/jwtAction";
 import { reject, resolve } from "bluebird";
 require("dotenv").config();
 // SEARCH: sequelize
@@ -91,37 +91,44 @@ const checkPassword = (userPassWord, hashPassWord) => {
 const handleUserLogin = async (rawData) => {
   try {
     let user = await db.User.findOne({
-        where:{
-            email: rawData.email,
-        },
-        raw: true,
+      where: {
+        email: rawData.email,
+      },
+      raw: true,
     });
     if (user) {
-    //   let isCorrectPassword = checkPassword(rawData.password, user.password);
-        let isCorrectPassword = rawData.password === user.password;
-    console.log("user: ", user);
+      //   let isCorrectPassword = checkPassword(rawData.password, user.password);
+      let isCorrectPassword = rawData.password === user.password;
+      console.log("user login: ", user);
       // không bị lỗi
       if (isCorrectPassword === true) {
-        
         let payload = {
           email: user.email,
           userName: user.userName,
-        //   groupWithRole,
-        //   roleID: user.roleID, // chức vụ
-        //   positionID: user.positionID, // vị trí
+          description: user.description,
+          phone: user.phone,
+          address: user.address,
+          title: user.title,
+          //   groupWithRole,
+          //   roleID: user.roleID, // chức vụ
+          //   positionID: user.positionID, // vị trí
         };
-        // let token = createJwt(payload);
-        // let tokenRefresh = refreshToken(payload);
+        let token = createJwt(payload);   // tạo token -> lưu trong localStorage
+        // let tokenRefresh = refreshToken(payload);   
         return {
-          EM: "ok!",
+          EM: "Login successfully",
           EC: 0,
           DT: {
             _id: user.id, // dùng để lấy patient của doctor này
-            // access_token: token,
+            access_token: token,
             // refreshToken: tokenRefresh,
             // groupWithRole: groupWithRole,
             email: user.email,
             userName: user.userName,
+            description: user.description,
+            phone: user.phone,
+            address: user.address,
+            title: user.title,
             // roleID: user.roleID, // chức vụ
             // positionID: user.positionID, // vị trí
           },
@@ -144,7 +151,7 @@ const handleUserLogin = async (rawData) => {
 };
 
 module.exports = {
-//   registerNewUser,
+  //   registerNewUser,
   handleUserLogin,
   hashPassWord,
   checkEmailExists,

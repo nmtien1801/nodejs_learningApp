@@ -18,7 +18,7 @@ const initApiRoutes = (app) => {
   //GET(R), POST (C), PUT (U), DELETE (D)
 //   router.post("/register", apiController.handleRegister);
   router.post("/login", apiController.handleLogin);
-//   router.post("/logout", apiController.handleLogout);
+  router.post("/logout", apiController.handleLogout);
 //   router.get("/account", userController.getUserAccount);
 
   // user router
