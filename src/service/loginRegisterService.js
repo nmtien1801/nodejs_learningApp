@@ -39,6 +39,41 @@ const hashPassWord = (userPassWord) => {
   return bcrypt.hashSync(userPassWord, salt);
 };
 
+const registerNewUser = async (rawUserData) => {
+  try {
+    // check email
+    let isEmailExists = await checkEmailExists(rawUserData.email);
+    if (isEmailExists === true) {
+      return {
+        EM: "the email is already exists",
+        EC: 1,
+        DT: "email",
+      };
+    }
+
+    // hash user password
+    let CheckHashPass = hashPassWord(rawUserData.password);
+    //create new user
+    await db.User.create({
+      email: rawUserData.email,
+      userName: rawUserData.userName,
+      password: CheckHashPass,
+    });
+
+    // không bị lỗi
+    return {
+      EM: "A user is create successfully",
+      EC: 0,
+    };
+  } catch (error) {
+    console.log("check Err create new user Register: ", error);
+    return {
+      EM: "something wrong in service ...",
+      EC: -2,
+    };
+  }
+};
+
 const checkPassword = (userPassWord, hashPassWord) => {
   return bcrypt.compareSync(userPassWord, hashPassWord); // true or false
 };
@@ -102,7 +137,7 @@ const handleUserLogin = async (rawData) => {
 };
 
 module.exports = {
-  //   registerNewUser,
+  registerNewUser,
   handleUserLogin,
   hashPassWord,
   checkEmailExists,
