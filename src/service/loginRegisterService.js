@@ -1,12 +1,10 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
 import { raw } from "body-parser";
-// import { getGroupWithRoles } from "./jwtService";
 import { Op } from "sequelize";
 import { createJwt, refreshToken } from "../middleware/jwtAction";
 import { reject, resolve } from "bluebird";
 require("dotenv").config();
-// SEARCH: sequelize
 
 const checkEmailExists = (userEmail) => {
   return new Promise(async (resolve, reject) => {
@@ -41,49 +39,6 @@ const hashPassWord = (userPassWord) => {
   return bcrypt.hashSync(userPassWord, salt);
 };
 
-// const registerNewUser = async (rawUserData) => {
-//   try {
-//     // check email | phone are exists
-//     let isEmailExists = await checkEmailExists(rawUserData.email);
-//     if (isEmailExists === true) {
-//       return {
-//         EM: "the email is already exists",
-//         EC: 1,
-//         DT: "email",
-//       };
-//     }
-//     let isPhoneExists = await checkPhoneExists(rawUserData.phone);
-//     if (isPhoneExists === true) {
-//       return {
-//         EM: "the phone is already exists",
-//         EC: 1,
-//       };
-//     }
-//     // hash user password
-//     let CheckHashPass = hashPassWord(rawUserData.password);
-//     //create new user
-//     await db.User.create({
-//       email: rawUserData.email,
-//       phone: rawUserData.phone,
-//       userName: rawUserData.userName,
-//       passWord: CheckHashPass,
-//       groupID: 2, // mặc định là Guest
-//       roleID: "R2", // mặc định là bác sĩ
-//     });
-//     // không bị lỗi
-//     return {
-//       EM: "A user is create successfully",
-//       EC: 0,
-//     };
-//   } catch (error) {
-//     console.log("check Err create new user Register: ", error);
-//     return {
-//       EM: "something wrong in service ...",
-//       EC: -2,
-//     };
-//   }
-// };
-
 const checkPassword = (userPassWord, hashPassWord) => {
   return bcrypt.compareSync(userPassWord, hashPassWord); // true or false
 };
@@ -97,7 +52,6 @@ const handleUserLogin = async (rawData) => {
       raw: true,
     });
     if (user) {
-      //   let isCorrectPassword = checkPassword(rawData.password, user.password);
       let isCorrectPassword = rawData.password === user.password;
       console.log("user login: ", user);
       // không bị lỗi
@@ -109,12 +63,9 @@ const handleUserLogin = async (rawData) => {
           phone: user.phone,
           address: user.address,
           title: user.title,
-          //   groupWithRole,
-          //   roleID: user.roleID, // chức vụ
-          //   positionID: user.positionID, // vị trí
         };
-        let token = createJwt(payload);   // tạo token -> lưu trong localStorage
-        // let tokenRefresh = refreshToken(payload);   
+        let token = createJwt(payload); // tạo token -> lưu trong localStorage
+
         return {
           EM: "Login successfully",
           EC: 0,

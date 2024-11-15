@@ -20,10 +20,10 @@ initApiRoutes(app);
 // nếu đúng authenticate thì trang web hiện (bởi next) thường đặt ở giữa
 // Cannot get/(link...) -> 404 not found
 app.use((req, res) => {
-    return res.send("404 not found");
-  });
+  return res.send("404 not found");
+});
 
-  const PORT = process.env.PORT || 8080;
-  app.listen(PORT, () => {
-    console.log(`>>> jwt backend is running on the port ${PORT}`);
-  });
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`>>> jwt backend is running on the port ${PORT}`);
+});
