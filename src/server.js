@@ -1,5 +1,7 @@
 import express from "express";
 require("dotenv").config(); // đọc file .env
+import initApiRoutes from "./router/api";
+import configCORS from "./config/cors";
 
 const app = express();
 
@@ -10,6 +12,9 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 //-------------------------------------------------------------------------------------
 // share localHost BE & FE
 configCORS(app);
+
+// init api router kết nối FE
+initApiRoutes(app);
 
 // đây là midleware(chạy từ trên xuống và xoay hoài nếu không có next)
 // nếu đúng authenticate thì trang web hiện (bởi next) thường đặt ở giữa

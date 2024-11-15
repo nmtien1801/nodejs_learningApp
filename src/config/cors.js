@@ -1,12 +1,13 @@
 require("dotenv").config();
 
-// CORS : chặn api khi host lạ truy cập => phải đùng port (3000) mới lấy đc API
+// CORS : chặn api khi host lạ truy cập => phải đùng port (8081) mới lấy đc API
 const configCORS = (app) => {
   // Add headers before the routes are defined
   app.use(function (req, res, next) {
     // console.log(">>>check bug don't status(FE): ", req.method);
     // Website you wish to allow to connect
     res.setHeader("Access-Control-Allow-Origin", process.env.REACT_URL);
+    
     // Request methods bạn muốn cho phép
     res.setHeader(
       "Access-Control-Allow-Methods",
