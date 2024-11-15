@@ -2,16 +2,30 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Course extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-        Course.belongsToMany(models.Order, {
-            through: "OrderDetail", // map qua orderDetail
-            foreignKey: "courseID", // khoá ngoại nếu không có sẽ tự sinh và lỗi
-          });
+      // Mối quan hệ nhiều-kết-nhiều với Order qua OrderDetail
+      Course.belongsToMany(models.Order, {
+        through: "OrderDetail",
+        foreignKey: "courseID",
+      });
+
+      // Một khóa học có nhiều đánh giá
+      Course.hasMany(models.Review, {
+        foreignKey: "courseID",
+        as: "reviews",
+      });
+
+      // Một khóa học thuộc một danh mục
+      Course.belongsTo(models.Category, {
+        foreignKey: "categoryID",
+        as: "category",
+      });
+
+      // Một khóa học có thể có nhiều bài học (lesson)
+      Course.hasMany(models.Lesson, {
+        foreignKey: "lessonID",
+        as: "lessons",
+      });
     }
   }
   Course.init(

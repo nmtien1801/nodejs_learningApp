@@ -39,16 +39,7 @@ const handleRegister = async (req, res) => {
 const handleLogin = async (req, res) => {
   try {
     let data = await loginRegisterService.handleUserLogin(req.body);
-    // set cookie chứa refreshToken -> còn access_token lưu trong localStorage(FE)
-    // if (data && data.DT.access_token) {
-    //   res.cookie("jwt", data.DT.access_token, {
-    //     httpOnly: true,
-    //     // secure: true,
-    //     maxAge: 60 * 60 * 1000,
-    //     sameSite: "strict", // ngăn chặn(CSOS) request từ các trang web khác
-    //   });
-    // }
-
+    console.log("check control login", req.body);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -66,8 +57,6 @@ const handleLogin = async (req, res) => {
 
 const handleLogout = async (req, res) => {
   try {
-    // search: express delete cookie
-    // res.clearCookie("jwt");
     return res.status(200).json({
       EM: "clear cookies - logout",
       EC: 0,
@@ -82,20 +71,6 @@ const handleLogout = async (req, res) => {
     });
   }
 };
-
-// const getRefreshToken = (req) => {
-//   let cookies = req.cookies;
-//   if (cookies && cookies.refreshToken) {
-//     return cookies.refreshToken;
-//   } else {
-//     return res.status(401).json({
-//       EM: "you are not authenticated", //error message
-//       EC: 2, //error code
-//       DT: "", // data
-//     });
-//     verifyToken(cookies.refreshToken);
-//   }
-// };
 
 module.exports = {
   handleRegister,

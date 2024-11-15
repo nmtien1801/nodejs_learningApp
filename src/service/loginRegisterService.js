@@ -1,12 +1,10 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
 import { raw } from "body-parser";
-// import { getGroupWithRoles } from "./jwtService";
 import { Op } from "sequelize";
 import { createJwt, refreshToken } from "../middleware/jwtAction";
 import { reject, resolve } from "bluebird";
 require("dotenv").config();
-// SEARCH: sequelize
 
 const checkEmailExists = (userEmail) => {
   return new Promise(async (resolve, reject) => {
@@ -52,7 +50,7 @@ const registerNewUser = async (rawUserData) => {
         DT: "email",
       };
     }
-  
+
     // hash user password
     let CheckHashPass = hashPassWord(rawUserData.password);
     //create new user
@@ -61,7 +59,7 @@ const registerNewUser = async (rawUserData) => {
       userName: rawUserData.userName,
       password: CheckHashPass,
     });
-    
+
     // không bị lỗi
     return {
       EM: "A user is create successfully",
@@ -89,7 +87,6 @@ const handleUserLogin = async (rawData) => {
       raw: true,
     });
     if (user) {
-      //   let isCorrectPassword = checkPassword(rawData.password, user.password);
       let isCorrectPassword = rawData.password === user.password;
       console.log("user login: ", user);
       // không bị lỗi
@@ -101,12 +98,9 @@ const handleUserLogin = async (rawData) => {
           phone: user.phone,
           address: user.address,
           title: user.title,
-          //   groupWithRole,
-          //   roleID: user.roleID, // chức vụ
-          //   positionID: user.positionID, // vị trí
         };
-        let token = createJwt(payload);   // tạo token -> lưu trong localStorage
-        // let tokenRefresh = refreshToken(payload);   
+        let token = createJwt(payload); // tạo token -> lưu trong localStorage
+
         return {
           EM: "Login successfully",
           EC: 0,
@@ -143,7 +137,7 @@ const handleUserLogin = async (rawData) => {
 };
 
 module.exports = {
-    registerNewUser,
+  registerNewUser,
   handleUserLogin,
   hashPassWord,
   checkEmailExists,
