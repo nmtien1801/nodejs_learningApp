@@ -16,10 +16,9 @@ const initApiRoutes = (app) => {
 
   //rest api - dùng web sử dụng các method (CRUD)
   //GET(R), POST (C), PUT (U), DELETE (D)
-//   router.post("/register", apiController.handleRegister);
+  router.post("/register", apiController.handleRegister);
   router.post("/login", apiController.handleLogin);
   router.post("/logout", apiController.handleLogout);
-//   router.get("/account", userController.getUserAccount);
 
   // user router
 //   router.get("/user/read", userController.read);
