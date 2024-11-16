@@ -2,7 +2,6 @@ import db from "../models/index";
 import bcrypt from "bcryptjs";
 import { raw } from "body-parser";
 import { Op } from "sequelize";
-import { createJwt, refreshToken } from "../middleware/jwtAction";
 import { reject, resolve } from "bluebird";
 require("dotenv").config();
 
@@ -21,16 +20,6 @@ const checkEmailExists = (userEmail) => {
       reject(error);
     }
   });
-};
-
-const checkPhoneExists = async (userPhone) => {
-  let phone = await db.User.findOne({
-    where: { phone: userPhone },
-  });
-  if (phone) {
-    return true;
-  }
-  return false;
 };
 
 // hash password
@@ -87,27 +76,15 @@ const handleUserLogin = async (rawData) => {
       raw: true,
     });
     if (user) {
-      let isCorrectPassword = rawData.password === user.password;
+      let isCorrectPassword = checkPassword(rawData.password, user.password);
       console.log("user login: ", user);
       // không bị lỗi
       if (isCorrectPassword === true) {
-        let payload = {
-          email: user.email,
-          userName: user.userName,
-          description: user.description,
-          phone: user.phone,
-          address: user.address,
-          title: user.title,
-        };
-        let token = createJwt(payload); // tạo token -> lưu trong localStorage
-
         return {
           EM: "Login successfully",
           EC: 0,
           DT: {
-            _id: user.id, // dùng để lấy patient của doctor này
-            access_token: token,
-            // refreshToken: tokenRefresh,
+            _id: user.id, // dùng để lấy user flow | student của user này
             // groupWithRole: groupWithRole,
             email: user.email,
             userName: user.userName,
@@ -115,8 +92,6 @@ const handleUserLogin = async (rawData) => {
             phone: user.phone,
             address: user.address,
             title: user.title,
-            // roleID: user.roleID, // chức vụ
-            // positionID: user.positionID, // vị trí
           },
         };
       }
@@ -141,5 +116,4 @@ module.exports = {
   handleUserLogin,
   hashPassWord,
   checkEmailExists,
-  checkPhoneExists,
 };
