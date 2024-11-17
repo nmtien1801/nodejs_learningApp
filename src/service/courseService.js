@@ -1,4 +1,5 @@
 import db from "../models/index";
+
 import bcrypt from "bcryptjs";
 import { createJwt } from "../middleware/jwtAction";
 require("dotenv").config();
@@ -7,7 +8,7 @@ const findAllCourses = async () => {
   try {
     let courses = await db.Course.findAll();
     return {
-      EM: "A user is created successfully",
+      EM: "Find all courses successfully",
       EC: 0,
       DT: courses,
     };
@@ -21,7 +22,7 @@ const findAllCourses = async () => {
   }
 };
 
-const findyByState = async (state) => {
+const findByState = async (state) => {
   try {
     let courses = await db.Course.findAll({
       where: {
@@ -29,7 +30,7 @@ const findyByState = async (state) => {
       },
     });
     return {
-      EM: "A user is created successfully",
+      EM: "Find courses by state successfully",
       EC: 0,
       DT: courses,
     };
@@ -43,7 +44,29 @@ const findyByState = async (state) => {
   }
 };
 
+const findCourseByID = async (courseID) => {
+  try {
+    let course = await db.Course.findOne({
+      where: {
+        id: courseID,
+      },
+    });
+    return {
+      EM: "Find course by ID successfully",
+      EC: 0,
+      DT: course,
+    };
+  } catch (error) {
+    console.error("Error in findCourseByID:", error);
+    return {
+      EM: "Something went wrong in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
 module.exports = {
   findAllCourses,
-  findyByState,
+  findByState,
+  findCourseByID,
 };
