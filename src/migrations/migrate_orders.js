@@ -5,7 +5,7 @@ const user = require("../models/user");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("Orders", {
-      orderID: {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,

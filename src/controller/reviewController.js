@@ -20,6 +20,24 @@ const handleGetRatingCourse = async (req, res) => {
   }
 };
 
+const handleGetCourseReviewsAndAverageRating = async (req, res) => {
+  try {
+    let courseID = req.params.courseID;
+    let data = await reviewService.getCourseReviewsAndAverageRating(courseID);
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC,
+      DT: data.DT,
+    });
+  } catch (error) {
+    console.error("Error in handleGetCourseReviewsAndAverageRating:", error);
+    return res.status(500).json({
+      EM: "Error from server",
+      EC: -1,
+      DT: "",
+    });
+  }
+};
 const handleFindReviewByCourseID = async (req, res) => {
   try {
     let courseID = req.params.courseID;
@@ -41,4 +59,5 @@ const handleFindReviewByCourseID = async (req, res) => {
 module.exports = {
   handleGetRatingCourse,
   handleFindReviewByCourseID,
+  handleGetCourseReviewsAndAverageRating,
 };

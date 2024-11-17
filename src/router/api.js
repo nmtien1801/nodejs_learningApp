@@ -33,6 +33,10 @@ const initApiRoutes = (app) => {
     "/getRatingCourse/:courseID",
     reviewController.handleGetRatingCourse
   );
+  router.get(
+    "/getCourseReviewsAndAverageRating/:courseID",
+    reviewController.handleGetCourseReviewsAndAverageRating
+  );
 
   // user router
   //   router.get("/user/read", userController.read);

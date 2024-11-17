@@ -74,7 +74,55 @@ const getRatingCourse = async (courseID) => {
   }
 };
 
+const getCourseReviewsAndAverageRating = async (courseID) => {
+  try {
+    // Lấy tất cả đánh giá
+    let reviews = await db.Review.findAll({
+      where: {
+        courseID: courseID,
+      },
+    });
+
+    let totalRating = 0;
+    let totalReviews = reviews.length;
+
+    if (totalReviews > 0) {
+      // Tính điểm trung bình
+      reviews.forEach((review) => {
+        totalRating += review.rating;
+      });
+      let avgRating = totalRating / totalReviews;
+
+      return {
+        EM: "Get reviews and average rating successfully",
+        EC: 0,
+        DT: {
+          reviews: reviews,
+          avgRating: avgRating,
+        },
+      };
+    } else {
+      return {
+        EM: "No reviews found for this course",
+        EC: -1,
+        DT: {
+          reviews: [],
+          avgRating: 0,
+        },
+      };
+    }
+  } catch (error) {
+    console.error("Error in getCourseReviewsAndAverageRating:", error);
+    return {
+      EM: "Something went wrong in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
+
 module.exports = {
   findReviewByCourseID,
   getRatingCourse,
+  getCourseReviewsAndAverageRating,
 };
