@@ -34,21 +34,21 @@ module.exports = {
       },
       roleID: {
         type: Sequelize.INTEGER,
-        // references: {
-        //   model: "Roles",
-        //   key: "id",
-        // },
-        // onDelete: "SET NULL",
-        // onUpdate: "CASCADE",
+        references: {
+          model: "Roles",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
       },
       projectID: {
         type: Sequelize.INTEGER,
-        // references: {
-        //   model: "Projects",
-        //   key: "id",
-        // },
-        // onDelete: "SET NULL",
-        // onUpdate: "CASCADE",
+        references: {
+          model: "Projects",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
       },
       createdAt: {
         allowNull: false,

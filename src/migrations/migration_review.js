@@ -10,21 +10,21 @@ module.exports = {
       },
       userID: {
         type: Sequelize.INTEGER,
-        // references: {
-        //   model: "Users",
-        //   key: "id",
-        // },
-        // onDelete: "CASCADE",
-        // onUpdate: "CASCADE",
+        references: {
+          model: "Users",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       courseID: {
         type: Sequelize.INTEGER,
-        // references: {
-        //   model: "Courses",
-        //   key: "id",
-        // },
-        // onDelete: "CASCADE",
-        // onUpdate: "CASCADE",
+        references: {
+          model: "Courses",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       review: {
         type: Sequelize.TEXT,

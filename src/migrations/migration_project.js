@@ -10,12 +10,12 @@ module.exports = {
       },
       userID: {
         type: Sequelize.INTEGER,
-        // references: {
-        //   model: "Users",
-        //   key: "id",
-        // },
-        // onDelete: "CASCADE",
-        // onUpdate: "CASCADE",
+        references: {
+          model: "Users",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       description: {
         type: Sequelize.STRING,
@@ -25,12 +25,12 @@ module.exports = {
       },
       lessonID: {
         type: Sequelize.INTEGER,
-        // references: {
-        //   model: "Lessons",
-        //   key: "id",
-        // },
-        // onDelete: "SET NULL",
-        // onUpdate: "CASCADE",
+        references: {
+          model: "Lessons",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
       },
       createdAt: {
         allowNull: false,
