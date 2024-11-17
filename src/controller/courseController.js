@@ -22,7 +22,7 @@ const handleFindCourse = async (req, res) => {
 const handleFindCourseByState = async (req, res) => {
   try {
     let state = req.params.state;
-    let data = await courseService.findyByState(state);
+    let data = await courseService.findByState(state);
     console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,

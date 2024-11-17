@@ -30,12 +30,12 @@ const findByState = async (state) => {
       },
     });
     return {
-      EM: "Find courses by state successfully",
+      EM: "Find course by state successfully",
       EC: 0,
       DT: courses,
     };
   } catch (error) {
-    console.error("Error in findyByState:", error);
+    console.error("Error in findByState:", error);
     return {
       EM: "Something went wrong in the service",
       EC: -2,
@@ -48,7 +48,7 @@ const findCourseByID = async (courseID) => {
   try {
     let course = await db.Course.findOne({
       where: {
-        id: courseID,
+        courseID: courseID,
       },
     });
     return {

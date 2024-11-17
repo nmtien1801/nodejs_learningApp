@@ -1,10 +1,12 @@
 import db from "../models/index";
-
+import bcrypt from "bcryptjs";
+import { createJwt } from "../middleware/jwtAction";
 require("dotenv").config();
 
 const findAllReviews = async () => {
   try {
-    let reviews = await db.Reviews.findAll();
+    let reviews = await db.Review.findAll(); // Use `Review` here
+    console.log(reviews);
     return {
       EM: "Find all reviews successfully",
       EC: 0,
@@ -20,24 +22,33 @@ const findAllReviews = async () => {
   }
 };
 
-// getRatingCourse(course Id) → tính TB rating của khóa đó (cộng listRating / sluong)
 const getRatingCourse = async (courseID) => {
   try {
-    let listRating = await db.Review.findAll({
+    let reviews = await db.Reviews.findAll({
       where: {
-        id: courseID,
+        courseID: courseID,
       },
     });
-    let sumRating = 0;
-    listRating.forEach((rating) => {
-      sumRating += rating.rating;
-    });
-    let avgRating = sumRating / listRating.length;
-    return {
-      EM: "get rating course successfully",
-      EC: 0,
-      DT: avgRating,
-    };
+    let totalRating = 0;
+    let totalReviews = reviews.length;
+
+    if (totalReviews > 0) {
+      reviews.forEach((review) => {
+        totalRating += review.rating;
+      });
+      let avgRating = totalRating / totalReviews;
+      return {
+        EM: "Get rating course successfully",
+        EC: 0,
+        DT: avgRating,
+      };
+    } else {
+      return {
+        EM: "No reviews found for this course",
+        EC: -1,
+        DT: 0,
+      };
+    }
   } catch (error) {
     console.error("Error in getRatingCourse:", error);
     return {

@@ -3,11 +3,10 @@ import reviewService from "../service/reviewService.js";
 const handleFindAllReviews = async (req, res) => {
   try {
     let data = await reviewService.findAllReviews();
-    console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,
-      EC: data.EC,
-      DT: data.DT,
+      EC: 0,
+      DT: data,
     });
   } catch (error) {
     console.error("Error in handleFindAllReviews:", error);
@@ -39,7 +38,7 @@ const handleGetRatingCourse = async (req, res) => {
   }
 };
 
-export default {
+module.exports = {
   handleFindAllReviews,
   handleGetRatingCourse,
 };

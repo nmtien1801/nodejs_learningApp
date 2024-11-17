@@ -1,34 +1,33 @@
-'use strict';
+"use strict";
 
 const user = require("../models/user");
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Orders', {
-      id: {
+    await queryInterface.createTable("Orders", {
+      orderID: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       userID: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
-      
 
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Orders');
-  }
+    await queryInterface.dropTable("Orders");
+  },
 };
 
-// npx sequelize-cli db:migrate --to migrate_orders.js  
+// npx sequelize-cli db:migrate --to migrate_orders.js
