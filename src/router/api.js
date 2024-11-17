@@ -17,6 +17,8 @@ const initApiRoutes = (app) => {
   router.post("/register", apiController.handleRegister);
   router.post("/login", apiController.handleLogin);
   router.post("/logout", apiController.handleLogout);
+
+  // course router
   router.get("/findAllCourses", courseController.handleFindCourse);
   router.get(
     "/findCourseByState/:state",
