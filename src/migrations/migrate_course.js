@@ -23,9 +23,21 @@ module.exports = {
 
       categoryID: {
         type: Sequelize.INTEGER,
+        // references: {
+        //   model: "Category",
+        //   key: "id",
+        // },
+        // onDelete: "CASCADE",
+        // onUpdate: "CASCADE",
       },
       lessonID: {
         type: Sequelize.INTEGER, // có những bài học nào
+        // references: {
+        //   model: "Lesson",
+        //   key: "id",
+        // },
+        // onDelete: "CASCADE",
+        // onUpdate: "CASCADE",
       },
       state: {
         type: Sequelize.INTEGER, // trạng thái khóa học (0 - chưa bắt đầu, 1 - đang học, 2 - đã hoàn thành)

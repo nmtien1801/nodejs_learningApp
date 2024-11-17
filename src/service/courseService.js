@@ -7,7 +7,7 @@ const findAllCourses = async () => {
   try {
     let courses = await db.Course.findAll();
     return {
-      EM: "A user is created successfully",
+      EM: "find all courses successfully",
       EC: 0,
       DT: courses,
     };
@@ -21,7 +21,7 @@ const findAllCourses = async () => {
   }
 };
 
-const findyByState = async (state) => {
+const findByState = async (state) => {
   try {
     let courses = await db.Course.findAll({
       where: {
@@ -29,12 +29,34 @@ const findyByState = async (state) => {
       },
     });
     return {
-      EM: "A user is created successfully",
+      EM: "findyByState is created successfully",
       EC: 0,
       DT: courses,
     };
   } catch (error) {
-    console.error("Error in findyByState:", error);
+    console.error("Error in findByState:", error);
+    return {
+      EM: "Something went wrong in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
+
+const findCourseByID = async (id) => {
+  try {
+    let course = await db.Course.findOne({
+      where: {
+        id: id,
+      },
+    });
+    return {
+      EM: "findCourseByID is created successfully",
+      EC: 0,
+      DT: course,
+    };
+  } catch (error) {
+    console.error("Error in findCourseByID:", error);
     return {
       EM: "Something went wrong in the service",
       EC: -2,
@@ -45,5 +67,6 @@ const findyByState = async (state) => {
 
 module.exports = {
   findAllCourses,
-  findyByState,
+  findByState,
+  findCourseByID,
 };

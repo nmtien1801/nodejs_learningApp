@@ -2,15 +2,13 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("Projects", {
-      projectID: {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      userID: {
-        type: Sequelize.INTEGER,
-      },
+
       description: {
         type: Sequelize.STRING,
       },
@@ -19,6 +17,12 @@ module.exports = {
       },
       lessonID: {
         type: Sequelize.INTEGER,
+        // references: {
+        //   model: "Lesson",
+        //   key: "id",
+        // },
+        // onDelete: "SET NULL",
+        // onUpdate: "CASCADE",
       },
       createdAt: {
         allowNull: false,

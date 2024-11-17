@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Review",
+      tableName: "Reviews", // Chỉ định tên bảng là 'Reviews'
     }
   );
   return Review;

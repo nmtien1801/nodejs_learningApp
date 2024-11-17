@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       // Một danh mục có thể có nhiều khóa học
       Category.hasMany(models.Course, {
         foreignKey: "categoryID",
-        as: "courses",
+        as: "Course",
       });
     }
   }

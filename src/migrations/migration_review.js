@@ -1,8 +1,9 @@
 "use strict";
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("Reviews", {
-      reviewID: {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -10,9 +11,21 @@ module.exports = {
       },
       userID: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "User",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       courseID: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "Course",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       review: {
         type: Sequelize.TEXT,
@@ -21,7 +34,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         validate: {
           min: 1,
-          max: 5, // Giả sử rating từ 1 đến 5
+          max: 5, // Rating từ 1 đến 5
         },
       },
       time: {
@@ -38,6 +51,7 @@ module.exports = {
       },
     });
   },
+
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable("Reviews");
   },

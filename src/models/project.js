@@ -8,18 +8,12 @@ module.exports = (sequelize) => {
         foreignKey: "lessonID",
         as: "lesson",
       });
-
-      Project.belongsTo(models.User, {
-        foreignKey: "userID",
-        as: "user",
-      });
     }
   }
 
   Project.init(
     {
       projectID: DataTypes.INTEGER,
-      userID: DataTypes.INTEGER,
       description: DataTypes.STRING,
       file: DataTypes.STRING, // Lưu đường dẫn file
       lessonID: DataTypes.INTEGER,
