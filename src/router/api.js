@@ -29,10 +29,7 @@ const initApiRoutes = (app) => {
     "/findReviewByCourseID/:courseID",
     reviewController.handleFindReviewByCourseID
   );
-  router.get(
-    "/getRatingCourse/:courseID",
-    reviewController.handleGetRatingCourse
-  );
+
   router.get(
     "/getCourseReviewsAndAverageRating/:courseID",
     reviewController.handleGetCourseReviewsAndAverageRating

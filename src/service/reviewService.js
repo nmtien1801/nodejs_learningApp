@@ -36,44 +36,6 @@ const findReviewByCourseID = async (courseID) => {
   }
 };
 
-const getRatingCourse = async (courseID) => {
-  try {
-    // Sử dụng db.Review thay vì db.Reviews
-    let reviews = await db.Review.findAll({
-      where: {
-        courseID: courseID,
-      },
-    });
-    let totalRating = 0;
-    let totalReviews = reviews.length;
-
-    if (totalReviews > 0) {
-      reviews.forEach((review) => {
-        totalRating += review.rating;
-      });
-      let avgRating = totalRating / totalReviews;
-      return {
-        EM: "Get rating course successfully",
-        EC: 0,
-        DT: avgRating,
-      };
-    } else {
-      return {
-        EM: "No reviews found for this course",
-        EC: -1,
-        DT: 0,
-      };
-    }
-  } catch (error) {
-    console.error("Error in getRatingCourse:", error);
-    return {
-      EM: "Something went wrong in the service",
-      EC: -2,
-      DT: "",
-    };
-  }
-};
-
 const getCourseReviewsAndAverageRating = async (courseID) => {
   try {
     // Lấy tất cả đánh giá
@@ -123,6 +85,5 @@ const getCourseReviewsAndAverageRating = async (courseID) => {
 
 module.exports = {
   findReviewByCourseID,
-  getRatingCourse,
   getCourseReviewsAndAverageRating,
 };
