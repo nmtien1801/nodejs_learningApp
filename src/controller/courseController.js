@@ -41,8 +41,8 @@ const handleFindCourseByState = async (req, res) => {
 
 const handleFindCourseByID = async (req, res) => {
   try {
-    let courseID = req.params.courseID;
-    let data = await courseService.findCourseByID(courseID);
+    let id = req.params.id;
+    let data = await courseService.findCourseByID(id);
     console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,
@@ -58,6 +58,7 @@ const handleFindCourseByID = async (req, res) => {
     });
   }
 };
+
 module.exports = {
   handleFindCourse,
   handleFindCourseByState,

@@ -1,7 +1,6 @@
 import express from "express";
 import apiController from "../controller/apiController";
 import courseController from "../controller/courseController";
-import reviewController from "../controller/reviewController";
 const router = express.Router(); // bằng app = express();
 /**
  *
@@ -24,15 +23,7 @@ const initApiRoutes = (app) => {
     "/findCourseByState/:state",
     courseController.handleFindCourseByState
   );
-  router.get(
-    "/findCourseByID/:courseID",
-    courseController.handleFindCourseByID
-  );
-  router.get("/findAllReviews", reviewController.handleFindAllReviews);
-  router.get(
-    "/getRatingCourse/:courseID",
-    reviewController.handleGetRatingCourse
-  );
+  router.get("/findCourseByID/:id", courseController.handleFindCourseByID);
   // user router
   //   router.get("/user/read", userController.read);
   //   router.post("/user/create", userController.create);

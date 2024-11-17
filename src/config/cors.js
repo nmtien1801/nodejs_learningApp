@@ -6,7 +6,10 @@ const configCORS = (app) => {
   app.use(function (req, res, next) {
     // console.log(">>>check bug don't status(FE): ", req.method);
     // Website you wish to allow to connect
-    res.setHeader("Access-Control-Allow-Origin", process.env.REACT_URL);
+    res.setHeader(
+      "Access-Control-Allow-Origin",
+      process.env.REACT_URL || process.env.REACT_ANDROID_URL
+    );
 
     // Request methods bạn muốn cho phép
     res.setHeader(

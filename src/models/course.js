@@ -62,7 +62,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Course", // Đặt tên mô hình
-      tableName: "Courses", // Đảm bảo tên bảng là 'Courses'
       timestamps: true, // Sử dụng `createdAt` và `updatedAt`
     }
   );

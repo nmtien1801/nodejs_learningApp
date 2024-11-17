@@ -31,5 +31,3 @@ module.exports = (sequelize, DataTypes) => {
   );
   return Review;
 };
-
-// npx sequelize-cli db:migrate
