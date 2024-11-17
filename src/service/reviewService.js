@@ -3,17 +3,31 @@ import bcrypt from "bcryptjs";
 import { createJwt } from "../middleware/jwtAction";
 require("dotenv").config();
 
-const findAllReviews = async () => {
+const findReviewByCourseID = async (courseID) => {
   try {
-    let reviews = await db.Review.findAll(); // Use `Review` here
-    console.log(reviews);
+    // Lấy tất cả đánh giá cùng với thông tin khóa học
+    let reviews = await db.Review.findAll({
+      where: {
+        courseID: courseID, // Lọc theo courseID
+      },
+      include: [
+        {
+          model: db.Course, // Bao gồm thông tin từ bảng Course
+          as: "course", // Sử dụng alias đúng "course" thay vì "Course"
+          required: true, // Yêu cầu kết nối phải có dữ liệu từ bảng Course
+        },
+      ],
+    });
+
+    console.log("reviews:", reviews);
+
     return {
       EM: "Find all reviews successfully",
       EC: 0,
       DT: reviews,
     };
   } catch (error) {
-    console.error("Error in findAllReviews:", error);
+    console.error("Error in findReviewByCourseID:", error);
     return {
       EM: "Something went wrong in the service",
       EC: -2,
@@ -24,7 +38,8 @@ const findAllReviews = async () => {
 
 const getRatingCourse = async (courseID) => {
   try {
-    let reviews = await db.Reviews.findAll({
+    // Sử dụng db.Review thay vì db.Reviews
+    let reviews = await db.Review.findAll({
       where: {
         courseID: courseID,
       },
@@ -60,6 +75,6 @@ const getRatingCourse = async (courseID) => {
 };
 
 module.exports = {
-  findAllReviews,
+  findReviewByCourseID,
   getRatingCourse,
 };
