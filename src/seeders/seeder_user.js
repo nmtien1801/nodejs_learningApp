@@ -31,3 +31,5 @@ module.exports = {
      */
   }
 };
+
+// npx sequelize-cli db:seed --seed seeder_user.js
