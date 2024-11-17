@@ -1,39 +1,35 @@
 "use strict";
-const { Model, DataTypes } = require("sequelize");
-
-module.exports = (sequelize) => {
+const { Model } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
+      // Một người dùng có thể có nhiều đánh giá
       User.hasMany(models.Review, {
         foreignKey: "userID",
-        as: "Reviews",
+        as: "reviews",
       });
 
+      // Một người dùng có thể có nhiều đơn hàng
       User.hasMany(models.Order, {
         foreignKey: "userID",
-        as: "Orders",
+        as: "orders",
       });
 
+      // Một người dùng thuộc về một vai trò
       User.belongsTo(models.Role, {
         foreignKey: "roleID",
-        as: "Role",
+        as: "role",
       });
 
+      // Một người dùng có thể có nhiều dự án (giả sử có mối quan hệ như vậy)
       User.hasMany(models.Project, {
-        foreignKey: "userID",
-        as: "Projects",
+        foreignKey: "projectID",
+        as: "projects",
       });
     }
   }
-
   User.init(
     {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER,
-      },
       userName: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
@@ -43,12 +39,12 @@ module.exports = (sequelize) => {
       address: DataTypes.STRING,
       title: DataTypes.STRING,
       roleID: DataTypes.INTEGER,
+      projectID: DataTypes.INTEGER,
     },
     {
       sequelize,
       modelName: "User",
     }
   );
-
   return User;
 };

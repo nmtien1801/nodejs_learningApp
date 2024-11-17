@@ -2,7 +2,7 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("Lessons", {
-      id: {
+      lessonID: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -10,13 +10,12 @@ module.exports = {
       },
       title: {
         type: Sequelize.STRING,
-        allowNull: false,
       },
       urlVideo: {
         type: Sequelize.STRING,
       },
       state: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.BOOLEAN, // Cột state là kiểu BOOLEAN
       },
       createdAt: {
         allowNull: false,

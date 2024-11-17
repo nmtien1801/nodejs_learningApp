@@ -2,7 +2,7 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("Projects", {
-      id: {
+      projectID: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -10,27 +10,27 @@ module.exports = {
       },
       userID: {
         type: Sequelize.INTEGER,
-        references: {
-          model: "Users",
-          key: "id",
-        },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
+        // references: {
+        //   model: "User",
+        //   key: "id",
+        // },
+        // onDelete: "CASCADE",
+        // onUpdate: "CASCADE",
       },
       description: {
         type: Sequelize.STRING,
       },
       file: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING, // Lưu đường dẫn file
       },
       lessonID: {
         type: Sequelize.INTEGER,
-        references: {
-          model: "Lessons",
-          key: "id",
-        },
-        onDelete: "SET NULL",
-        onUpdate: "CASCADE",
+        // references: {
+        //   model: "Lesson",
+        //   key: "id",
+        // },
+        // onDelete: "SET NULL",
+        // onUpdate: "CASCADE",
       },
       createdAt: {
         allowNull: false,

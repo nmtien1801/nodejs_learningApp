@@ -1,25 +1,21 @@
 "use strict";
-const { Model, DataTypes } = require("sequelize");
-
-module.exports = (sequelize) => {
+const { Model } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
   class Order extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
     static associate(models) {
       Order.belongsToMany(models.Course, {
-        through: "OrderDetails", // bảng trung gian
-        foreignKey: "orderID",
-        as: "Courses",
+        through: "OrderDetail", // map tới orderDetail để tạo mối quan hệ n-n giữa Order và Course
+        foreignKey: "orderID", // khoá ngoại
       });
     }
   }
-
   Order.init(
     {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER,
-      },
       userID: DataTypes.INTEGER,
     },
     {
@@ -27,6 +23,5 @@ module.exports = (sequelize) => {
       modelName: "Order",
     }
   );
-
   return Order;
 };

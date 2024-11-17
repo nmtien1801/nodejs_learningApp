@@ -5,7 +5,7 @@ require("dotenv").config();
 
 const findAllReviews = async () => {
   try {
-    let reviews = await db.Reviews.findAll(); // Use `Review` here
+    let reviews = await db.Review.findAll(); // Use `Review` here
     console.log(reviews);
     return {
       EM: "Find all reviews successfully",
@@ -59,29 +59,7 @@ const getRatingCourse = async (courseID) => {
   }
 };
 
-const findReviewByCourseID = async (courseID) => {
-  try {
-    let reviews = await db.Review.findAll({
-      where: {
-        courseID: courseID,
-      },
-    });
-    return {
-      EM: "Find review by courseID successfully",
-      EC: 0,
-      DT: reviews,
-    };
-  } catch (error) {
-    console.error("Error in findReviewByCourseID:", error);
-    return {
-      EM: "Something went wrong in the service",
-      EC: -2,
-      DT: "",
-    };
-  }
-};
 module.exports = {
   findAllReviews,
   getRatingCourse,
-  findReviewByCourseID,
 };
