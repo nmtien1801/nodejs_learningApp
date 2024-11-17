@@ -1,68 +1,43 @@
 "use strict";
-const { Model } = require("sequelize");
+const { Model, DataTypes } = require("sequelize");
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize) => {
   class Course extends Model {
     static associate(models) {
-      // Mối quan hệ nhiều-kết-nhiều với Order qua OrderDetail
-      Course.belongsToMany(models.Order, {
-        through: "OrderDetail",
-        foreignKey: "courseID",
-        otherKey: "orderID", // Sử dụng foreignKey khác trong bảng OrderDetail
-      });
-
-      // Một khóa học có nhiều đánh giá
-      Course.hasMany(models.Review, {
-        foreignKey: "courseID", // Khóa ngoại phải là courseID
-        as: "reviews", // Dữ liệu sẽ được lấy với alias "reviews"
-      });
-
-      // Một khóa học thuộc một danh mục
+      // Một khóa học thuộc một danh mục (Categories)
       Course.belongsTo(models.Category, {
-        foreignKey: "categoryID", // Khóa ngoại
-        as: "category", // Alias cho quan hệ này
+        foreignKey: "categoryID",
+        as: "Category",
       });
 
-      // Một khóa học có thể có nhiều bài học (lesson)
+      // Một khóa học có thể có nhiều bài học (Lessons)
       Course.hasMany(models.Lesson, {
-        foreignKey: "courseID", // Khóa ngoại là courseID
-        as: "lessons", // Alias cho bài học
+        foreignKey: "courseID",
+        as: "Lessons",
       });
     }
   }
 
-  // Định nghĩa các thuộc tính của Course
   Course.init(
     {
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false, // Không cho phép trường này null
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
       },
-      description: {
-        type: DataTypes.STRING,
-        allowNull: true, // Mô tả có thể là null
-      },
-      image: {
-        type: DataTypes.STRING,
-        allowNull: true, // Hình ảnh có thể null
-      },
+      name: DataTypes.STRING,
+      description: DataTypes.STRING,
+      image: DataTypes.STRING,
       categoryID: {
         type: DataTypes.INTEGER,
-        allowNull: false, // Không cho phép categoryID null
+        allowNull: false,
       },
-      lessonID: {
-        type: DataTypes.INTEGER,
-        allowNull: true, // Có thể null nếu khóa học không có bài học
-      },
-      state: {
-        type: DataTypes.INTEGER,
-        allowNull: false, // Trạng thái không thể null
-      },
+      state: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: "Course", // Đặt tên mô hình
-      timestamps: true, // Sử dụng `createdAt` và `updatedAt`
+      modelName: "Course",
     }
   );
 

@@ -1,11 +1,8 @@
 "use strict";
-
-const user = require("../models/user");
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("Orders", {
-      orderID: {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -13,8 +10,13 @@ module.exports = {
       },
       userID: {
         type: Sequelize.INTEGER,
+        // references: {
+        //   model: "Users",
+        //   key: "id",
+        // },
+        // onDelete: "CASCADE",
+        // onUpdate: "CASCADE",
       },
-
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -29,5 +31,3 @@ module.exports = {
     await queryInterface.dropTable("Orders");
   },
 };
-
-// npx sequelize-cli db:migrate --to migrate_orders.js

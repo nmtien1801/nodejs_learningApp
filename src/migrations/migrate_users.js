@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("User", {
+    await queryInterface.createTable("Users", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -30,15 +30,26 @@ module.exports = {
         type: Sequelize.STRING,
       },
       title: {
-        type: Sequelize.STRING, // tiểu sử của người dùng
+        type: Sequelize.STRING,
       },
       roleID: {
         type: Sequelize.INTEGER,
+        // references: {
+        //   model: "Roles",
+        //   key: "id",
+        // },
+        // onDelete: "SET NULL",
+        // onUpdate: "CASCADE",
       },
       projectID: {
         type: Sequelize.INTEGER,
+        // references: {
+        //   model: "Projects",
+        //   key: "id",
+        // },
+        // onDelete: "SET NULL",
+        // onUpdate: "CASCADE",
       },
-
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -50,8 +61,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("User");
+    await queryInterface.dropTable("Users");
   },
 };
-
-// npx sequelize-cli db:migrate --to migrate_users.js

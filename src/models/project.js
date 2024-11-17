@@ -6,23 +6,28 @@ module.exports = (sequelize) => {
     static associate(models) {
       Project.belongsTo(models.Lesson, {
         foreignKey: "lessonID",
-        as: "lesson",
+        as: "Lesson",
       });
 
       Project.belongsTo(models.User, {
         foreignKey: "userID",
-        as: "user",
+        as: "User",
       });
     }
   }
 
   Project.init(
     {
-      projectID: DataTypes.INTEGER,
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
       userID: DataTypes.INTEGER,
-      description: DataTypes.STRING,
-      file: DataTypes.STRING, // Lưu đường dẫn file
       lessonID: DataTypes.INTEGER,
+      description: DataTypes.STRING,
+      file: DataTypes.STRING,
     },
     {
       sequelize,

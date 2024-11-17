@@ -1,21 +1,31 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("UserDetail", {
-      userDetailID: {
+    await queryInterface.createTable("UserDetails", {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-
       userID: {
-        type: Sequelize.INTEGER, // theo dõi thầy nào
+        type: Sequelize.INTEGER,
+        // references: {
+        //   model: "Users",
+        //   key: "id",
+        // },
+        // onDelete: "CASCADE",
+        // onUpdate: "CASCADE",
       },
       courseID: {
-        type: Sequelize.INTEGER, // theo dõi khóa học nào
+        type: Sequelize.INTEGER,
+        // references: {
+        //   model: "Courses",
+        //   key: "id",
+        // },
+        // onDelete: "CASCADE",
+        // onUpdate: "CASCADE",
       },
-
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -27,6 +37,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("UserDetail");
+    await queryInterface.dropTable("UserDetails");
   },
 };

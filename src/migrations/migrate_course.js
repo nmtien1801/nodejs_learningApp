@@ -1,7 +1,8 @@
 "use strict";
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Course", {
+    await queryInterface.createTable("Courses", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -10,35 +11,41 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
+        allowNull: false, // Đảm bảo không được null
       },
       description: {
         type: Sequelize.STRING,
       },
       image: {
-        type: Sequelize.BLOB("long"),
+        type: Sequelize.STRING, // Loại dữ liệu hình ảnh
       },
-
       categoryID: {
         type: Sequelize.INTEGER,
-      },
-      lessonID: {
-        type: Sequelize.INTEGER, // có những bài học nào
+        allowNull: false, // Đảm bảo categoryID không được null
+        references: {
+          model: "Categories", // Tên bảng Categories
+          key: "id", // Khóa chính của bảng Categories
+        },
+        onUpdate: "CASCADE", // Cập nhật khi có thay đổi trong bảng Categories
+        onDelete: "SET NULL", // Giữ lại khóa ngoại NULL khi xóa bảng Categories
       },
       state: {
-        type: Sequelize.INTEGER, // trạng thái khóa học (0 - chưa bắt đầu, 1 - đang học, 2 - đã hoàn thành)
+        type: Sequelize.INTEGER, // Trạng thái khóa học
       },
-
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"), // Mặc định là thời gian hiện tại
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"), // Mặc định là thời gian hiện tại
       },
     });
   },
+
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Course");
+    await queryInterface.dropTable("Courses");
   },
 };

@@ -1,23 +1,29 @@
 "use strict";
-const { Model } = require("sequelize");
-module.exports = (sequelize, DataTypes) => {
+const { Model, DataTypes } = require("sequelize");
+
+module.exports = (sequelize) => {
   class Review extends Model {
     static associate(models) {
-      // Một đánh giá thuộc về một khóa học
       Review.belongsTo(models.Course, {
         foreignKey: "courseID",
-        as: "course",
+        as: "Course",
       });
 
-      // Một đánh giá thuộc về một người dùng
       Review.belongsTo(models.User, {
         foreignKey: "userID",
-        as: "user",
+        as: "User",
       });
     }
   }
+
   Review.init(
     {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
       userID: DataTypes.INTEGER,
       courseID: DataTypes.INTEGER,
       review: DataTypes.TEXT,
@@ -29,5 +35,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Review",
     }
   );
+
   return Review;
 };

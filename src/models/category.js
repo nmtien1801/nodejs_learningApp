@@ -1,24 +1,31 @@
 "use strict";
-const { Model } = require("sequelize");
-module.exports = (sequelize, DataTypes) => {
+const { Model, DataTypes } = require("sequelize");
+
+module.exports = (sequelize) => {
   class Category extends Model {
     static associate(models) {
-      // Một danh mục có thể có nhiều khóa học
       Category.hasMany(models.Course, {
         foreignKey: "categoryID",
-        as: "courses",
+        as: "Courses",
       });
     }
   }
+
   Category.init(
     {
-      categoryID: DataTypes.INTEGER,
-      name: DataTypes.STRING,
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+      name: DataTypes.STRING, // Bạn có thể thêm các trường khác nếu cần
     },
     {
       sequelize,
       modelName: "Category",
     }
   );
+
   return Category;
 };

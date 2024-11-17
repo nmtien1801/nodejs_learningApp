@@ -1,25 +1,24 @@
 "use strict";
-const { Model } = require("sequelize");
+const { Model, DataTypes } = require("sequelize");
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize) => {
   class Role extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // Một vai trò có thể có nhiều người dùng
       Role.hasMany(models.User, {
-        foreignKey: "roleID", // Khoá ngoại trong bảng User
-        as: "users", // Định danh quan hệ
+        foreignKey: "roleID",
+        as: "Users",
       });
     }
   }
 
   Role.init(
     {
-      roleID: DataTypes.INTEGER,
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
       name: DataTypes.STRING,
       url: DataTypes.STRING,
     },
