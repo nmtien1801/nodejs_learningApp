@@ -3,19 +3,22 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert(
-      "Orders",
+      "Categories",
       [
         {
-          userID: 1, // người mua khóa học
-          total: 27, //$27
+          name: "Programming Languages",
         },
         {
-          userID: 2, // người mua khóa học
-          total: 260, //$260
+          name: "Web Development",
         },
         {
-          userID: 2, // người mua khóa học
-          total: 260, //$260
+          name: "Data Science",
+        },
+        {
+          name: "Machine Learning",
+        },
+        {
+          name: "Mobile Development",
         },
       ],
       {}
@@ -32,4 +35,4 @@ module.exports = {
   },
 };
 
-// npx sequelize-cli db:seed --seed seeder_order.js
+// npx sequelize-cli db:seed --seed seeder_user.js

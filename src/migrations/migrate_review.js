@@ -11,21 +11,21 @@ module.exports = {
       },
       userID: {
         type: Sequelize.INTEGER,
-        references: {
-          model: "User",
-          key: "id",
-        },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
+        // references: {
+        //   model: "User",
+        //   key: "id",
+        // },
+        // onDelete: "CASCADE",
+        // onUpdate: "CASCADE",
       },
       courseID: {
         type: Sequelize.INTEGER,
-        references: {
-          model: "Course",
-          key: "id",
-        },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
+        // references: {
+        //   model: "Course",
+        //   key: "id",
+        // },
+        // onDelete: "CASCADE",
+        // onUpdate: "CASCADE",
       },
       review: {
         type: Sequelize.TEXT,

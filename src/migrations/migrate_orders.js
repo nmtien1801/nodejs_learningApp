@@ -20,6 +20,10 @@ module.exports = {
         // onDelete: "CASCADE",
         // onUpdate: "CASCADE",
       },
+      total:{
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
 
       createdAt: {
         allowNull: false,
