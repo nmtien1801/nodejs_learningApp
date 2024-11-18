@@ -1,6 +1,8 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
 import { createJwt } from "../middleware/jwtAction";
+import { at } from "lodash";
+import { raw } from "body-parser";
 require("dotenv").config();
 
 const findReviewByCourseID = async (courseID) => {
@@ -43,6 +45,14 @@ const getCourseReviewsAndAverageRating = async (courseID) => {
       where: {
         courseID: courseID,
       },
+      attributes: ["id","userID", "courseID","rating", "review","time"],
+      include: [
+        {
+          model: db.Course,
+          attributes: ["name", "title"],
+          as: "course",
+        },
+      ],
     });
 
     let totalRating = 0;

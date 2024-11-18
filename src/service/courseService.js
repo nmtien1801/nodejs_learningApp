@@ -1,11 +1,15 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
 import { createJwt } from "../middleware/jwtAction";
+import { includes } from "lodash";
+import { raw } from "body-parser";
 require("dotenv").config();
 
 const findAllCourses = async () => {
   try {
-    let courses = await db.Course.findAll();
+    let courses = await db.Course.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] }, // không lấy trường trong exclude
+    });
     return {
       EM: "find all courses successfully",
       EC: 0,
@@ -48,6 +52,24 @@ const findCourseByID = async (id) => {
     let course = await db.Course.findOne({
       where: {
         id: id,
+      },
+      attributes: { exclude: ["createdAt", "updatedAt"] }, // không lấy trường trong exclude
+      include: [
+        {
+          model: db.Review,
+          attributes: ["review", "rating"],
+          as: "Review",
+        },
+      ],
+
+      // lấy ra số rating trung bình của khóa học
+      attributes: {
+        include: [
+          [
+            db.sequelize.fn("AVG", db.sequelize.col("Review.rating")),
+            "averageRating",
+          ],
+        ],
       },
     });
     return {
