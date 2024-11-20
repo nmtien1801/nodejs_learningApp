@@ -3,6 +3,7 @@ import apiController from "../controller/apiController";
 import courseController from "../controller/courseController";
 import reviewController from "../controller/reviewController";
 import teacherController from "../controller/teacherController";
+import userFlowController from "../controller/userFlowController";
 const router = express.Router(); // bằng app = express();
 /**
  *
@@ -44,7 +45,11 @@ const initApiRoutes = (app) => {
     "/teacherOverview/:teacherID",
     teacherController.handleTeacherOverview
   );
-
+  //userFlow router
+  router.get(
+    "/findCourseByTeacherID_Categories/:teacherID",
+    userFlowController.handleFindCourseByTeacherID_Categories
+  );
   // user router
   //   router.get("/user/read", userController.read);
   //   router.post("/user/create", userController.create);
