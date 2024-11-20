@@ -7,13 +7,39 @@ require("dotenv").config();
 
 const findAllCourses = async () => {
   try {
+    // Lấy danh sách khóa học và thông tin review, rating
     let courses = await db.Course.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt"] }, // không lấy trường trong exclude
+      attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
+      include: [
+        {
+          model: db.Review,
+          attributes: ["review", "rating"],
+          as: "Review", // Kết nối với bảng Review
+        },
+      ],
     });
+
+    // Tính trung bình rating cho từng khóa học
+    const coursesWithAverageRating = courses.map((course) => {
+      // Lấy danh sách các rating của review cho khóa học
+      const ratings = course.Review.map((review) => review.rating);
+
+      // Tính trung bình của các rating
+      const averageRating =
+        ratings.length > 0
+          ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+          : 0; // Nếu không có rating nào thì để giá trị mặc định là 0
+
+      return {
+        ...course.toJSON(), // Chuyển đổi khóa học thành đối tượng JSON
+        averageRating, // Thêm trường trung bình rating
+      };
+    });
+
     return {
       EM: "find all courses successfully",
       EC: 0,
-      DT: courses,
+      DT: coursesWithAverageRating,
     };
   } catch (error) {
     console.error("Error in findAllCourses:", error);
