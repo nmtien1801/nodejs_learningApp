@@ -1,20 +1,20 @@
-import userFlowService from "../service/userFlowService"; // Import userFlowService to use its functions
+import userFlowService from "../service/userFlowService"; // Import service để gọi function
+
 const handleFindCourseByTeacherID_Categories = async (req, res) => {
   try {
-    let teacherID = req.params.teacherID; // Get teacherID from URL params
+    let teacherID = req.params.teacherID; // Lấy teacherID từ tham số URL
     let data = await userFlowService.findCourseByTeacherID_Categories(
       teacherID
-    ); // Call the service function to get the data
+    ); // Gọi function từ service
+
     return res.status(200).json({
-      // Respond with the data from the service
       EM: data.EM,
       EC: data.EC,
-      DT: data.DT,
+      DT: data.DT, // Trả kết quả từ service
     });
   } catch (error) {
-    console.error("Error in handleFindCourseByTeacherID_Categories:", error); // Log any error
+    console.error("Error in handleFindCourseByTeacherID_Categories:", error);
     return res.status(500).json({
-      // Return an error response if something goes wrong
       EM: "Error from server",
       EC: -1,
       DT: "",

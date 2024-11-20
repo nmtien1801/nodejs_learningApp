@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       // Một danh mục có thể có nhiều khóa học
       Category.hasMany(models.Course, {
         foreignKey: "categoryID",
-        as: "Course",
+        as: "Category", // Đảm bảo alias trùng với phần 'include'
       });
     }
   }
@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Category",
+      tableName: "Categories", // Đảm bảo tên bảng đúng
     }
   );
   return Category;
