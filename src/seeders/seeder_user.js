@@ -43,7 +43,7 @@ module.exports = {
           phone: "1122334455",
           address: "789 Oak St, City, Country",
           title: "Data Scientist",
-          roleID: 3, // Assuming 3: Data Scientist
+          roleID: 2, // Assuming 3: Data Scientist
           projectID: 3,
         },
         {
@@ -57,7 +57,7 @@ module.exports = {
           phone: "2233445566",
           address: "101 Pine St, City, Country",
           title: "Backend Developer",
-          roleID: 4, // Assuming 4: Backend Developer
+          roleID: 2, // Assuming 4: Backend Developer
           projectID: 4,
         },
         {
@@ -70,7 +70,7 @@ module.exports = {
           phone: "3344556677",
           address: "202 Maple St, City, Country",
           title: "UI/UX Designer",
-          roleID: 5, // Assuming 5: UI/UX Designer
+          roleID: 2, // Assuming 5: UI/UX Designer
           projectID: 5,
         },
       ],

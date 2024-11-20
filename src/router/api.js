@@ -2,6 +2,7 @@ import express from "express";
 import apiController from "../controller/apiController";
 import courseController from "../controller/courseController";
 import reviewController from "../controller/reviewController";
+import teacherController from "../controller/teacherController";
 const router = express.Router(); // bằng app = express();
 /**
  *
@@ -36,6 +37,12 @@ const initApiRoutes = (app) => {
   router.get(
     "/getCourseReviewsAndAverageRating/:courseID",
     reviewController.handleGetCourseReviewsAndAverageRating
+  );
+
+  // teacher router
+  router.get(
+    "/teacherOverview/:teacherID",
+    teacherController.handleTeacherOverview
   );
 
   // user router
