@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       // Một người dùng có thể có nhiều đơn hàng
-      User.hasMany(models.Order, {
+      User.hasMany(models.Orders, {
         foreignKey: "userID",
         as: "orders",
       });
@@ -25,6 +25,11 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Project, {
         foreignKey: "projectID",
         as: "projects",
+      });
+
+      User.hasMany(models.UserFollow, {
+        foreignKey: "userID",
+        as: "userFollows",
       });
     }
   }

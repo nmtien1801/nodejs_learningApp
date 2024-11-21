@@ -4,6 +4,7 @@ import courseController from "../controller/courseController";
 import reviewController from "../controller/reviewController";
 import teacherController from "../controller/teacherController";
 import userFlowController from "../controller/userFlowController";
+import userController from "../controller/userController";
 const router = express.Router(); // bằng app = express();
 /**
  *
@@ -33,6 +34,7 @@ const initApiRoutes = (app) => {
     "/findReviewByCourseID/:courseID",
     reviewController.handleFindReviewByCourseID
   );
+  router.get("/findPopularCourses", courseController.handleFindPopularCourses);
 
   // review router
   router.get(
@@ -51,7 +53,7 @@ const initApiRoutes = (app) => {
     userFlowController.handleFindCourseByTeacherID_Categories
   );
   // user router
-  //   router.get("/user/read", userController.read);
+    router.get("/getTopTeacher", userController.getTopTeacher);
   //   router.post("/user/create", userController.create);
   //   router.put("/user/update", userController.update);
   //   router.delete("/user/delete", userController.remove);

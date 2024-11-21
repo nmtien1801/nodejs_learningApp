@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Lesson extends Model {
+  class Lessons extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,27 +9,28 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // Một bài học thuộc về một khóa học
-      Lesson.belongsTo(models.Course, {
+      Lessons.belongsTo(models.Course, {
         foreignKey: "lessonID",
         as: "course",
       });
-      Lesson.hasMany(models.Project, {
+      Lessons.hasMany(models.Project, {
         foreignKey: "lessonID", // Khoá ngoại trong bảng Project
         as: "projects", // Định danh quan hệ
       });
     }
   }
-  Lesson.init(
+  Lessons.init(
     {
       lessonID: DataTypes.INTEGER,
       title: DataTypes.STRING,
       urlVideo: DataTypes.STRING,
       state: DataTypes.BOOLEAN, // Cột state là kiểu BOOLEAN
+      courseID: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: "Lesson",
+      modelName: "Lessons",
     }
   );
-  return Lesson;
+  return Lessons;
 };

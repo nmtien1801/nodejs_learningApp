@@ -5,10 +5,11 @@ module.exports = (sequelize, DataTypes) => {
   class Course extends Model {
     static associate(models) {
       // Mối quan hệ nhiều-kết-nhiều với Order qua OrderDetail
-      Course.belongsToMany(models.Order, {
-        through: "OrderDetail",
+      Course.belongsToMany(models.Orders, {
+        through: models.OrderDetail, // Đảm bảo dùng model trung gian
         foreignKey: "courseID",
         otherKey: "orderID", // Sử dụng foreignKey khác trong bảng OrderDetail
+        as: "Orders", // Tên bí danh để dùng trong include
       });
 
       // Một khóa học có nhiều đánh giá
@@ -24,9 +25,15 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       // Một khóa học có thể có nhiều bài học (lesson)
-      Course.hasMany(models.Lesson, {
+      Course.hasMany(models.Lessons, {
         foreignKey: "courseID", // Khóa ngoại là courseID
         as: "Lesson", // Alias cho bài học
+      });
+
+      // Một khóa học có thể có nhiều người theo dõi
+      Course.hasMany(models.UserFollow, {
+        foreignKey: "courseID", // Khóa ngoại là courseID
+        as: "UserFollow", // Alias cho người theo dõi
       });
     }
   }

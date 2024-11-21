@@ -17,6 +17,9 @@ module.exports = {
       state: {
         type: Sequelize.BOOLEAN, // Cột state là kiểu BOOLEAN
       },
+      courseID: {
+        type: Sequelize.INTEGER,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
