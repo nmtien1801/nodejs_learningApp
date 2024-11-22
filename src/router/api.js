@@ -5,6 +5,8 @@ import reviewController from "../controller/reviewController";
 import teacherController from "../controller/teacherController";
 import userFlowController from "../controller/userFlowController";
 import userController from "../controller/userController";
+import lessonController from "../controller/lessonController";
+
 const router = express.Router(); // bằng app = express();
 /**
  *
@@ -58,6 +60,10 @@ const initApiRoutes = (app) => {
   //   router.post("/user/create", userController.create);
   //   router.put("/user/update", userController.update);
   //   router.delete("/user/delete", userController.remove);
+
+  // lesson router
+  router.get("/getAllLesson", lessonController.findAllLesson);
+
 
   return app.use("/api", router);
 };

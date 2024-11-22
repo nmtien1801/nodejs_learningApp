@@ -1,24 +1,23 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Lessons", {
+    await queryInterface.createTable("Video", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      title: {
+      name: {
         type: Sequelize.STRING,
       },
-      
-      state: {
-        type: Sequelize.INTEGER, // 1- Đã hoàn thành, 2- Chưa hoàn thành
+      urlVideo: {
+        type: Sequelize.STRING,
       },
-      courseID: {
+      LessonID: {
         type: Sequelize.INTEGER,
       },
-
+      
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -30,6 +29,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Lessons");
+    await queryInterface.dropTable("Video");
   },
 };
