@@ -35,6 +35,7 @@ const initApiRoutes = (app) => {
     reviewController.handleFindReviewByCourseID
   );
   router.get("/findPopularCourses", courseController.handleFindPopularCourses);
+  router.get("/findCourseSimilar/:id", courseController.handleFindCourseSimilar);
 
   // review router
   router.get(
