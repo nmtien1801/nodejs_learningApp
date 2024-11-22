@@ -32,10 +32,6 @@ const initApiRoutes = (app) => {
     courseController.handleFindCourseByState
   );
   router.get("/findCourseByID/:id", courseController.handleFindCourseByID);
-  router.get(
-    "/findReviewByCourseID/:courseID",
-    reviewController.handleFindReviewByCourseID
-  );
   router.get("/findPopularCourses", courseController.handleFindPopularCourses);
   router.get("/findCourseSimilar/:id", courseController.handleFindCourseSimilar);
 
@@ -43,6 +39,10 @@ const initApiRoutes = (app) => {
   router.get(
     "/getCourseReviewsAndAverageRating/:courseID",
     reviewController.handleGetCourseReviewsAndAverageRating
+  );
+  router.get(
+    "/findReviewByCourseID/:courseID",
+    reviewController.handleFindReviewByCourseID
   );
 
   // teacher router

@@ -7,16 +7,24 @@ require("dotenv").config();
 
 const findReviewByCourseID = async (courseID) => {
   try {
+    
     // Lấy tất cả đánh giá cùng với thông tin khóa học
     let reviews = await db.Review.findAll({
       where: {
         courseID: courseID, // Lọc theo courseID
       },
+      attributes: ["id", "rating", "review", "time"],
       include: [
         {
           model: db.Course, // Bao gồm thông tin từ bảng Course
           as: "course", // Sử dụng alias đúng "course" thay vì "Course"
           required: true, // Yêu cầu kết nối phải có dữ liệu từ bảng Course
+        },
+        // user
+        {
+          model: db.User, // Bao gồm thông tin từ bảng User
+          as: "user", // Sử dụng alias đúng "user" thay vì "User"
+          required: true, // Yêu cầu kết nối phải có dữ liệu từ bảng User
         },
       ],
     });
