@@ -18,20 +18,34 @@ module.exports = {
           lessonID: 1,
         },
         {
+          name: 'Adipisicing dolor amet occaeca',
           urlVideo: "https://youtu.be/vs5N49eZyKg?list=RDvs5N49eZyKg",
           lessonID: 2,
         },
         {
+          name:'Exercitation elit incididunt esse',
           urlVideo: "https://youtu.be/vs5N49eZyKg?list=RDvs5N49eZyKg",
           lessonID: 2,
         },
         {
+          name:'Duis esse ipsum laboru',
           urlVideo: "https://youtu.be/vs5N49eZyKg?list=RDvs5N49eZyKg",
           lessonID: 2,
         },
         {
+          name:'Labore minim reprehenderit pariaturea deserunt',
           urlVideo: "https://youtu.be/vs5N49eZyKg?list=RDvs5N49eZyKg",
           lessonID: 2,
+        },
+        {
+          name:'Exercitation minim ipsum laboru pariaturea deserunt',
+          urlVideo: "https://youtu.be/vs5N49eZyKg?list=RDvs5N49eZyKg",
+          lessonID: 3,
+        },
+        {
+          name:'Labore minim reprehenderit ipsum laboru',
+          urlVideo: "https://youtu.be/vs5N49eZyKg?list=RDvs5N49eZyKg",
+          lessonID: 4,
         },
       ],
       {}
