@@ -21,7 +21,6 @@ module.exports = (sequelize, DataTypes) => {
   Lessons.init(
     {
       title: DataTypes.STRING,
-      state: DataTypes.INTEGER, // 1- Đã hoàn thành, 2- Chưa hoàn thành
       courseID: DataTypes.INTEGER,
     },
     {

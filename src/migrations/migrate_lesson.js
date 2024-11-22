@@ -12,9 +12,6 @@ module.exports = {
         type: Sequelize.STRING,
       },
       
-      state: {
-        type: Sequelize.INTEGER, // 1- Đã hoàn thành, 2- Chưa hoàn thành
-      },
       courseID: {
         type: Sequelize.INTEGER,
       },

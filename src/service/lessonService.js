@@ -13,7 +13,7 @@ const findAllLesson = async () => {
       include: [
         {
           model: db.Video,
-          attributes: ["id", "urlVideo"],
+          attributes: ["id", "name", "state","urlVideo"],
           as: "Video", // Kết nối với bảng Video
         },
       ],
