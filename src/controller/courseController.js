@@ -76,7 +76,7 @@ const handleFindPopularCourses = async (req, res) => {
       DT: "",
     });
   }
-}
+};
 
 const handleFindCourseSimilar = async (req, res) => {
   try {
@@ -95,12 +95,40 @@ const handleFindCourseSimilar = async (req, res) => {
       DT: "",
     });
   }
-}
+};
+
+const handleSearchCourse = async (req, res) => {
+  try {
+    const keyword = req.params.name;
+    if (!keyword || keyword.trim() === "") {
+      return res.status(400).json({
+        EM: "Course name is required",
+        EC: -1,
+        DT: "",
+      });
+    }
+    const data = await courseService.searchCourse(keyword);
+    console.log("Search result:", data);
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC,
+      DT: data.DT,
+    });
+  } catch (error) {
+    console.error("Error in handleSearchCourse:", error);
+    return res.status(500).json({
+      EM: "Error from server",
+      EC: -1,
+      DT: "",
+    });
+  }
+};
 
 module.exports = {
   handleFindCourse,
   handleFindCourseByState,
   handleFindCourseByID,
   handleFindPopularCourses,
-  handleFindCourseSimilar
+  handleFindCourseSimilar,
+  handleSearchCourse,
 };
