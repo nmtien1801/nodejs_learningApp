@@ -319,6 +319,7 @@ const findCourseSimilar = async (id) => {
               model: db.User,
               attributes: ["userName"],
               as: "user",
+              where: { roleID: 1 }, // chỉ user có role = 1 (giảng viên)
             },
           ],
         },

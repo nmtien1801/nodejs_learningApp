@@ -55,6 +55,12 @@ const initApiRoutes = (app) => {
     "/findCourseByTeacherID_Categories/:teacherID",
     userFlowController.handleFindCourseByTeacherID_Categories
   );
+
+  router.get(
+    "/getCourseOfUser/:userID",
+    userFlowController.getCourseOfUser
+  );
+
   // user router
     router.get("/getTopTeacher", userController.getTopTeacher);
   //   router.post("/user/create", userController.create);
