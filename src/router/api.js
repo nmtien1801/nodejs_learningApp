@@ -37,7 +37,11 @@ const initApiRoutes = (app) => {
     reviewController.handleFindReviewByCourseID
   );
   router.get("/findPopularCourses", courseController.handleFindPopularCourses);
-  router.get("/findCourseSimilar/:id", courseController.handleFindCourseSimilar);
+  router.get(
+    "/findCourseSimilar/:id",
+    courseController.handleFindCourseSimilar
+  );
+  router.get("/searchCourse/:name", courseController.handleSearchCourse);
 
   // review router
   router.get(
@@ -56,14 +60,13 @@ const initApiRoutes = (app) => {
     userFlowController.handleFindCourseByTeacherID_Categories
   );
   // user router
-    router.get("/getTopTeacher", userController.getTopTeacher);
+  router.get("/getTopTeacher", userController.getTopTeacher);
   //   router.post("/user/create", userController.create);
   //   router.put("/user/update", userController.update);
   //   router.delete("/user/delete", userController.remove);
 
   // lesson router
   router.get("/getAllLesson", lessonController.findAllLesson);
-
 
   return app.use("/api", router);
 };

@@ -4,6 +4,7 @@ import { createJwt } from "../middleware/jwtAction";
 import { includes } from "lodash";
 import { raw } from "body-parser";
 require("dotenv").config();
+const { Op } = require("sequelize");
 
 const findAllCourses = async () => {
   try {
@@ -190,7 +191,6 @@ const findCourseByID = async (id) => {
   }
 };
 
-
 const findPopularCourses = async () => {
   try {
     // Lấy danh sách khóa học và thông tin review, rating
@@ -361,10 +361,96 @@ const findCourseSimilar = async (id) => {
   }
 };
 
+const searchCourse = async (keyword) => {
+  try {
+    const courses = await db.Course.findAll({
+      where: {
+        name: {
+          [Op.substring]: keyword,
+        },
+      },
+      attributes: { exclude: ["createdAt", "updatedAt", "lessonID"] },
+      include: [
+        {
+          model: db.Review,
+          attributes: ["review", "rating"],
+          as: "Review",
+        },
+        {
+          model: db.Lessons,
+          attributes: ["title"],
+          as: "Lesson",
+        },
+        {
+          model: db.Orders,
+          attributes: ["id", "total"],
+          as: "Orders",
+          through: {
+            model: db.OrderDetail,
+            attributes: ["price"],
+          },
+        },
+        {
+          model: db.UserFollow,
+          attributes: ["userID"],
+          as: "UserFollow",
+          include: [
+            {
+              model: db.User,
+              attributes: ["userName"],
+              as: "user",
+            },
+          ],
+        },
+      ],
+    });
+
+    // Kiểm tra nếu không có khóa học nào
+    if (!courses || courses.length === 0) {
+      return {
+        EM: "Không tìm thấy khóa học",
+        EC: 1,
+        DT: [],
+      };
+    }
+
+    const coursesWithAverageRating = courses.map((course) => {
+      const ratings = course.Review
+        ? course.Review.map((review) => review.rating)
+        : [];
+      const averageRating = ratings.length
+        ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+        : 0;
+      const totalLessons = course.Lesson ? course.Lesson.length : 0;
+
+      return {
+        ...course.toJSON(),
+        averageRating,
+        totalRating: ratings.length,
+        totalLessons,
+      };
+    });
+
+    return {
+      EM: "Tìm khóa học thành công",
+      EC: 0,
+      DT: coursesWithAverageRating,
+    };
+  } catch (error) {
+    console.error("Lỗi trong searchCourse:", error);
+    return {
+      EM: "Có lỗi xảy ra trong dịch vụ",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
+
 module.exports = {
   findAllCourses,
   findByState,
   findCourseByID,
   findPopularCourses,
-  findCourseSimilar
+  findCourseSimilar,
+  searchCourse,
 };
