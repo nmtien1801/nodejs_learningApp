@@ -57,6 +57,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true, // Hình ảnh có thể null
       },
+      descProject: {
+        type: DataTypes.STRING,
+        allowNull: true, // Mô tả có thể null
+      },
       categoryID: {
         type: DataTypes.INTEGER,
         allowNull: false, // Không cho phép categoryID null

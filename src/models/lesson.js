@@ -8,10 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "courseID",
         as: "course",
       });
-      Lessons.hasMany(models.Project, {
-        foreignKey: "lessonID", // Khoá ngoại trong bảng Project
-        as: "projects", // Định danh quan hệ
-      });
+      
       Lessons.hasMany(models.Video, {
         foreignKey: "lessonID", // Khoá ngoại trong bảng Video
         as: "Video", // Định danh quan hệ
@@ -21,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
   Lessons.init(
     {
       title: DataTypes.STRING,
-      state: DataTypes.INTEGER, // 1- Đã hoàn thành, 2- Chưa hoàn thành
       courseID: DataTypes.INTEGER,
     },
     {

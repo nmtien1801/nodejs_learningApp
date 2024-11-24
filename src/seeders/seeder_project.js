@@ -6,30 +6,30 @@ module.exports = {
       "Projects",
       [
         {
+          userID: 1,
+          name: "Web Development Project",
           description: "Web development project on front-end technologies.",
-          file: "front-end.zip",
-          lessonID: 1,
         },
         {
+          userID: 1,
+          name: "Web Development Project",
           description: "Machine learning project using Python and TensorFlow.",
-          file: "ml-project.zip",
-          lessonID: 2,
         },
         {
+          userID: 1,
+          name: "Web Development Project",
           description: "Mobile app development project using React Native.",
-          file: "mobile-app.zip",
-          lessonID: 3,
         },
         {
+          userID: 1,
+          name: "Web Development Project",
           description: "Data analysis project with data visualization in R.",
-          file: "data-analysis.zip",
-          lessonID: 4,
         },
         {
+          userID: 1,
+          name: "Web Development Project",
           description:
             "IoT project with embedded systems and sensor data collection.",
-          file: "iot-project.zip",
-          lessonID: 5,
         },
       ],
       {}

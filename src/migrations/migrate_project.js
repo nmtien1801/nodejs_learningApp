@@ -8,22 +8,19 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-
+      name: {
+        type: Sequelize.STRING,
+      },
       description: {
         type: Sequelize.STRING,
       },
-      file: {
-        type: Sequelize.STRING, // Lưu đường dẫn file
+      image: {
+        type: Sequelize.BLOB("long"),
       },
-      lessonID: {
+      userID: {
         type: Sequelize.INTEGER,
-        // references: {
-        //   model: "Lesson",
-        //   key: "id",
-        // },
-        // onDelete: "SET NULL",
-        // onUpdate: "CASCADE",
       },
+    
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

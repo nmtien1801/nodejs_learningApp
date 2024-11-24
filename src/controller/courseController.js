@@ -19,26 +19,6 @@ const handleFindCourse = async (req, res) => {
   }
 };
 
-const handleFindCourseByState = async (req, res) => {
-  try {
-    let state = req.params.state;
-    let data = await courseService.findByState(state);
-    console.log("data:", data);
-    return res.status(200).json({
-      EM: data.EM,
-      EC: data.EC,
-      DT: data.DT,
-    });
-  } catch (error) {
-    console.error("Error in handleFindCourseByState:", error);
-    return res.status(500).json({
-      EM: "Error from server",
-      EC: -1,
-      DT: "",
-    });
-  }
-};
-
 const handleFindCourseByID = async (req, res) => {
   try {
     let id = req.params.id;
@@ -126,7 +106,6 @@ const handleSearchCourse = async (req, res) => {
 
 module.exports = {
   handleFindCourse,
-  handleFindCourseByState,
   handleFindCourseByID,
   handleFindPopularCourses,
   handleFindCourseSimilar,

@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: DataTypes.STRING,
       urlVideo: DataTypes.STRING,
+      state: DataTypes.INTEGER, // 1- Đã hoàn thành, 2- Chưa hoàn thành
       lessonID: DataTypes.INTEGER,
     },
     {
