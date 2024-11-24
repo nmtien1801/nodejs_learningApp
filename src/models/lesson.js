@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "courseID",
         as: "course",
       });
-      Lessons.hasMany(models.Project, {
+      Lessons.hasMany(models.Projects, {
         foreignKey: "lessonID", // Khoá ngoại trong bảng Project
         as: "projects", // Định danh quan hệ
       });

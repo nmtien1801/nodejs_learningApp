@@ -102,5 +102,5 @@ module.exports = {
   handleFindCourseByState,
   handleFindCourseByID,
   handleFindPopularCourses,
-  handleFindCourseSimilar
+  handleFindCourseSimilar,
 };

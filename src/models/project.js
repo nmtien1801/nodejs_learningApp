@@ -2,27 +2,25 @@
 const { Model, DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  class Project extends Model {
+  class Projects extends Model {
     static associate(models) {
-      Project.belongsTo(models.Lessons, {
-        foreignKey: "lessonID",
-        as: "lesson",
-      });
+     
     }
   }
 
-  Project.init(
+  Projects.init(
     {
-      projectID: DataTypes.INTEGER,
+      userID: DataTypes.INTEGER,
       description: DataTypes.STRING,
       file: DataTypes.STRING, // Lưu đường dẫn file
+      resource: DataTypes.TEXT,
       lessonID: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: "Project",
+      modelName: "Projects",
     }
   );
 
-  return Project;
+  return Projects;
 };

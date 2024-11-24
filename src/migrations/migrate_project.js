@@ -9,12 +9,19 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
 
+      userID: {
+        type: Sequelize.INTEGER,
+      },
       description: {
         type: Sequelize.STRING,
       },
       file: {
         type: Sequelize.STRING, // Lưu đường dẫn file
       },
+      resource: {
+        type: Sequelize.TEXT,
+      },
+
       lessonID: {
         type: Sequelize.INTEGER,
         // references: {

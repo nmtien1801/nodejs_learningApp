@@ -190,7 +190,6 @@ const findCourseByID = async (id) => {
   }
 };
 
-
 const findPopularCourses = async () => {
   try {
     // Lấy danh sách khóa học và thông tin review, rating
@@ -367,5 +366,5 @@ module.exports = {
   findByState,
   findCourseByID,
   findPopularCourses,
-  findCourseSimilar
+  findCourseSimilar,
 };

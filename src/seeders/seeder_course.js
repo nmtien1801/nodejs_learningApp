@@ -10,7 +10,7 @@ module.exports = {
           title: "Introduction to User Experiece Design",
           description:
             "Convallis in semper laoreet nibh leo. Vivamus malesuada ipsum pulvinar non rutrum risus dui, risus. Purus massa velit iaculis tincidunt tortor, risus, scelerisque risus... See more",
-          image: "",
+          image: "https://via.placeholder.com/150",
           state: 0, // chưa bắt đầu
           categoryID: 1,
           lessonID: 1,
@@ -20,7 +20,7 @@ module.exports = {
             title: "Introduction to User Experiece Design",
             description:
               "Convallis in semper laoreet nibh leo. Vivamus malesuada ipsum pulvinar non rutrum risus dui, risus. Purus massa velit iaculis tincidunt tortor, risus, scelerisque risus... See more",
-            image: "",
+            image: "https://via.placeholder.com/150",
             state: 0, // chưa bắt đầu
             categoryID: 1,
             lessonID: 1,
@@ -30,7 +30,7 @@ module.exports = {
             title: "Introduction to User Experiece Design",
             description:
               "Convallis in semper laoreet nibh leo. Vivamus malesuada ipsum pulvinar non rutrum risus dui, risus. Purus massa velit iaculis tincidunt tortor, risus, scelerisque risus... See more",
-            image: "",
+            image: "https://via.placeholder.com/150",
             state: 1, // đang học
             categoryID: 1,
             lessonID: 1,
@@ -40,7 +40,7 @@ module.exports = {
             title: "Introduction to User Experiece Design",
             description:
               "Convallis in semper laoreet nibh leo. Vivamus malesuada ipsum pulvinar non rutrum risus dui, risus. Purus massa velit iaculis tincidunt tortor, risus, scelerisque risus... See more",
-            image: "",
+            image: "https://via.placeholder.com/150",
             state: 2, // đã hoàn thành
             categoryID: 1,
             lessonID: 1,
@@ -50,7 +50,7 @@ module.exports = {
             title: "Introduction to User Experiece Design",
             description:
               "Convallis in semper laoreet nibh leo. Vivamus malesuada ipsum pulvinar non rutrum risus dui, risus. Purus massa velit iaculis tincidunt tortor, risus, scelerisque risus... See more",
-            image: "",
+            image: "https://via.placeholder.com/150",
             state: 0, // chưa bắt đầu
             categoryID: 1,
             lessonID: 1,
@@ -60,7 +60,7 @@ module.exports = {
             title: "Introduction to User Experiece Design",
             description:
               "Convallis in semper laoreet nibh leo. Vivamus malesuada ipsum pulvinar non rutrum risus dui, risus. Purus massa velit iaculis tincidunt tortor, risus, scelerisque risus... See more",
-            image: "",
+            image: "https://via.placeholder.com/150",
             state: 0, // chưa bắt đầu
             categoryID: 1,
             lessonID: 1,
