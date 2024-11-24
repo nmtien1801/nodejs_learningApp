@@ -11,10 +11,9 @@ module.exports = (sequelize) => {
   Projects.init(
     {
       userID: DataTypes.INTEGER,
+      name: DataTypes.STRING,
+      image: DataTypes.STRING,
       description: DataTypes.STRING,
-      file: DataTypes.STRING, // Lưu đường dẫn file
-      resource: DataTypes.TEXT,
-      lessonID: DataTypes.INTEGER,
     },
     {
       sequelize,

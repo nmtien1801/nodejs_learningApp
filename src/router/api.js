@@ -78,6 +78,7 @@ const initApiRoutes = (app) => {
 
   // project router
   router.get("/getProjectByUser/:userID", projectController.getProjectByUser);
+  router.post("/createProject", projectController.createProject);
 
 
   return app.use("/api", router);
