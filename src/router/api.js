@@ -28,10 +28,6 @@ const initApiRoutes = (app) => {
   // course router
   router.get("/ ", courseController.handleFindCourse);
   router.get("/findAllCourses", courseController.handleFindCourse);
-  router.get(
-    "/findCourseByState/:state",
-    courseController.handleFindCourseByState
-  );
   router.get("/findCourseByID/:id", courseController.handleFindCourseByID);
   router.get("/findPopularCourses", courseController.handleFindPopularCourses);
   router.get("/findCourseSimilar/:id", courseController.handleFindCourseSimilar);

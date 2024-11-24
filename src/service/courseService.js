@@ -84,28 +84,6 @@ const findAllCourses = async () => {
   }
 };
 
-const findByState = async (state) => {
-  try {
-    let courses = await db.Course.findAll({
-      where: {
-        state: state,
-      },
-    });
-    return {
-      EM: "findyByState is created successfully",
-      EC: 0,
-      DT: courses,
-    };
-  } catch (error) {
-    console.error("Error in findByState:", error);
-    return {
-      EM: "Something went wrong in the service",
-      EC: -2,
-      DT: "",
-    };
-  }
-};
-
 const findCourseByID = async (id) => {
   try {
     let course = await db.Course.findOne({
@@ -363,7 +341,6 @@ const findCourseSimilar = async (id) => {
 
 module.exports = {
   findAllCourses,
-  findByState,
   findCourseByID,
   findPopularCourses,
   findCourseSimilar,
