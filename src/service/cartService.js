@@ -1,4 +1,4 @@
-import db from "../models/index"; // Import các model từ sequelize
+import db from "../models/index"; // Import models from sequelize
 import bcrypt from "bcryptjs";
 import { createJwt } from "../middleware/jwtAction";
 import { includes } from "lodash";
@@ -6,7 +6,7 @@ import { raw } from "body-parser";
 require("dotenv").config();
 const { Op } = require("sequelize");
 
-// Get giỏ hàng theo userID
+// Get cart by userID
 const getCartByUserID = async (userID) => {
   return await db.Cart.findAll({
     where: {
@@ -15,33 +15,58 @@ const getCartByUserID = async (userID) => {
     include: [
       {
         model: db.Course,
-        as: "course", // Dùng alias "course" đã định nghĩa trong association
+        as: "course", // Use alias "course" defined in the association
       },
     ],
   });
 };
 
-// Thêm khóa học vào giỏ hàng
+// Add course to cart
 const addCourseToCart = async (userID, courseID) => {
-  // Kiểm tra xem khóa học đã có trong giỏ hàng chưa
-  const existingCart = await db.Cart.findOne({
-    where: {
+  try {
+    // Kiểm tra xem userID và courseID có hợp lệ không
+    if (!userID || !courseID) {
+      throw new Error("userID or courseID is missing or invalid");
+    }
+
+    // Log giá trị userID và courseID để kiểm tra
+    console.log(
+      "Adding course to cart - userID:",
+      userID,
+      "courseID:",
+      courseID
+    );
+
+    // Kiểm tra xem khóa học đã có trong giỏ hàng chưa
+    const existingCart = await db.Cart.findOne({
+      where: {
+        userID: userID,
+        courseID: courseID, // Kiểm tra để tránh trùng lặp khóa học trong giỏ hàng
+      },
+    });
+
+    if (existingCart) {
+      // Nếu khóa học đã có trong giỏ hàng, ném lỗi
+      throw new Error("The course is already in the cart");
+    }
+
+    // Nếu chưa có, thêm khóa học vào giỏ hàng
+    const newCart = await db.Cart.create({
       userID: userID,
-      courseID: courseID, // Thêm check để tránh thêm trùng khóa học vào giỏ
-    },
-  });
+      courseID: courseID, // Thêm khóa học vào giỏ hàng
+    });
 
-  if (existingCart) {
-    throw new Error("Khóa học đã có trong giỏ hàng");
+    console.log("Course added successfully to cart:", newCart);
+
+    return newCart; // Trả về kết quả
+  } catch (error) {
+    // Nếu có lỗi, log và ném lỗi ra ngoài
+    console.error("Error in addCourseToCart:", error);
+    throw error; // Ném lỗi để phía caller có thể xử lý
   }
-
-  return await db.Cart.create({
-    userID: userID,
-    courseID: courseID, // Gán khóa học vào giỏ hàng
-  });
 };
 
-// Xóa khóa học khỏi giỏ hàng
+// Remove course from cart
 const deleteCourseFromCart = async (userID, courseID) => {
   const result = await db.Cart.destroy({
     where: {
@@ -51,13 +76,13 @@ const deleteCourseFromCart = async (userID, courseID) => {
   });
 
   if (result === 0) {
-    throw new Error("Không tìm thấy khóa học trong giỏ hàng");
+    throw new Error("Course not found in the cart");
   }
 
   return result;
 };
 
-// Xóa toàn bộ giỏ hàng
+// Remove all courses from cart
 const deleteAllCart = async (userID) => {
   return await db.Cart.destroy({
     where: {
@@ -66,12 +91,12 @@ const deleteAllCart = async (userID) => {
   });
 };
 
-// Tính tổng tiền giỏ hàng
+// Calculate total price of the cart
 const getTotalPrice = async (userID) => {
   const carts = await getCartByUserID(userID);
   let totalPrice = 0;
 
-  // Duyệt qua tất cả khóa học trong giỏ hàng và tính tổng
+  // Iterate through all courses in the cart and calculate total
   carts.forEach((cart) => {
     if (cart.course && cart.course.price) {
       totalPrice += cart.course.price;
