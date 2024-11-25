@@ -7,7 +7,6 @@ require("dotenv").config();
 
 const findReviewByCourseID = async (courseID) => {
   try {
-    
     // Lấy tất cả đánh giá cùng với thông tin khóa học
     let reviews = await db.Review.findAll({
       where: {
@@ -53,7 +52,7 @@ const getCourseReviewsAndAverageRating = async (courseID) => {
       where: {
         courseID: courseID,
       },
-      attributes: ["id","userID", "courseID","rating", "review","time"],
+      attributes: ["id", "userID", "courseID", "rating", "review", "time"],
       include: [
         {
           model: db.Course,
@@ -101,7 +100,43 @@ const getCourseReviewsAndAverageRating = async (courseID) => {
   }
 };
 
+// Đánh giá khóa học
+const addReview = async (courseID, userID, rating, review) => {
+  try {
+    // Kiểm tra xem userId và courseId có hợp lệ không
+    if (!userID || !courseID) {
+      throw new Error("userId hoặc courseId không hợp lệ");
+    }
+
+    // Log giá trị userID và courseID để kiểm tra
+    console.log("Adding review - userID:", userID, "courseID:", courseID);
+
+    // Tạo một đánh giá mới
+    const newReview = await db.Review.create({
+      courseID: courseID,
+      userID: userID,
+      rating: rating,
+      // review: review,
+      // time: new Date(),
+    });
+
+    // Trả về thông báo thành công
+    return {
+      EM: "Đánh giá khóa học thành công",
+      EC: 0,
+      DT: newReview,
+    };
+  } catch (error) {
+    console.error("Lỗi khi thêm đánh giá:", error);
+    return {
+      EM: "Không thể thêm đánh giá. Vui lòng thử lại sau.",
+      EC: -2,
+      DT: null,
+    };
+  }
+};
 module.exports = {
   findReviewByCourseID,
   getCourseReviewsAndAverageRating,
+  addReview,
 };

@@ -99,6 +99,9 @@ const initApiRoutes = (app) => {
     orderController.handleGetOrderByUserID
   );
 
+  //ĐÁNH GIÁ KHÓA HỌC
+  router.post("/createReview", reviewController.handleCreateReview);
+
   router.post("/buyCourses", orderController.handleBuyCourses);
   return app.use("/api", router);
 };
