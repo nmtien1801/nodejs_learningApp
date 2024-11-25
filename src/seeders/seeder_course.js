@@ -14,7 +14,6 @@ module.exports = {
           state: 0, // chưa bắt đầu,
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
-          lessonID: 1,
           price: 10,
         },
         {
@@ -26,7 +25,6 @@ module.exports = {
           state: 0, // chưa bắt đầu
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
-          lessonID: 1,
           price: 12,
         },
         {
@@ -38,7 +36,6 @@ module.exports = {
           state: 1, // đang học
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
-          lessonID: 1,
           price: 13,
         },
         {
@@ -50,7 +47,6 @@ module.exports = {
           state: 2, // đã hoàn thành
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
-          lessonID: 1,
           price: 14,
         },
         {
@@ -62,7 +58,6 @@ module.exports = {
           state: 0, // chưa bắt đầu
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
-          lessonID: 1,
           price: 15,
         },
         {
@@ -74,7 +69,6 @@ module.exports = {
           state: 0, // chưa bắt đầu
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
-          lessonID: 1,
           price: 16,
         },
       ],
