@@ -2,7 +2,8 @@ import orderService from "../service/orderService";
 
 const handleGetOrderByUserID = async (req, res) => {
   try {
-    const { userID } = req.params; // Sử dụng destructuring để dễ đọc
+    const { userID } = req.params;
+
     if (!userID) {
       return res.status(400).json({
         EM: "Thiếu userID trong request",
@@ -11,16 +12,12 @@ const handleGetOrderByUserID = async (req, res) => {
       });
     }
 
-    const data = await orderService.getOrdersByUserId(userID);
-    console.log("Fetched orders for userID:", userID, "Data:", data);
+    const result = await orderService.getOrdersByUserId(userID);
 
-    return res.status(200).json({
-      EM: "Lấy danh sách khóa học thành công",
-      EC: 0,
-      DT: data,
-    });
+    // Trả thẳng kết quả từ service mà không bọc thêm
+    return res.status(200).json(result);
   } catch (error) {
-    console.error("Error in handleGetOrderByUserID:", error); // Log lỗi chi tiết
+    console.error("Error in handleGetOrderByUserID:", error);
 
     return res.status(500).json({
       EM: "Lỗi từ server",
@@ -30,6 +27,36 @@ const handleGetOrderByUserID = async (req, res) => {
   }
 };
 
-export default {
+const handleBuyCourses = async (req, res) => {
+  try {
+    let { userID, courseIDs } = req.body;
+
+    // Chuyển đổi courseIDs thành mảng nếu nó là một chuỗi
+    if (typeof courseIDs === "string") {
+      courseIDs = [courseIDs]; // Nếu là chuỗi, chuyển thành mảng
+    }
+
+    if (!userID || !Array.isArray(courseIDs) || courseIDs.length === 0) {
+      return res.status(400).json({
+        EM: "Thiếu userID hoặc courseIDs không hợp lệ trong request",
+        EC: 1,
+        DT: null,
+      });
+    }
+
+    const result = await orderService.buyCourses(userID, courseIDs);
+    return res.status(200).json(result); // Trả về kết quả từ buyCourses
+  } catch (error) {
+    console.error("Error in handleBuyCourses:", error);
+    return res.status(500).json({
+      EM: "Lỗi từ server",
+      EC: -1,
+      DT: null,
+    });
+  }
+};
+
+module.exports = {
   handleGetOrderByUserID,
+  handleBuyCourses,
 };

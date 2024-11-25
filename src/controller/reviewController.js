@@ -36,7 +36,29 @@ const handleFindReviewByCourseID = async (req, res) => {
     });
   }
 };
+
+// Đánh giá khóa học
+const handleCreateReview = async (req, res) => {
+  try {
+    let { userID, courseID, rating } = req.body;
+    let data = await reviewService.addReview(userID, courseID, rating);
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC,
+      DT: data.DT,
+    });
+  } catch (error) {
+    console.error("Error in handleCreateReview:", error);
+    return res.status(500).json({
+      EM: "Error from server",
+      EC: -1,
+      DT: "",
+    });
+  }
+};
+
 module.exports = {
   handleFindReviewByCourseID,
   handleGetCourseReviewsAndAverageRating,
+  handleCreateReview,
 };
