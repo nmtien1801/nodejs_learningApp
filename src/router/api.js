@@ -7,6 +7,7 @@ import userFlowController from "../controller/userFlowController";
 import userController from "../controller/userController";
 import lessonController from "../controller/lessonController";
 import projectController from "../controller/projectController";
+import cartController from "../controller/cartController";
 
 const router = express.Router(); // bằng app = express();
 /**
@@ -32,8 +33,9 @@ const initApiRoutes = (app) => {
   router.get("/findPopularCourses", courseController.handleFindPopularCourses);
   router.get("/findCourseSimilar/:id", courseController.handleFindCourseSimilar);
   router.post("/addNewCourse", courseController.addNewCourse);
+  router.get("/searchCourse/:keyword", courseController.handleSearchCourse);
 
-  // review router
+  // 1. review router
   router.get(
     "/getCourseReviewsAndAverageRating/:courseID",
     reviewController.handleGetCourseReviewsAndAverageRating
@@ -43,44 +45,47 @@ const initApiRoutes = (app) => {
     reviewController.handleFindReviewByCourseID
   );
 
-  // teacher router
+  // 2. teacher router
   router.get(
     "/teacherOverview/:teacherID",
     teacherController.handleTeacherOverview
   );
-  //userFlow router
+  // 3. userFlow router
   router.get(
     "/findCourseByTeacherID_Categories/:teacherID",
     userFlowController.handleFindCourseByTeacherID_Categories
   );
 
-  router.get(
-    "/getCourseOfUser/:userID",
-    userFlowController.getCourseOfUser
-  );
+  router.get("/getCourseOfUser/:userID", userFlowController.getCourseOfUser);
 
-  // user router
-    router.get("/getTopTeacher", userController.getTopTeacher);
-    router.get("/getAllCourseUser/:userID", userController.getAllCourseUser);
-    router.get(
-      "/findCourseUserState1/:userID",    // on going
-      userController.findCourseUserState1
-    );
-    router.get(
-      "/findCourseUserState2/:userID",    // conpleted
-      userController.findCourseUserState2
-    );
+  // 4. user router
+  router.get("/getTopTeacher", userController.getTopTeacher);
+  router.get("/getAllCourseUser/:userID", userController.getAllCourseUser);
+  router.get(
+    "/findCourseUserState1/:userID", // on going
+    userController.findCourseUserState1
+  );
+  router.get(
+    "/findCourseUserState2/:userID", // conpleted
+    userController.findCourseUserState2
+  );
   //   router.post("/user/create", userController.create);
   //   router.put("/user/update", userController.update);
   //   router.delete("/user/delete", userController.remove);
 
-  // lesson router
+  // 5. lesson router
   router.get("/getAllLesson", lessonController.findAllLesson);
 
-  // project router
+  // 6. project router
   router.get("/getProjectByUser/:userID", projectController.getProjectByUser);
   router.post("/createProject", projectController.createProject);
 
+  //7. cart router
+  router.get("/getCartByUser/:userID", cartController.getCartByUser);
+  router.post("/addCourseToCart", cartController.addCourseToCart);
+  router.post("/removeCourseFromCart", cartController.removeCourseFromCart);
+  router.delete("/removeAllCart/:userID", cartController.removeAllCart);
+  router.get("/getTotalPrice/:userID", cartController.getTotalPrice);
 
   return app.use("/api", router);
 };

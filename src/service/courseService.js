@@ -4,6 +4,7 @@ import { createJwt } from "../middleware/jwtAction";
 import { includes } from "lodash";
 import { raw } from "body-parser";
 require("dotenv").config();
+const { Op } = require("sequelize");
 
 const findAllCourses = async () => {
   try {
@@ -345,7 +346,7 @@ const addNewCourse = async (courseData) => {
     let newCourse = await db.Course.create({
       name: courseData.name,
       title: courseData.title,
-      description:  courseData.description,
+      description: courseData.description,
       image: courseData.image,
       descProject: courseData.descriptionProject,
       state: 0, // Chưa bắt đầu
@@ -366,6 +367,177 @@ const addNewCourse = async (courseData) => {
   } catch (error) {
     console.error("Error in addNewCourse service:", error);
     return {
+      EM: "err addNewCourse in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
+
+// const searchCourse = async (keyword) => {
+//   try {
+//     const courses = await db.Course.findAll({
+//       where: {
+//         name: {
+//           [Op.substring]: keyword,
+//         },
+//       },
+//       attributes: { exclude: ["createdAt", "updatedAt", "lessonID"] },
+//       include: [
+//         {
+//           model: db.Review,
+//           attributes: ["review", "rating"],
+//           as: "Review",
+//         },
+//         {
+//           model: db.Lessons,
+//           attributes: ["title"],
+//           as: "Lesson",
+//         },
+//         {
+//           model: db.Orders,
+//           attributes: ["id", "total"],
+//           as: "Orders",
+//           through: {
+//             model: db.OrderDetail,
+//             attributes: ["price"],
+//           },
+//         },
+//         {
+//           model: db.UserFollow,
+//           attributes: ["userID"],
+//           as: "UserFollow",
+//           include: [
+//             {
+//               model: db.User,
+//               attributes: ["userName"],
+//               as: "user",
+//             },
+//           ],
+//         },
+//       ],
+//     });
+
+//     // Kiểm tra nếu không có khóa học nào
+//     if (!courses || courses.length === 0) {
+//       return {
+//         EM: "Không tìm thấy khóa học",
+//         EC: 1,
+//         DT: [],
+//       };
+//     }
+
+//     const coursesWithAverageRating = courses.map((course) => {
+//       const ratings = course.Review
+//         ? course.Review.map((review) => review.rating)
+//         : [];
+//       const averageRating = ratings.length
+//         ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+//         : 0;
+//       const totalLessons = course.Lesson ? course.Lesson.length : 0;
+
+//       return {
+//         ...course.toJSON(),
+//         averageRating,
+//         totalRating: ratings.length,
+//         totalLessons,
+//       };
+//     });
+
+//     return {
+//       EM: "Tìm khóa học thành công",
+//       EC: 0,
+//       DT: coursesWithAverageRating,
+//     };
+//   } catch (error) {
+//     console.error("Lỗi trong searchCourse:", error);
+//     return {
+//       EM: "Có lỗi xảy ra trong dịch vụ",
+//       EC: -2,
+//       DT: "",
+//     };
+//   }
+// };
+
+const searchCourse = async (keyword) => {
+  try {
+    const courses = await db.Course.findAll({
+      where: {
+        name: {
+          [Op.substring]: keyword,
+        },
+      },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      include: [
+        {
+          model: db.Review,
+          attributes: ["review", "rating"],
+          as: "Review",
+        },
+        {
+          model: db.Lessons,
+          attributes: ["title"],
+          as: "Lesson",
+        },
+        {
+          model: db.Orders,
+          attributes: ["id", "total"],
+          as: "Orders",
+          through: {
+            model: db.OrderDetail,
+            attributes: ["price"],
+          },
+        },
+        {
+          model: db.UserFollow,
+          attributes: ["userID"],
+          as: "UserFollow",
+          include: [
+            {
+              model: db.User,
+              attributes: ["userName", "title"],
+              as: "user",
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!courses || courses.length === 0) {
+      return {
+        EM: "No courses found matching the keyword",
+        EC: -1,
+        DT: [],
+      };
+    }
+
+    const processedCourses = courses.map((course) => {
+      const courseJSON = course.toJSON();
+
+      const ratings = courseJSON.Review?.map((review) => review.rating) || [];
+      const averageRating =
+        ratings.length > 0
+          ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+          : 0;
+
+      const totalLessons = courseJSON.Lesson?.length || 0;
+
+      return {
+        ...courseJSON,
+        averageRating,
+        totalRating: ratings.length,
+        totalLessons,
+      };
+    });
+
+    return {
+      EM: "Courses retrieved successfully",
+      EC: 0,
+      DT: processedCourses,
+    };
+  } catch (error) {
+    console.error("Error in searchCourse:", error);
+    return {
       EM: "Something went wrong in the service",
       EC: -2,
       DT: "",
@@ -379,4 +551,5 @@ module.exports = {
   findPopularCourses,
   findCourseSimilar,
   addNewCourse,
+  searchCourse,
 };
