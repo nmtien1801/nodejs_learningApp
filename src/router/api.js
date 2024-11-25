@@ -99,7 +99,6 @@ const initApiRoutes = (app) => {
     orderController.handleGetOrderByUserID
   );
 
-  router.post("/buyCourse", orderController.handleBuyCourse);
   router.post("/buyCourses", orderController.handleBuyCourses);
   return app.use("/api", router);
 };

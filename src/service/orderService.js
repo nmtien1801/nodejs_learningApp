@@ -1,5 +1,7 @@
 "use strict";
-const db = require("../models");
+import db from "../models/index"; // Import models from sequelize
+require("dotenv").config();
+const { Op } = require("sequelize");
 
 const getOrdersByUserId = async (userId) => {
   try {
@@ -168,8 +170,21 @@ const buyCourse = async (userID, courseID) => {
 
 const buyCourses = async (userID, courseIDs) => {
   try {
-    if (!userID || !Array.isArray(courseIDs) || courseIDs.length === 0) {
+    // Đảm bảo courseIDs là mảng
+    if (
+      !userID ||
+      (!Array.isArray(courseIDs) && typeof courseIDs !== "string")
+    ) {
       throw new Error("userID hoặc courseIDs không hợp lệ");
+    }
+
+    // Nếu courseIDs là chuỗi, chuyển thành mảng
+    if (typeof courseIDs === "string") {
+      courseIDs = [courseIDs];
+    }
+
+    if (courseIDs.length === 0) {
+      throw new Error("courseIDs không thể rỗng");
     }
 
     console.log(
@@ -198,14 +213,12 @@ const buyCourses = async (userID, courseIDs) => {
           DT: null,
         };
       }
-
       // Thêm chi tiết đơn hàng cho mỗi khóa học
       const orderDetail = await db.OrderDetail.create({
         orderID: newOrder.id,
         courseID: courseID,
         price: course.price,
       });
-
       orderDetails.push(orderDetail);
       totalPrice += course.price;
     }
@@ -234,7 +247,6 @@ const buyCourses = async (userID, courseIDs) => {
     };
   }
 };
-
 module.exports = {
   getOrdersByUserId,
   buyCourse,
