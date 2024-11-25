@@ -3,18 +3,21 @@ import cartService from "../service/cartService";
 // Get cart by userID
 const getCartByUser = async (req, res) => {
   try {
+    // Lấy dữ liệu giỏ hàng từ service mà không cần thông điệp lồng
     let data = await cartService.getCartByUserID(req.params.userID);
+
+    // Trả về kết quả dưới dạng JSON
     return res.status(200).json({
-      EM: "Get cart by user successfully",
-      EC: 0,
-      DT: data,
+      EM: "Get cart by user successfully", // Thông điệp thành công
+      EC: 0, // Mã thành công
+      DT: data, // Dữ liệu giỏ hàng đã được xử lý
     });
   } catch (error) {
     console.log("Error:", error);
     return res.status(500).json({
       EM: "Error from server",
       EC: -1,
-      DT: "",
+      DT: "", // Trả về dữ liệu rỗng khi có lỗi
     });
   }
 };
@@ -53,57 +56,99 @@ const addCourseToCart = async (req, res) => {
   }
 };
 
-// Remove course from cart
-const removeCourseFromCart = async (req, res) => {
+// Xóa các mục được chọn khỏi giỏ hàng
+const removeSelectedCartItems = async (req, res) => {
+  const { cartIDs } = req.body; // Nhận danh sách `cartIDs` từ body của request
+
+  // Kiểm tra `cartIDs` có phải là mảng hay không
+  if (!Array.isArray(cartIDs)) {
+    return res.status(400).json({
+      EM: "cartIDs must be an array",
+      EC: -1,
+      DT: "",
+    });
+  }
+
   try {
-    let data = await cartService.deleteCourseFromCart(
-      req.body.userID,
-      req.body.courseID
-    );
-    return res.status(200).json({
-      EM: "Course removed from cart successfully",
+    // Sử dụng hàm từ service để xóa các mục trong giỏ hàng
+    const deletedCount = await cartService.deleteSelectedCartItems(cartIDs);
+
+    // Kiểm tra số lượng mục đã xóa
+    if (deletedCount === 0) {
+      return res.status(404).json({
+        EM: "Selected items not found in cart",
+        EC: -1,
+        DT: "",
+      });
+    }
+
+    res.status(200).json({
+      EM: "Selected items removed successfully",
       EC: 0,
-      DT: data,
+      DT: deletedCount,
     });
   } catch (error) {
-    return res.status(500).json({
-      EM: "Error from server",
+    console.log("lỗi", error);
+    res.status(500).json({
+      EM: "Error removing selected items",
       EC: -1,
       DT: "",
     });
   }
 };
 
-// Remove all courses from cart
-const removeAllCart = async (req, res) => {
-  try {
-    let data = await cartService.deleteAllCart(req.params.userID);
-    return res.status(200).json({
-      EM: "All courses removed from cart successfully",
-      EC: 0,
-      DT: data,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      EM: "Error from server",
+const calculateTotalPrice = async (req, res) => {
+  const { cartIDs } = req.body; // Nhận danh sách `cartIDs` từ body của request
+
+  // Kiểm tra `cartIDs` có phải là mảng hay không
+  if (!Array.isArray(cartIDs)) {
+    return res.status(400).json({
+      EM: "cartIDs must be an array",
       EC: -1,
       DT: "",
     });
   }
-};
 
-// Get total price of the cart
-const getTotalPrice = async (req, res) => {
   try {
-    let data = await cartService.getTotalPrice(req.params.userID);
-    return res.status(200).json({
+    const totalPrice = await cartService.calculateTotalPrice(cartIDs);
+    res.status(200).json({
       EM: "Total price calculated successfully",
       EC: 0,
-      DT: data,
+      DT: totalPrice,
     });
   } catch (error) {
-    return res.status(500).json({
-      EM: "Error from server",
+    console.log("lỗi", error);
+    res.status(500).json({
+      EM: "Error calculating total price",
+      EC: -1,
+      DT: "",
+    });
+  }
+};
+
+const deleteSelectedCourse = async (req, res) => {
+  const { courseID } = req.body; // Nhận danh sách `courseID` từ body của request
+
+  // Kiểm tra `courseID` có phải là mảng hay không
+  if (!Array.isArray(courseID)) {
+    return res.status(400).json({
+      EM: "courseID must be an array",
+      EC: -1,
+      DT: "",
+    });
+  }
+
+  try {
+    const deletedCount = await cartService.deleteSelectedCourse(courseID);
+    res.status(200).json({
+      EM: "Selected items removed successfully",
+      EC: 0,
+      DT: deletedCount,
+    });
+  } catch (error) {
+    console.log("lỗi", error);
+    res.status(500).json({
+      EM: "Error removing selected items",
       EC: -1,
       DT: "",
     });
@@ -113,7 +158,7 @@ const getTotalPrice = async (req, res) => {
 module.exports = {
   getCartByUser,
   addCourseToCart,
-  removeCourseFromCart,
-  removeAllCart,
-  getTotalPrice,
+  removeSelectedCartItems,
+  calculateTotalPrice,
+  deleteSelectedCourse,
 };
