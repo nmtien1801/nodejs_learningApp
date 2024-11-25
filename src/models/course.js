@@ -73,6 +73,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false, // Trạng thái không thể null
       },
+      price: {
+        type: DataTypes.INTEGER,
+        allowNull: false, // Giá không thể null
+      },
     },
     {
       sequelize,
