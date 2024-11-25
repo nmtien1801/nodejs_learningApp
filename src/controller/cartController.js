@@ -3,18 +3,21 @@ import cartService from "../service/cartService";
 // Get cart by userID
 const getCartByUser = async (req, res) => {
   try {
+    // Lấy dữ liệu giỏ hàng từ service mà không cần thông điệp lồng
     let data = await cartService.getCartByUserID(req.params.userID);
+
+    // Trả về kết quả dưới dạng JSON
     return res.status(200).json({
-      EM: "Get cart by user successfully",
-      EC: 0,
-      DT: data,
+      EM: "Get cart by user successfully", // Thông điệp thành công
+      EC: 0, // Mã thành công
+      DT: data, // Dữ liệu giỏ hàng đã được xử lý
     });
   } catch (error) {
     console.log("Error:", error);
     return res.status(500).json({
       EM: "Error from server",
       EC: -1,
-      DT: "",
+      DT: "", // Trả về dữ liệu rỗng khi có lỗi
     });
   }
 };
