@@ -9,6 +9,16 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: "courseID",
         as: "Courses",
       });
+
+      // Mối quan hệ một-nhiều với OrderDetail
+      Orders.hasMany(models.OrderDetail, {
+        foreignKey: "orderID", // Khoá ngoại trong OrderDetail
+        as: "OrderDetails", // Alias được sử dụng khi truy vấn
+      });
+      Orders.belongsTo(models.User, {
+        foreignKey: "userID",
+        as: "User",
+      });
     }
   }
   Orders.init(

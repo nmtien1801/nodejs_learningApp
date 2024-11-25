@@ -8,6 +8,7 @@ import userController from "../controller/userController";
 import lessonController from "../controller/lessonController";
 import projectController from "../controller/projectController";
 import cartController from "../controller/cartController";
+import orderController from "../controller/orderController";
 
 const router = express.Router(); // bằng app = express();
 /**
@@ -85,9 +86,18 @@ const initApiRoutes = (app) => {
   //7. cart router
   router.get("/getCartByUser/:userID", cartController.getCartByUser);
   router.post("/addCourseToCart", cartController.addCourseToCart);
-  router.post("/removeCourseFromCart", cartController.removeCourseFromCart);
-  router.delete("/removeAllCart/:userID", cartController.removeAllCart);
-  router.get("/getTotalPrice/:userID", cartController.getTotalPrice);
+  router.post("/cart/delete-selected", cartController.removeSelectedCartItems);
+  router.post(
+    "/cart/deleteSelectedCourse",
+    cartController.deleteSelectedCourse
+  );
+  router.post("/cart/total-price", cartController.calculateTotalPrice);
+
+  // 8. order router
+  router.get(
+    "/getOrderByUserID/:userID",
+    orderController.handleGetOrderByUserID
+  );
 
   return app.use("/api", router);
 };

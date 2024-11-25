@@ -15,6 +15,7 @@ module.exports = {
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
           lessonID: 1,
+          price: 10,
         },
         {
           name: "Design  Basics",
@@ -26,6 +27,7 @@ module.exports = {
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
           lessonID: 1,
+          price: 12,
         },
         {
           name: "Digistal Sketching",
@@ -37,6 +39,7 @@ module.exports = {
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
           lessonID: 1,
+          price: 13,
         },
         {
           name: "Digital Portrait",
@@ -48,6 +51,7 @@ module.exports = {
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
           lessonID: 1,
+          price: 14,
         },
         {
           name: "Web Design",
@@ -59,6 +63,7 @@ module.exports = {
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
           lessonID: 1,
+          price: 15,
         },
         {
           name: "PHP in One Click",
@@ -70,6 +75,7 @@ module.exports = {
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
           lessonID: 1,
+          price: 16,
         },
       ],
       {}

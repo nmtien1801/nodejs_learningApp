@@ -23,7 +23,7 @@ module.exports = {
       descProject: {
         type: Sequelize.STRING,
       },
-      
+
       categoryID: {
         type: Sequelize.INTEGER,
         // references: {
@@ -44,6 +44,10 @@ module.exports = {
       },
       state: {
         type: Sequelize.INTEGER, // trạng thái khóa học (0 - chưa bắt đầu, 1 - đang học, 2 - đã hoàn thành)
+      },
+
+      price: {
+        type: Sequelize.INTEGER,
       },
 
       createdAt: {
