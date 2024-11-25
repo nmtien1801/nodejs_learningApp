@@ -86,6 +86,10 @@ const initApiRoutes = (app) => {
   router.get("/getCartByUser/:userID", cartController.getCartByUser);
   router.post("/addCourseToCart", cartController.addCourseToCart);
   router.post("/cart/delete-selected", cartController.removeSelectedCartItems);
+  router.post(
+    "/cart/deleteSelectedCourse",
+    cartController.deleteSelectedCourse
+  );
 
   return app.use("/api", router);
 };

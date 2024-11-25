@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { createJwt } from "../middleware/jwtAction";
 import { includes } from "lodash";
 import { raw } from "body-parser";
+import course from "../models/course";
 require("dotenv").config();
 const { Op } = require("sequelize");
 
@@ -76,8 +77,6 @@ const getCartByUserID = async (userID) => {
       const totalLessons = courseJSON.Lesson?.length || 0;
 
       // Lấy giá từ OrderDetail qua Orders
-      const price =
-        courseJSON.Orders?.[0]?.OrderDetail?.price || "Price not available"; // Kiểm tra sự tồn tại của price
 
       // Trả về dữ liệu đã được xử lý
       return {
@@ -86,13 +85,13 @@ const getCartByUserID = async (userID) => {
         title: courseJSON.title,
         description: courseJSON.description,
         image: courseJSON.image,
+        price: courseJSON.price,
         averageRating,
         totalRating: ratings.length,
         totalLessons,
         userName:
           courseJSON.UserFollow?.[0]?.user?.userName ||
           "Instructor not available", // Nếu không có tên người dạy
-        price: price, // Trả về giá
       };
     });
 
@@ -157,10 +156,43 @@ const deleteSelectedCartItems = async (cartIDs) => {
   });
 };
 
+// Tính tổng giá trị các khóa học được chọn
+const calculateTotalPrice = async (cartIDs) => {
+  // Lấy giá của các khóa học trong giỏ hàng
+  const cartItems = await db.Cart.findAll({
+    where: {
+      id: cartIDs, // Lọc dựa trên danh sách cartIDs
+    },
+    include: [
+      {
+        model: db.Course,
+        attributes: ["price"], // Chỉ lấy giá
+      },
+    ],
+  });
+
+  // Tính tổng giá trị của các khóa học
+  const totalPrice = cartItems.reduce((sum, cartItem) => {
+    return sum + cartItem.course.price;
+  }, 0);
+
+  return totalPrice; // Trả về tổng giá trị
+};
+
+const deleteSelectedCourse = async (courseID) => {
+  return await db.Cart.destroy({
+    where: {
+      courseID: courseID,
+    },
+  });
+};
+
 module.exports = {
   getCartByUserID,
   addCourseToCart,
   deleteSelectedCartItems,
+  calculateTotalPrice,
+  deleteSelectedCourse,
 };
 
 //ok

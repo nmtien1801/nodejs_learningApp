@@ -62,7 +62,11 @@ const removeSelectedCartItems = async (req, res) => {
 
   // Kiểm tra `cartIDs` có phải là mảng hay không
   if (!Array.isArray(cartIDs)) {
-    return res.status(400).json({ message: "cartIDs must be an array" });
+    return res.status(400).json({
+      EM: "cartIDs must be an array",
+      EC: -1,
+      DT: "",
+    });
   }
 
   try {
@@ -71,13 +75,83 @@ const removeSelectedCartItems = async (req, res) => {
 
     // Kiểm tra số lượng mục đã xóa
     if (deletedCount === 0) {
-      return res.status(404).json({ message: "No items found to delete" });
+      return res.status(404).json({
+        EM: "Selected items not found in cart",
+        EC: -1,
+        DT: "",
+      });
     }
 
-    res.status(200).json({ message: "Selected items removed from cart" });
+    res.status(200).json({
+      EM: "Selected items removed successfully",
+      EC: 0,
+      DT: deletedCount,
+    });
   } catch (error) {
     console.log("lỗi", error);
-    res.status(500).json({ message: "Error removing selected items", error });
+    res.status(500).json({
+      EM: "Error removing selected items",
+      EC: -1,
+      DT: "",
+    });
+  }
+};
+
+const calculateTotalPrice = async (req, res) => {
+  const { cartIDs } = req.body; // Nhận danh sách `cartIDs` từ body của request
+
+  // Kiểm tra `cartIDs` có phải là mảng hay không
+  if (!Array.isArray(cartIDs)) {
+    return res.status(400).json({
+      EM: "cartIDs must be an array",
+      EC: -1,
+      DT: "",
+    });
+  }
+
+  try {
+    const totalPrice = await cartService.calculateTotalPrice(cartIDs);
+    res.status(200).json({
+      EM: "Total price calculated successfully",
+      EC: 0,
+      DT: totalPrice,
+    });
+  } catch (error) {
+    console.log("lỗi", error);
+    res.status(500).json({
+      EM: "Error calculating total price",
+      EC: -1,
+      DT: "",
+    });
+  }
+};
+
+const deleteSelectedCourse = async (req, res) => {
+  const { courseID } = req.body; // Nhận danh sách `courseID` từ body của request
+
+  // Kiểm tra `courseID` có phải là mảng hay không
+  if (!Array.isArray(courseID)) {
+    return res.status(400).json({
+      EM: "courseID must be an array",
+      EC: -1,
+      DT: "",
+    });
+  }
+
+  try {
+    const deletedCount = await cartService.deleteSelectedCourse(courseID);
+    res.status(200).json({
+      EM: "Selected items removed successfully",
+      EC: 0,
+      DT: deletedCount,
+    });
+  } catch (error) {
+    console.log("lỗi", error);
+    res.status(500).json({
+      EM: "Error removing selected items",
+      EC: -1,
+      DT: "",
+    });
   }
 };
 
@@ -85,4 +159,6 @@ module.exports = {
   getCartByUser,
   addCourseToCart,
   removeSelectedCartItems,
+  calculateTotalPrice,
+  deleteSelectedCourse,
 };
