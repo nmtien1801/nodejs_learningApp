@@ -8,12 +8,12 @@ const getOrdersByUserId = async (userId) => {
       include: [
         {
           model: db.OrderDetail,
-          as: "OrderDetails", // Alias cho mối quan hệ giữa Orders và OrderDetail
-          attributes: ["courseID", "date", "price"], // Lựa chọn các trường cần thiết
+          as: "OrderDetails",
+          attributes: ["courseID", "date", "price"],
           include: [
             {
               model: db.Course,
-              as: "Course", // Alias cho mối quan hệ giữa OrderDetail và Course
+              as: "Course",
               attributes: [
                 "name",
                 "title",
@@ -24,27 +24,27 @@ const getOrdersByUserId = async (userId) => {
                 "lessonID",
                 "state",
                 "price",
-              ], // Lựa chọn các thuộc tính của Course
+              ],
               include: [
                 {
                   model: db.Review,
-                  attributes: ["review", "rating"], // Lấy thông tin review
-                  as: "Review", // Alias cho mối quan hệ giữa Course và Review
+                  attributes: ["review", "rating"],
+                  as: "Review",
                 },
                 {
                   model: db.Lessons,
-                  attributes: ["title"], // Lấy thông tin bài học
-                  as: "Lesson", // Alias cho mối quan hệ giữa Course và Lesson
+                  attributes: ["title"],
+                  as: "Lesson",
                 },
                 {
                   model: db.UserFollow,
-                  attributes: ["userID"], // Lấy thông tin người theo dõi
+                  attributes: ["userID"],
                   as: "UserFollow",
                   include: [
                     {
                       model: db.User,
-                      attributes: ["userName"], // Lấy tên người dùng
-                      as: "user", // Alias cho mối quan hệ giữa UserFollow và User
+                      attributes: ["userName"],
+                      as: "user",
                     },
                   ],
                 },
@@ -55,43 +55,39 @@ const getOrdersByUserId = async (userId) => {
       ],
     });
 
-    // Tính toán thông tin bổ sung cho các đơn hàng
+    // Xử lý thêm dữ liệu cần thiết
     const ordersWithDetails = orders.map((order) => {
-      // Lấy danh sách các chi tiết đơn hàng
       const orderDetails = order.OrderDetails || [];
 
-      // Tính tổng số tiền từ các chi tiết đơn hàng
       const totalPrice = orderDetails.reduce(
         (sum, detail) => sum + detail.price,
         0
       );
 
-      // Tính số lượng khóa học từ chi tiết đơn hàng
       const totalCourses = orderDetails.length;
 
-      // Tính trung bình rating và tổng số bài giảng cho các khóa học
       const coursesWithRatings = orderDetails.map((detail) => {
         const course = detail.Course;
         const ratings = course.Review.map((review) => review.rating);
         const averageRating =
           ratings.length > 0
             ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
-            : 0; // Giá trị mặc định nếu không có rating
+            : 0;
 
         const totalLessons = course.Lesson ? course.Lesson.length : 0;
 
         return {
-          ...course.toJSON(), // Chuyển đổi khóa học thành đối tượng JSON
-          averageRating, // Thêm trường trung bình rating
-          totalLessons, // Thêm tổng số bài giảng
+          ...course.toJSON(),
+          averageRating,
+          totalLessons,
         };
       });
 
       return {
-        ...order.toJSON(), // Chuyển đổi đơn hàng thành đối tượng JSON
-        totalPrice, // Thêm tổng số tiền
-        totalCourses, // Thêm tổng số khóa học
-        courses: coursesWithRatings, // Thêm thông tin khóa học với rating
+        ...order.toJSON(),
+        totalPrice,
+        totalCourses,
+        courses: coursesWithRatings,
       };
     });
 
@@ -105,7 +101,7 @@ const getOrdersByUserId = async (userId) => {
     return {
       EM: "Không thể lấy đơn hàng. Vui lòng thử lại sau.",
       EC: -2,
-      DT: "",
+      DT: null,
     };
   }
 };

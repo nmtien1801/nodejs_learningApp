@@ -2,7 +2,8 @@ import orderService from "../service/orderService";
 
 const handleGetOrderByUserID = async (req, res) => {
   try {
-    const { userID } = req.params; // Sử dụng destructuring để dễ đọc
+    const { userID } = req.params;
+
     if (!userID) {
       return res.status(400).json({
         EM: "Thiếu userID trong request",
@@ -11,16 +12,12 @@ const handleGetOrderByUserID = async (req, res) => {
       });
     }
 
-    const data = await orderService.getOrdersByUserId(userID);
-    console.log("Fetched orders for userID:", userID, "Data:", data);
+    const result = await orderService.getOrdersByUserId(userID);
 
-    return res.status(200).json({
-      EM: "Lấy danh sách khóa học thành công",
-      EC: 0,
-      DT: data,
-    });
+    // Trả thẳng kết quả từ service mà không bọc thêm
+    return res.status(200).json(result);
   } catch (error) {
-    console.error("Error in handleGetOrderByUserID:", error); // Log lỗi chi tiết
+    console.error("Error in handleGetOrderByUserID:", error);
 
     return res.status(500).json({
       EM: "Lỗi từ server",
