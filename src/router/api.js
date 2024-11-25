@@ -35,6 +35,7 @@ const initApiRoutes = (app) => {
     "/findCourseSimilar/:id",
     courseController.handleFindCourseSimilar
   );
+  router.get("/searchCourse/:keyword", courseController.handleSearchCourse);
 
   // 1. review router
   router.get(
