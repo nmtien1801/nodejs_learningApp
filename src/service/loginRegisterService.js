@@ -92,6 +92,7 @@ const handleUserLogin = async (rawData) => {
             phone: user.phone,
             address: user.address,
             title: user.title,
+            image: user.image,
           },
         };
       }

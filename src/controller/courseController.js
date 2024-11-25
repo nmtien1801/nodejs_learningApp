@@ -107,11 +107,72 @@ const handleSearchCourse = async (req, res) => {
   }
 };
 
+const addNewCourse = async (req, res) => {
+  try {
+    let data = await courseService.addNewCourse(req.body);
+    console.log("data:", data);
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC,
+      DT: data.DT,
+    });
+  } catch (error) {
+    console.error("Error in addNewCourse:", error);
+    return res.status(500).json({
+      EM: "Error from server",
+      EC: -1,
+      DT: "",
+    });
+  }
+}
+
+const updateCourse = async (req, res) => {
+  try {
+    let data = await courseService.updateCourse(req.body);
+    console.log("data:", data);
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC,
+      DT: data.DT,
+    });
+  } catch (error) {
+    console.error("Error in updateCourse:", error);
+    return res.status(500).json({
+      EM: "Error from server",
+      EC: -1,
+      DT: "",
+    });
+  }
+}
+
+const deleteCourse = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let data = await courseService.deleteCourse(id);
+    console.log("data:", data);
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC,
+      DT: data.DT,
+    });
+  } catch (error) {
+    console.error("Error in deleteCourse:", error);
+    return res.status(500).json({
+      EM: "Error from server",
+      EC: -1,
+      DT: "",
+    });
+  }
+}
+
 module.exports = {
   handleFindCourse,
   handleFindCourseByID,
   handleFindPopularCourses,
   handleFindCourseSimilar,
+  addNewCourse,
   handleSearchCourse,
+  updateCourse,
+  deleteCourse,
 };
 //done

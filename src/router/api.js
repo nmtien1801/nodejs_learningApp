@@ -36,7 +36,10 @@ const initApiRoutes = (app) => {
     "/findCourseSimilar/:id",
     courseController.handleFindCourseSimilar
   );
+  router.post("/addNewCourse", courseController.addNewCourse);
   router.get("/searchCourse/:keyword", courseController.handleSearchCourse);
+  router.put("/updateCourse", courseController.updateCourse);
+  router.delete("/deleteCourse/:id", courseController.deleteCourse);
 
   // 1. review router
   router.get(
@@ -72,9 +75,6 @@ const initApiRoutes = (app) => {
     "/findCourseUserState2/:userID", // conpleted
     userController.findCourseUserState2
   );
-  //   router.post("/user/create", userController.create);
-  //   router.put("/user/update", userController.update);
-  //   router.delete("/user/delete", userController.remove);
 
   // 5. lesson router
   router.get("/getAllLesson", lessonController.findAllLesson);
