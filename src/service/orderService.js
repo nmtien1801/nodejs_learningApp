@@ -171,20 +171,13 @@ const buyCourse = async (userID, courseID) => {
 const buyCourses = async (userID, courseIDs) => {
   try {
     // Đảm bảo courseIDs là mảng
-    if (
-      !userID ||
-      (!Array.isArray(courseIDs) && typeof courseIDs !== "string")
-    ) {
+    if (!userID || !Array.isArray(courseIDs) || courseIDs.length === 0) {
       throw new Error("userID hoặc courseIDs không hợp lệ");
     }
 
     // Nếu courseIDs là chuỗi, chuyển thành mảng
     if (typeof courseIDs === "string") {
       courseIDs = [courseIDs];
-    }
-
-    if (courseIDs.length === 0) {
-      throw new Error("courseIDs không thể rỗng");
     }
 
     console.log(
@@ -197,22 +190,21 @@ const buyCourses = async (userID, courseIDs) => {
     // Tạo đơn hàng mới
     const newOrder = await db.Orders.create({
       userID: userID,
-      total: 0, // Initialize total to 0
+      total: 0, // Khởi tạo tổng là 0
     });
 
     const orderDetails = [];
     let totalPrice = 0;
+    let failedCourses = [];
 
     // Duyệt qua từng khóa học
     for (let courseID of courseIDs) {
       const course = await db.Course.findByPk(courseID);
       if (!course) {
-        return {
-          EM: `Không tìm thấy khóa học với ID: ${courseID}`,
-          EC: -1,
-          DT: null,
-        };
+        failedCourses.push(courseID); // Lưu lại khóa học không tồn tại
+        continue; // Tiếp tục với khóa học tiếp theo
       }
+
       // Thêm chi tiết đơn hàng cho mỗi khóa học
       const orderDetail = await db.OrderDetail.create({
         orderID: newOrder.id,
@@ -223,9 +215,18 @@ const buyCourses = async (userID, courseIDs) => {
       totalPrice += course.price;
     }
 
+    // Nếu có khóa học không hợp lệ
+    if (failedCourses.length > 0) {
+      return {
+        EM: `Không tìm thấy khóa học với ID: ${failedCourses.join(", ")}`,
+        EC: -1,
+        DT: null,
+      };
+    }
+
     // Cập nhật tổng tiền vào bảng Orders
     await newOrder.update({
-      total: totalPrice, // Set the total price
+      total: totalPrice, // Cập nhật tổng tiền
     });
 
     // Trả về kết quả với đơn hàng và chi tiết
