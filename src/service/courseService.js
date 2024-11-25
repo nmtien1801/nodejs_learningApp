@@ -340,6 +340,91 @@ const findCourseSimilar = async (id) => {
   }
 };
 
+// const searchCourse = async (keyword) => {
+//   try {
+//     const courses = await db.Course.findAll({
+//       where: {
+//         name: {
+//           [Op.substring]: keyword,
+//         },
+//       },
+//       attributes: { exclude: ["createdAt", "updatedAt", "lessonID"] },
+//       include: [
+//         {
+//           model: db.Review,
+//           attributes: ["review", "rating"],
+//           as: "Review",
+//         },
+//         {
+//           model: db.Lessons,
+//           attributes: ["title"],
+//           as: "Lesson",
+//         },
+//         {
+//           model: db.Orders,
+//           attributes: ["id", "total"],
+//           as: "Orders",
+//           through: {
+//             model: db.OrderDetail,
+//             attributes: ["price"],
+//           },
+//         },
+//         {
+//           model: db.UserFollow,
+//           attributes: ["userID"],
+//           as: "UserFollow",
+//           include: [
+//             {
+//               model: db.User,
+//               attributes: ["userName"],
+//               as: "user",
+//             },
+//           ],
+//         },
+//       ],
+//     });
+
+//     // Kiểm tra nếu không có khóa học nào
+//     if (!courses || courses.length === 0) {
+//       return {
+//         EM: "Không tìm thấy khóa học",
+//         EC: 1,
+//         DT: [],
+//       };
+//     }
+
+//     const coursesWithAverageRating = courses.map((course) => {
+//       const ratings = course.Review
+//         ? course.Review.map((review) => review.rating)
+//         : [];
+//       const averageRating = ratings.length
+//         ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+//         : 0;
+//       const totalLessons = course.Lesson ? course.Lesson.length : 0;
+
+//       return {
+//         ...course.toJSON(),
+//         averageRating,
+//         totalRating: ratings.length,
+//         totalLessons,
+//       };
+//     });
+
+//     return {
+//       EM: "Tìm khóa học thành công",
+//       EC: 0,
+//       DT: coursesWithAverageRating,
+//     };
+//   } catch (error) {
+//     console.error("Lỗi trong searchCourse:", error);
+//     return {
+//       EM: "Có lỗi xảy ra trong dịch vụ",
+//       EC: -2,
+//       DT: "",
+//     };
+//   }
+// };
+
 const searchCourse = async (keyword) => {
   try {
     const courses = await db.Course.findAll({
@@ -348,7 +433,7 @@ const searchCourse = async (keyword) => {
           [Op.substring]: keyword,
         },
       },
-      attributes: { exclude: ["createdAt", "updatedAt", "lessonID"] },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
         {
           model: db.Review,
@@ -376,7 +461,7 @@ const searchCourse = async (keyword) => {
           include: [
             {
               model: db.User,
-              attributes: ["userName"],
+              attributes: ["userName", "title"],
               as: "user",
             },
           ],
@@ -384,26 +469,27 @@ const searchCourse = async (keyword) => {
       ],
     });
 
-    // Kiểm tra nếu không có khóa học nào
     if (!courses || courses.length === 0) {
       return {
-        EM: "Không tìm thấy khóa học",
-        EC: 1,
+        EM: "No courses found matching the keyword",
+        EC: -1,
         DT: [],
       };
     }
 
-    const coursesWithAverageRating = courses.map((course) => {
-      const ratings = course.Review
-        ? course.Review.map((review) => review.rating)
-        : [];
-      const averageRating = ratings.length
-        ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
-        : 0;
-      const totalLessons = course.Lesson ? course.Lesson.length : 0;
+    const processedCourses = courses.map((course) => {
+      const courseJSON = course.toJSON();
+
+      const ratings = courseJSON.Review?.map((review) => review.rating) || [];
+      const averageRating =
+        ratings.length > 0
+          ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+          : 0;
+
+      const totalLessons = courseJSON.Lesson?.length || 0;
 
       return {
-        ...course.toJSON(),
+        ...courseJSON,
         averageRating,
         totalRating: ratings.length,
         totalLessons,
@@ -411,20 +497,19 @@ const searchCourse = async (keyword) => {
     });
 
     return {
-      EM: "Tìm khóa học thành công",
+      EM: "Courses retrieved successfully",
       EC: 0,
-      DT: coursesWithAverageRating,
+      DT: processedCourses,
     };
   } catch (error) {
-    console.error("Lỗi trong searchCourse:", error);
+    console.error("Error in searchCourse:", error);
     return {
-      EM: "Có lỗi xảy ra trong dịch vụ",
+      EM: "Something went wrong in the service",
       EC: -2,
       DT: "",
     };
   }
 };
-
 module.exports = {
   findAllCourses,
   findCourseByID,
