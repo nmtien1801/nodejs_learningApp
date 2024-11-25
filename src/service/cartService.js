@@ -75,6 +75,10 @@ const getCartByUserID = async (userID) => {
       // Tính tổng số bài học
       const totalLessons = courseJSON.Lesson?.length || 0;
 
+      // Lấy giá từ OrderDetail qua Orders
+      const price =
+        courseJSON.Orders?.[0]?.OrderDetail?.price || "Price not available"; // Kiểm tra sự tồn tại của price
+
       // Trả về dữ liệu đã được xử lý
       return {
         id: courseJSON.id,
@@ -88,8 +92,7 @@ const getCartByUserID = async (userID) => {
         userName:
           courseJSON.UserFollow?.[0]?.user?.userName ||
           "Instructor not available", // Nếu không có tên người dạy
-        price:
-          courseJSON.Orders?.[0]?.OrderDetail?.price || "Price not available", // Giá khóa học
+        price: price, // Trả về giá
       };
     });
 
@@ -100,19 +103,6 @@ const getCartByUserID = async (userID) => {
   }
 };
 
-// const getCartByUserID = async (userID) => {
-//   return await db.Cart.findAll({
-//     where: {
-//       userID: userID,
-//     },
-//     include: [
-//       {
-//         model: db.Course,
-//         as: "course", // Use alias "course" defined in the association
-//       },
-//     ],
-//   });
-// };
 // Add course to cart
 const addCourseToCart = async (userID, courseID) => {
   try {
@@ -158,52 +148,19 @@ const addCourseToCart = async (userID, courseID) => {
   }
 };
 
-// Remove course from cart
-const deleteCourseFromCart = async (userID, courseID) => {
-  const result = await db.Cart.destroy({
-    where: {
-      userID: userID,
-      courseID: courseID,
-    },
-  });
-
-  if (result === 0) {
-    throw new Error("Course not found in the cart");
-  }
-
-  return result;
-};
-
-// Remove all courses from cart
-const deleteAllCart = async (userID) => {
+// Xóa nhiều mục khỏi giỏ hàng dựa trên danh sách cartIDs
+const deleteSelectedCartItems = async (cartIDs) => {
   return await db.Cart.destroy({
     where: {
-      userID: userID,
+      id: cartIDs, // Xóa dựa trên mảng `cartIDs`
     },
   });
-};
-
-// Calculate total price of the cart
-const getTotalPrice = async (userID) => {
-  const carts = await getCartByUserID(userID);
-  let totalPrice = 0;
-
-  // Iterate through all courses in the cart and calculate total
-  carts.forEach((cart) => {
-    if (cart.course && cart.course.price) {
-      totalPrice += cart.course.price;
-    }
-  });
-
-  return totalPrice;
 };
 
 module.exports = {
   getCartByUserID,
   addCourseToCart,
-  deleteCourseFromCart,
-  deleteAllCart,
-  getTotalPrice,
+  deleteSelectedCartItems,
 };
 
 //ok

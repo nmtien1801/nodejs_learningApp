@@ -56,67 +56,33 @@ const addCourseToCart = async (req, res) => {
   }
 };
 
-// Remove course from cart
-const removeCourseFromCart = async (req, res) => {
-  try {
-    let data = await cartService.deleteCourseFromCart(
-      req.body.userID,
-      req.body.courseID
-    );
-    return res.status(200).json({
-      EM: "Course removed from cart successfully",
-      EC: 0,
-      DT: data,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      EM: "Error from server",
-      EC: -1,
-      DT: "",
-    });
-  }
-};
+// Xóa các mục được chọn khỏi giỏ hàng
+const removeSelectedCartItems = async (req, res) => {
+  const { cartIDs } = req.body; // Nhận danh sách `cartIDs` từ body của request
 
-// Remove all courses from cart
-const removeAllCart = async (req, res) => {
-  try {
-    let data = await cartService.deleteAllCart(req.params.userID);
-    return res.status(200).json({
-      EM: "All courses removed from cart successfully",
-      EC: 0,
-      DT: data,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      EM: "Error from server",
-      EC: -1,
-      DT: "",
-    });
+  // Kiểm tra `cartIDs` có phải là mảng hay không
+  if (!Array.isArray(cartIDs)) {
+    return res.status(400).json({ message: "cartIDs must be an array" });
   }
-};
 
-// Get total price of the cart
-const getTotalPrice = async (req, res) => {
   try {
-    let data = await cartService.getTotalPrice(req.params.userID);
-    return res.status(200).json({
-      EM: "Total price calculated successfully",
-      EC: 0,
-      DT: data,
-    });
+    // Sử dụng hàm từ service để xóa các mục trong giỏ hàng
+    const deletedCount = await cartService.deleteSelectedCartItems(cartIDs);
+
+    // Kiểm tra số lượng mục đã xóa
+    if (deletedCount === 0) {
+      return res.status(404).json({ message: "No items found to delete" });
+    }
+
+    res.status(200).json({ message: "Selected items removed from cart" });
   } catch (error) {
-    return res.status(500).json({
-      EM: "Error from server",
-      EC: -1,
-      DT: "",
-    });
+    console.log("lỗi", error);
+    res.status(500).json({ message: "Error removing selected items", error });
   }
 };
 
 module.exports = {
   getCartByUser,
   addCourseToCart,
-  removeCourseFromCart,
-  removeAllCart,
-  getTotalPrice,
+  removeSelectedCartItems,
 };
