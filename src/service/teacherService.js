@@ -6,10 +6,6 @@ import { raw } from "body-parser";
 require("dotenv").config();
 
 const teacherOverview = async (teacherID) => {
-  // role = 1: teacher    /teacher/
-  //  user  có id = teacherID
-  // id, username, email, phone, address, image, roleID,
-
   try {
     let teacher = await db.User.findOne({
       where: {

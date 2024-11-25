@@ -77,6 +77,11 @@ const initApiRoutes = (app) => {
 
   // 5. lesson router
   router.get("/getAllLesson", lessonController.findAllLesson);
+  router.get("/getLessonByCourse/:courseID", lessonController.getLessonByCourse);
+  router.post("/createLesson", lessonController.createLesson);
+  router.put("/updateLesson", lessonController.updateLesson);
+  router.delete("/deleteVideo/:id", lessonController.deleteVideo);
+
 
   // 6. project router
   router.get("/getProjectByUser/:userID", projectController.getProjectByUser);
