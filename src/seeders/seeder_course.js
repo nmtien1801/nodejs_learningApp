@@ -14,7 +14,6 @@ module.exports = {
           state: 0, // chưa bắt đầu,
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
-          lessonID: 1,
         },
         {
           name: "Design  Basics",
@@ -25,7 +24,6 @@ module.exports = {
           state: 0, // chưa bắt đầu
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
-          lessonID: 1,
         },
         {
           name: "Digistal Sketching",
@@ -36,7 +34,6 @@ module.exports = {
           state: 1, // đang học
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
-          lessonID: 1,
         },
         {
           name: "Digital Portrait",
@@ -47,7 +44,6 @@ module.exports = {
           state: 2, // đã hoàn thành
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
-          lessonID: 1,
         },
         {
           name: "Web Design",
@@ -58,7 +54,6 @@ module.exports = {
           state: 0, // chưa bắt đầu
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
-          lessonID: 1,
         },
         {
           name: "PHP in One Click",
@@ -69,7 +64,6 @@ module.exports = {
           state: 0, // chưa bắt đầu
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
-          lessonID: 1,
         },
       ],
       {}

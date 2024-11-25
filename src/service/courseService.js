@@ -9,7 +9,7 @@ const findAllCourses = async () => {
   try {
     // Lấy danh sách khóa học và thông tin review, rating
     let courses = await db.Course.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt", "lessonID"] }, // Không lấy trường trong exclude
+      attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
       include: [
         {
           model: db.Review,
@@ -172,7 +172,7 @@ const findPopularCourses = async () => {
   try {
     // Lấy danh sách khóa học và thông tin review, rating
     let courses = await db.Course.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt", "lessonID"] }, // Không lấy trường trong exclude
+      attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
       include: [
         {
           model: db.Review,
@@ -263,7 +263,7 @@ const findCourseSimilar = async (id) => {
   try {
     // Lấy danh sách khóa học và thông tin review, rating
     let courses = await db.Course.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt", "lessonID"] }, // Không lấy trường trong exclude
+      attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
       include: [
         {
           model: db.Review,
@@ -339,9 +339,44 @@ const findCourseSimilar = async (id) => {
   }
 };
 
+const addNewCourse = async (courseData) => {
+  try {
+    // Tạo khóa học mới
+    let newCourse = await db.Course.create({
+      name: courseData.name,
+      title: courseData.title,
+      description:  courseData.description,
+      image: courseData.image,
+      descProject: courseData.descriptionProject,
+      state: 0, // Chưa bắt đầu
+      categoryID: courseData.categoryID,
+    });
+
+    // tạo mới user follow để kết nối vói id của user và course
+    let newUserFollow = await db.UserFollow.create({
+      userID: courseData.userID,
+      courseID: newCourse.id,
+    });
+
+    return {
+      EM: "addNewCourse successfully",
+      EC: 0,
+      DT: [],
+    };
+  } catch (error) {
+    console.error("Error in addNewCourse service:", error);
+    return {
+      EM: "Something went wrong in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
+
 module.exports = {
   findAllCourses,
   findCourseByID,
   findPopularCourses,
   findCourseSimilar,
+  addNewCourse,
 };

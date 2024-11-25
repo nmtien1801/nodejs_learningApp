@@ -105,6 +105,31 @@ const getAllCourseUser = async (userId) => {
               model: db.Course,
               attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
               as: "course",
+
+              // review
+              include: [
+                {
+                  model: db.Review,
+                  attributes: ["id", "rating", "review", "time"],
+                  as: "Review",
+                  // user
+                  include: [
+                    {
+                      model: db.User,
+                      attributes: ["userName"],
+                      as: "user",
+                    },
+                  ],
+                },
+              ],
+              // category
+              include: [
+                {
+                  model: db.Category,
+                  attributes: ["name"],
+                  as: "Category",
+                },
+              ],
             },
           ],
         },
@@ -119,6 +144,15 @@ const getAllCourseUser = async (userId) => {
       };
     } else {
       const courses = user.userFollows.map((userFollow) => userFollow.course);
+      // ảnh
+      // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
+      if (courses && courses.length > 0) {
+        courses.map((item) => {
+          if (item.image) {
+            item.image = Buffer.from(item.image, "base64").toString("binary");
+          }
+        });
+      }
       return {
         EM: "Get all courses of user successfully",
         EC: 0,
