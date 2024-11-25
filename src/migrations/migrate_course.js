@@ -20,7 +20,10 @@ module.exports = {
       image: {
         type: Sequelize.BLOB("long"),
       },
-
+      descProject: {
+        type: Sequelize.STRING,
+      },
+      
       categoryID: {
         type: Sequelize.INTEGER,
         // references: {

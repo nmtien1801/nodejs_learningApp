@@ -87,6 +87,159 @@ const getTopTeacher = async () => {
   }
 };
 
+const getAllCourseUser = async (userId) => {
+  try {
+    const user = await db.User.findOne({
+      where: {
+        id: userId,
+      },
+      include: [
+        // user follow
+        {
+          model: db.UserFollow,
+          attributes: ["userID"],
+          as: "userFollows",
+          include: [
+            // course
+            {
+              model: db.Course,
+              attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
+              as: "course",
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!user) {
+      return {
+        EM: "User not found",
+        EC: 1,
+        DT: [],
+      };
+    } else {
+      const courses = user.userFollows.map((userFollow) => userFollow.course);
+      return {
+        EM: "Get all courses of user successfully",
+        EC: 0,
+        DT: courses,
+      };
+    }
+  } catch (error) {
+    console.error("Error in getAllCourseUser service:", error);
+    return {
+      EM: "Something went wrong in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
+
+const findCourseUserState1 = async (userId) => {
+  try {
+    const user = await db.User.findOne({
+      where: {
+        id: userId,
+      },
+      include: [
+        // user follow
+        {
+          model: db.UserFollow,
+          attributes: ["userID"],
+          as: "userFollows",
+          include: [
+            // course
+            {
+              model: db.Course,
+              where: {
+                state: 1,
+              },
+              attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
+              as: "course",
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!user) {
+      return {
+        EM: "User not found",
+        EC: 1,
+        DT: [],
+      };
+    } else {
+      const courses = user.userFollows.map((userFollow) => userFollow.course);
+      return {
+        EM: "Get all courses of user successfully",
+        EC: 0,
+        DT: courses,
+      };
+    }
+  } catch (error) {
+    console.error("Error in findCourseUserState1 service:", error);
+    return {
+      EM: "Something went wrong in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
+
+const findCourseUserState2 = async (userId) => {
+  try {
+    const user = await db.User.findOne({
+      where: {
+        id: userId,
+      },
+      include: [
+        // user follow
+        {
+          model: db.UserFollow,
+          attributes: ["userID"],
+          as: "userFollows",
+          include: [
+            // course
+            {
+              model: db.Course,
+              where: {
+                state: 2,
+              },
+              attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
+              as: "course",
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!user) {
+      return {
+        EM: "User not found",
+        EC: 1,
+        DT: [],
+      };
+    } else {
+      const courses = user.userFollows.map((userFollow) => userFollow.course);
+      return {
+        EM: "Get all courses of user successfully",
+        EC: 0,
+        DT: courses,
+      };
+    }
+  } catch (error) {
+    console.error("Error in findCourseUserState2 service:", error);
+    return {
+      EM: "Something went wrong in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
+
 module.exports = {
   getTopTeacher,
+  getAllCourseUser,
+  findCourseUserState1,
+  findCourseUserState2,
 };

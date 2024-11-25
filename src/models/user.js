@@ -22,8 +22,8 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       // Một người dùng có thể có nhiều dự án (giả sử có mối quan hệ như vậy)
-      User.hasMany(models.Project, {
-        foreignKey: "projectID",
+      User.hasMany(models.Projects, {
+        foreignKey: "userID",
         as: "projects",
       });
 

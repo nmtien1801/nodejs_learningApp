@@ -6,6 +6,7 @@ import teacherController from "../controller/teacherController";
 import userFlowController from "../controller/userFlowController";
 import userController from "../controller/userController";
 import lessonController from "../controller/lessonController";
+import projectController from "../controller/projectController";
 
 const router = express.Router(); // bằng app = express();
 /**
@@ -27,10 +28,6 @@ const initApiRoutes = (app) => {
   // course router
   router.get("/ ", courseController.handleFindCourse);
   router.get("/findAllCourses", courseController.handleFindCourse);
-  router.get(
-    "/findCourseByState/:state",
-    courseController.handleFindCourseByState
-  );
   router.get("/findCourseByID/:id", courseController.handleFindCourseByID);
   router.get("/findPopularCourses", courseController.handleFindPopularCourses);
   router.get(
@@ -59,14 +56,30 @@ const initApiRoutes = (app) => {
     "/findCourseByTeacherID_Categories/:teacherID",
     userFlowController.handleFindCourseByTeacherID_Categories
   );
+
+  router.get("/getCourseOfUser/:userID", userFlowController.getCourseOfUser);
+
   // user router
   router.get("/getTopTeacher", userController.getTopTeacher);
+  router.get("/getAllCourseUser/:userID", userController.getAllCourseUser);
+  router.get(
+    "/findCourseUserState1/:userID", // on going
+    userController.findCourseUserState1
+  );
+  router.get(
+    "/findCourseUserState2/:userID", // conpleted
+    userController.findCourseUserState2
+  );
   //   router.post("/user/create", userController.create);
   //   router.put("/user/update", userController.update);
   //   router.delete("/user/delete", userController.remove);
 
   // lesson router
   router.get("/getAllLesson", lessonController.findAllLesson);
+
+  // project router
+  router.get("/getProjectByUser/:userID", projectController.getProjectByUser);
+  router.post("/createProject", projectController.createProject);
 
   return app.use("/api", router);
 };
