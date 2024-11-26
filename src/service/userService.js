@@ -106,6 +106,14 @@ const getAllCourseUser = async (userId) => {
                   model: db.Review,
                   attributes: ["review", "rating"],
                   as: "Review", // Connect to Review model
+                  // user
+                  include: [
+                    {
+                      model: db.User,
+                      attributes: ["userName"],
+                      as: "user",
+                    },
+                  ],
                 },
                 {
                   model: db.Lessons,
@@ -164,6 +172,10 @@ const getAllCourseUser = async (userId) => {
 
         // Calculate total number of lessons
         const totalLessons = course.Lesson ? course.Lesson.length : 0;
+
+        // ảnh
+        // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
+        course.image = Buffer.from(course.image, "base64").toString("binary");
 
         // Add new fields to the course object
         return {
@@ -275,7 +287,10 @@ const findCourseUserState1 = async (userId) => {
         // Calculate total number of lessons
         const totalLessons = course.Lesson ? course.Lesson.length : 0;
 
-        // Add new fields to the course object
+        // ảnh
+        // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
+        course.image = Buffer.from(course.image, "base64").toString("binary");
+
         return {
           ...course.toJSON(),
           averageRating: parseFloat(averageRating), // Convert to number
@@ -384,6 +399,10 @@ const findCourseUserState2 = async (userId) => {
 
         // Calculate total number of lessons
         const totalLessons = course.Lesson ? course.Lesson.length : 0;
+
+        // ảnh
+        // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
+        course.image = Buffer.from(course.image, "base64").toString("binary");
 
         // Add new fields to the course object
         return {

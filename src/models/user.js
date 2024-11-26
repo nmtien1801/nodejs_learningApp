@@ -44,7 +44,6 @@ module.exports = (sequelize, DataTypes) => {
       address: DataTypes.STRING,
       title: DataTypes.STRING,
       roleID: DataTypes.INTEGER,
-      // projectID: DataTypes.INTEGER,
     },
     {
       sequelize,
