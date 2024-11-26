@@ -42,9 +42,9 @@ module.exports = {
       //   // onDelete: "CASCADE",
       //   // onUpdate: "CASCADE",
       // },
-      // state: {
-      //   type: Sequelize.INTEGER, // trạng thái khóa học (0 - chưa bắt đầu, 1 - đang học, 2 - đã hoàn thành)
-      // },
+      state: {
+        type: Sequelize.INTEGER, // trạng thái khóa học (0 - chưa bắt đầu, 1 - đang học, 2 - đã hoàn thành)
+      },
 
       price: {
         type: Sequelize.INTEGER,
