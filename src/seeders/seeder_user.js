@@ -38,7 +38,7 @@ module.exports = {
           password:
             "$2a$10$zHwMBVyL3Cbwq8hfEFryJeVaUW45Dxs.KuLUKWf9DAMtTJzp3m5vK", // 1234
 
-          image: "profile3.jpg",
+          image: "",
           description: "Data scientist with a focus on AI.",
           phone: "1122334455",
           address: "789 Oak St, City, Country",
@@ -51,7 +51,7 @@ module.exports = {
           email: "bob.brown@example.com",
           password:
             "$2a$10$zHwMBVyL3Cbwq8hfEFryJeVaUW45Dxs.KuLUKWf9DAMtTJzp3m5vK", // 1234
-          image: "profile4.jpg",
+          image: "",
           description:
             "Software engineer with expertise in backend development.",
           phone: "2233445566",
@@ -65,12 +65,38 @@ module.exports = {
           email: "charlie.davis@example.com",
           password:
             "$2a$10$zHwMBVyL3Cbwq8hfEFryJeVaUW45Dxs.KuLUKWf9DAMtTJzp3m5vK", // 1234
-          image: "profile5.jpg",
+          image: "",
           description: "UI/UX designer with a passion for creative design.",
           phone: "3344556677",
           address: "202 Maple St, City, Country",
           title: "UI/UX Designer",
           roleID: 2, // Assuming 5: UI/UX Designer
+          // projectID: 5,
+        },
+        {
+          userName: "Hoa",
+          email: "charlie.davis@example.com",
+          password:
+            "$2a$10$zHwMBVyL3Cbwq8hfEFryJeVaUW45Dxs.KuLUKWf9DAMtTJzp3m5vK", // 1234
+          image: "",
+          description: "UI/UX designer with a passion for creative design.",
+          phone: "3344556677",
+          address: "202 Maple St, City, Country",
+          title: "UI/UX Designer",
+          roleID: 1, // Assuming 5: UI/UX Designer
+          // projectID: 5,
+        },
+        {
+          userName: "Ly Ly",
+          email: "charlie.davis@example.com",
+          password:
+            "$2a$10$zHwMBVyL3Cbwq8hfEFryJeVaUW45Dxs.KuLUKWf9DAMtTJzp3m5vK", // 1234
+          image: "",
+          description: "UI/UX designer with a passion for creative design.",
+          phone: "3344556677",
+          address: "202 Maple St, City, Country",
+          title: "UI/UX Designer",
+          roleID: 1, // Assuming 5: UI/UX Designer
           // projectID: 5,
         },
       ],
