@@ -607,6 +607,91 @@ const findInspireCourses = async () => {
   }
 }
 
+const findCourseByCategory = async (categoryID) => {
+  try {
+    let courses = await db.Course.findAll({
+      where: {
+        categoryID: categoryID,
+      },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      include: [
+        {
+          model: db.Review,
+          attributes: ["review", "rating"],
+          as: "Review",
+        },
+        {
+          model: db.Lessons,
+          attributes: ["title"],
+          as: "Lesson",
+        },
+        {
+          model: db.Orders,
+          attributes: ["id", "total"],
+          as: "Orders",
+          through: {
+            model: db.OrderDetail,
+            attributes: ["price"],
+          },
+        },
+        {
+          model: db.UserFollow,
+          attributes: ["userID"],
+          as: "UserFollow",
+          include: [
+            {
+              model: db.User,
+              attributes: ["userName", "title"],
+              as: "user",
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!courses || courses.length === 0) {
+      return {
+        EM: "No courses found in this category",
+        EC: -1,
+        DT: [],
+      };
+    }
+
+    const processedCourses = courses.map((course) => {
+      const courseJSON = course.toJSON();
+
+      const ratings = courseJSON.Review?.map((review) => review.rating) || [];
+      const averageRating =
+        ratings.length > 0
+          ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+          : 0;
+
+      const totalLessons = courseJSON.Lesson?.length || 0;
+
+      return {
+        ...courseJSON,
+        averageRating,
+        totalRating: ratings.length,
+        totalLessons,
+      };
+    });
+
+    return {
+      EM: "Courses retrieved successfully",
+      EC: 0,
+      DT: processedCourses,
+    };
+  } catch (error) {
+    console.error("Error in findCourseByCategory:", error);
+    return {
+      EM: "Something went wrong in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
+
+
 module.exports = {
   findAllCourses,
   findCourseByID,
@@ -617,4 +702,5 @@ module.exports = {
   updateCourse,
   deleteCourse,
   findInspireCourses,
+  findCourseByCategory
 };

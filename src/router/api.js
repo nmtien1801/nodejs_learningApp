@@ -42,6 +42,7 @@ const initApiRoutes = (app) => {
   router.get("/searchCourse/:keyword", courseController.handleSearchCourse);
   router.put("/updateCourse", courseController.updateCourse);
   router.delete("/deleteCourse/:id", courseController.deleteCourse);
+  router.get("/findCourseByCategory/:CategoryID", courseController.findCourseByCategory);
 
   // 1. review router
   router.get(
