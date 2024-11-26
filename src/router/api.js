@@ -26,17 +26,23 @@ const initApiRoutes = (app) => {
   router.post("/register", apiController.handleRegister);
   router.post("/login", apiController.handleLogin);
   router.post("/logout", apiController.handleLogout);
+  router.post("/changePassword", apiController.changePassword);
 
   // course router
   router.get("/ ", courseController.handleFindCourse);
   router.get("/findAllCourses", courseController.handleFindCourse);
   router.get("/findCourseByID/:id", courseController.handleFindCourseByID);
   router.get("/findPopularCourses", courseController.handleFindPopularCourses);
+  router.get("/findInspireCourses", courseController.findInspireCourses);
   router.get(
     "/findCourseSimilar/:id",
     courseController.handleFindCourseSimilar
   );
+  router.post("/addNewCourse", courseController.addNewCourse);
   router.get("/searchCourse/:keyword", courseController.handleSearchCourse);
+  router.put("/updateCourse", courseController.updateCourse);
+  router.delete("/deleteCourse/:id", courseController.deleteCourse);
+  router.get("/findCourseByCategory/:CategoryID", courseController.findCourseByCategory);
 
   // 1. review router
   router.get(
@@ -72,12 +78,14 @@ const initApiRoutes = (app) => {
     "/findCourseUserState2/:userID", // conpleted
     userController.findCourseUserState2
   );
-  //   router.post("/user/create", userController.create);
-  //   router.put("/user/update", userController.update);
-  //   router.delete("/user/delete", userController.remove);
 
   // 5. lesson router
   router.get("/getAllLesson", lessonController.findAllLesson);
+  router.get("/getLessonByCourse/:courseID", lessonController.getLessonByCourse);
+  router.post("/createLesson", lessonController.createLesson);
+  router.put("/updateLesson", lessonController.updateLesson);
+  router.delete("/deleteVideo/:id", lessonController.deleteVideo);
+
 
   // 6. project router
   router.get("/getProjectByUser/:userID", projectController.getProjectByUser);

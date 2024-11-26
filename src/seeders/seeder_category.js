@@ -6,19 +6,19 @@ module.exports = {
       "Categories", //5 data
       [
         {
-          name: "Programming Languages",
+          name: "Design",
         },
         {
-          name: "Web Development",
+          name: "Code",
         },
         {
-          name: "Data Science",
+          name: "Business",
         },
         {
-          name: "Machine Learning",
+          name: "Video",
         },
         {
-          name: "Mobile Development",
+          name: "Language",
         },
       ],
       {}

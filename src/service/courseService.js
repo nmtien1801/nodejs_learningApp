@@ -10,7 +10,7 @@ const findAllCourses = async () => {
   try {
     // Lấy danh sách khóa học và thông tin review, rating
     let courses = await db.Course.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt", "lessonID"] }, // Không lấy trường trong exclude
+      attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
       include: [
         {
           model: db.Review,
@@ -173,7 +173,7 @@ const findPopularCourses = async () => {
   try {
     // Lấy danh sách khóa học và thông tin review, rating
     let courses = await db.Course.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt", "lessonID"] }, // Không lấy trường trong exclude
+      attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
       include: [
         {
           model: db.Review,
@@ -248,7 +248,7 @@ const findPopularCourses = async () => {
     return {
       EM: "find popular courses successfully",
       EC: 0,
-      DT: coursesWithAverageRating,
+      DT: coursesWithAverageRating.sort((a, b) => b.totalLessons - a.totalLessons),
     };
   } catch (error) {
     console.error("Error in findPopularCourses:", error);
@@ -264,7 +264,7 @@ const findCourseSimilar = async (id) => {
   try {
     // Lấy danh sách khóa học và thông tin review, rating
     let courses = await db.Course.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt", "lessonID"] }, // Không lấy trường trong exclude
+      attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
       include: [
         {
           model: db.Review,
@@ -328,7 +328,7 @@ const findCourseSimilar = async (id) => {
     return {
       EM: "findCourseSimilar successfully",
       EC: 0,
-      DT: coursesWithAverageRating,
+      DT: coursesWithAverageRating.sort((a, b) => b.totalLessons - a.totalLessons),
     };
   } catch (error) {
     console.error("Error in findCourseSimilar:", error);
@@ -340,90 +340,40 @@ const findCourseSimilar = async (id) => {
   }
 };
 
-// const searchCourse = async (keyword) => {
-//   try {
-//     const courses = await db.Course.findAll({
-//       where: {
-//         name: {
-//           [Op.substring]: keyword,
-//         },
-//       },
-//       attributes: { exclude: ["createdAt", "updatedAt", "lessonID"] },
-//       include: [
-//         {
-//           model: db.Review,
-//           attributes: ["review", "rating"],
-//           as: "Review",
-//         },
-//         {
-//           model: db.Lessons,
-//           attributes: ["title"],
-//           as: "Lesson",
-//         },
-//         {
-//           model: db.Orders,
-//           attributes: ["id", "total"],
-//           as: "Orders",
-//           through: {
-//             model: db.OrderDetail,
-//             attributes: ["price"],
-//           },
-//         },
-//         {
-//           model: db.UserFollow,
-//           attributes: ["userID"],
-//           as: "UserFollow",
-//           include: [
-//             {
-//               model: db.User,
-//               attributes: ["userName"],
-//               as: "user",
-//             },
-//           ],
-//         },
-//       ],
-//     });
+const addNewCourse = async (courseData) => {
+  try {
+    // Tạo khóa học mới
+    let newCourse = await db.Course.create({
+      name: courseData.name,
+      title: courseData.title,
+      description: courseData.description,
+      price: courseData.price,
+      image: courseData.image,
+      descProject: courseData.descriptionProject,
+      state: 0, // Chưa bắt đầu
+      categoryID: courseData.categoryID,
+    });
 
-//     // Kiểm tra nếu không có khóa học nào
-//     if (!courses || courses.length === 0) {
-//       return {
-//         EM: "Không tìm thấy khóa học",
-//         EC: 1,
-//         DT: [],
-//       };
-//     }
+    // tạo mới user follow để kết nối vói id của user và course
+    let newUserFollow = await db.UserFollow.create({
+      userID: courseData.userID,
+      courseID: newCourse.id,
+    });
 
-//     const coursesWithAverageRating = courses.map((course) => {
-//       const ratings = course.Review
-//         ? course.Review.map((review) => review.rating)
-//         : [];
-//       const averageRating = ratings.length
-//         ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
-//         : 0;
-//       const totalLessons = course.Lesson ? course.Lesson.length : 0;
-
-//       return {
-//         ...course.toJSON(),
-//         averageRating,
-//         totalRating: ratings.length,
-//         totalLessons,
-//       };
-//     });
-
-//     return {
-//       EM: "Tìm khóa học thành công",
-//       EC: 0,
-//       DT: coursesWithAverageRating,
-//     };
-//   } catch (error) {
-//     console.error("Lỗi trong searchCourse:", error);
-//     return {
-//       EM: "Có lỗi xảy ra trong dịch vụ",
-//       EC: -2,
-//       DT: "",
-//     };
-//   }
-// };
+    return {
+      EM: "addNewCourse successfully",
+      EC: 0,
+      DT: [],
+    };
+  } catch (error) {
+    console.error("Error in addNewCourse service:", error);
+    return {
+      EM: "err addNewCourse in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
 
 const searchCourse = async (keyword) => {
   try {
@@ -510,10 +460,248 @@ const searchCourse = async (keyword) => {
     };
   }
 };
+
+const updateCourse = async (courseData) => {
+  try {
+    // Cập nhật thông tin khóa học
+    let updatedCourse = await db.Course.update(
+      {
+        name: courseData.name,
+        title: courseData.title,
+        description: courseData.description,
+        image: courseData.image,
+        descProject: courseData.descriptionProject,
+        state: 0, // Chưa bắt đầu
+        categoryID: courseData.categoryID,
+      },
+      {
+        where: {
+          id: courseData.id,
+        },
+      }
+    );
+
+    return {
+      EM: "updateCourse successfully",
+      EC: 0,
+      DT: [],
+    };
+  } catch (error) {
+    console.error("Error in updateCourse service:", error);
+    return {
+      EM: "err updateCourse in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
+
+const deleteCourse = async (id) => {
+  try {
+    // Xóa khóa học
+    let deletedCourse = await db.Course.destroy({
+      where: {
+        id: id,
+      },
+    });
+
+    // xóa luôn user follow
+    let deletedUserFollow = await db.UserFollow.destroy({
+      where: {
+        courseID: id,
+      },
+    });
+    
+    return {
+      EM: "deleteCourse successfully",
+      EC: 0,
+      DT: [],
+    };
+  } catch (error) {
+    console.error("Error in deleteCourse service:", error);
+    return {
+      EM: "err deleteCourse in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+}
+
+const findInspireCourses = async () => {
+  try {
+    // Lấy danh sách khóa học và thông tin review, rating
+    let courses = await db.Course.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
+      include: [
+        {
+          model: db.Review,
+          attributes: ["review", "rating"],
+          as: "Review", // Kết nối với bảng Review
+        },
+        // lấy ds lesson
+        {
+          model: db.Lessons,
+          attributes: ["title"],
+          as: "Lesson",
+        },
+        // lấy price trong orderDetail
+        {
+          model: db.Orders, // Bao gồm bảng Order qua bảng trung gian
+          attributes: ["id", "total"],
+          as: "Orders", // Khớp với as trong mối quan hệ belongsToMany
+          through: {
+            model: db.OrderDetail, // Chỉ định bảng trung gian
+            attributes: ["price"], // Chỉ lấy giá
+          },
+        },
+        // lấy ra teacher dạy trong userFollow
+        {
+          model: db.UserFollow,
+          attributes: ["userID"],
+          as: "UserFollow",
+          include: [
+            {
+              model: db.User,
+              attributes: ["userName"],
+              as: "user",
+            },
+          ],
+        },
+      ],
+    });
+
+    // Tính trung bình rating cho từng khóa học
+    const coursesWithAverageRating = courses.map((course) => {
+      // Lấy danh sách các rating của review cho khóa học
+      const ratings = course.Review.map((review) => review.rating);
+
+      // Tính trung bình của các rating
+      const averageRating =
+        ratings.length > 0
+          ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+          : 0; // Nếu không có rating nào thì để giá trị mặc định là 0
+
+      // Tổng số bài giảng
+      const totalLessons = course.Lesson ? course.Lesson.length : 0;
+      return {
+        ...course.toJSON(), // Chuyển đổi khóa học thành đối tượng JSON
+        averageRating, // Thêm trường trung bình rating
+        totalRating: ratings.length, // Thêm trường tổng số rating
+        totalLessons, // Thêm trường tổng số bài giảng
+      };
+    }
+    );
+
+    return {
+      EM: "find inspire courses successfully",
+      EC: 0,
+      DT: coursesWithAverageRating.sort((a, b) => b.totalRating - a.totalRating),
+    };
+  }
+  catch (error) {
+    console.error("Error in findInspireCourses:", error);
+    return {
+      EM: "Something went wrong in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+}
+
+const findCourseByCategory = async (categoryID) => {
+  try {
+    let courses = await db.Course.findAll({
+      where: {
+        categoryID: categoryID,
+      },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      include: [
+        {
+          model: db.Review,
+          attributes: ["review", "rating"],
+          as: "Review",
+        },
+        {
+          model: db.Lessons,
+          attributes: ["title"],
+          as: "Lesson",
+        },
+        {
+          model: db.Orders,
+          attributes: ["id", "total"],
+          as: "Orders",
+          through: {
+            model: db.OrderDetail,
+            attributes: ["price"],
+          },
+        },
+        {
+          model: db.UserFollow,
+          attributes: ["userID"],
+          as: "UserFollow",
+          include: [
+            {
+              model: db.User,
+              attributes: ["userName", "title"],
+              as: "user",
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!courses || courses.length === 0) {
+      return {
+        EM: "No courses found in this category",
+        EC: -1,
+        DT: [],
+      };
+    }
+
+    const processedCourses = courses.map((course) => {
+      const courseJSON = course.toJSON();
+
+      const ratings = courseJSON.Review?.map((review) => review.rating) || [];
+      const averageRating =
+        ratings.length > 0
+          ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+          : 0;
+
+      const totalLessons = courseJSON.Lesson?.length || 0;
+
+      return {
+        ...courseJSON,
+        averageRating,
+        totalRating: ratings.length,
+        totalLessons,
+      };
+    });
+
+    return {
+      EM: "Courses retrieved successfully",
+      EC: 0,
+      DT: processedCourses,
+    };
+  } catch (error) {
+    console.error("Error in findCourseByCategory:", error);
+    return {
+      EM: "Something went wrong in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
+
+
 module.exports = {
   findAllCourses,
   findCourseByID,
   findPopularCourses,
   findCourseSimilar,
+  addNewCourse,
   searchCourse,
+  updateCourse,
+  deleteCourse,
+  findInspireCourses,
+  findCourseByCategory
 };

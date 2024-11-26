@@ -3,6 +3,7 @@ import orderService from "../service/orderService";
 const handleGetOrderByUserID = async (req, res) => {
   try {
     const { userID } = req.params;
+    console.log("userID", userID);
 
     if (!userID) {
       return res.status(400).json({
@@ -11,7 +12,6 @@ const handleGetOrderByUserID = async (req, res) => {
         DT: null,
       });
     }
-
     const result = await orderService.getOrdersByUserId(userID);
 
     // Trả thẳng kết quả từ service mà không bọc thêm
