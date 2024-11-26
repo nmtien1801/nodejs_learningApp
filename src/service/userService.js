@@ -89,29 +89,42 @@ const getTopTeacher = async () => {
 
 const getAllCourseUser = async (userId) => {
   try {
+    // Fetch user and associated courses
     const user = await db.User.findOne({
-      where: {
-        id: userId,
-      },
+      where: { id: userId },
       include: [
-        // user follow
         {
           model: db.UserFollow,
           attributes: ["userID"],
           as: "userFollows",
           include: [
-            // course
             {
               model: db.Course,
-              // attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
               as: "course",
-              // review
               include: [
                 {
                   model: db.Review,
-                  attributes: ["id", "rating", "review", "time"],
-                  as: "Review",
-                  // user
+                  attributes: ["review", "rating"],
+                  as: "Review", // Connect to Review model
+                },
+                {
+                  model: db.Lessons,
+                  attributes: ["title"],
+                  as: "Lesson", // Connect to Lessons model
+                },
+                {
+                  model: db.Orders,
+                  attributes: ["id", "total"],
+                  as: "Orders",
+                  through: {
+                    model: db.OrderDetail,
+                    attributes: ["price"], // Price in OrderDetail
+                  },
+                },
+                {
+                  model: db.UserFollow,
+                  attributes: ["userID"],
+                  as: "UserFollow",
                   include: [
                     {
                       model: db.User,
@@ -120,12 +133,6 @@ const getAllCourseUser = async (userId) => {
                     },
                   ],
                 },
-                // category
-                {
-                  model: db.Category,
-                  attributes: ["name"],
-                  as: "Category",
-                },
               ],
             },
           ],
@@ -133,6 +140,7 @@ const getAllCourseUser = async (userId) => {
       ],
     });
 
+    // Check if user exists
     if (!user) {
       return {
         EM: "User not found",
@@ -141,19 +149,35 @@ const getAllCourseUser = async (userId) => {
       };
     } else {
       const courses = user.userFollows.map((userFollow) => userFollow.course);
-      // ảnh
-      // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
-      if (courses && courses.length > 0) {
-        courses.map((item) => {
-          if (item.image) {
-            item.image = Buffer.from(item.image, "base64").toString("binary");
-          }
-        });
-      }
+
+      // Process each course to calculate average rating, total rating, and total lessons
+      const coursesWithAverageRating = courses.map((course) => {
+        // Get ratings from reviews for each course
+        const ratings = course.Review.map((review) => review.rating);
+
+        // Calculate average rating
+        const averageRating = ratings.length
+          ? (
+              ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+            ).toFixed(1)
+          : 0; // Default to 0 if no reviews
+
+        // Calculate total number of lessons
+        const totalLessons = course.Lesson ? course.Lesson.length : 0;
+
+        // Add new fields to the course object
+        return {
+          ...course.toJSON(),
+          averageRating: parseFloat(averageRating), // Convert to number
+          totalRating: ratings.length, // Total number of ratings
+          totalLessons, // Total number of lessons
+        };
+      });
+
       return {
         EM: "Get all courses of user successfully",
         EC: 0,
-        DT: courses,
+        DT: coursesWithAverageRating,
       };
     }
   } catch (error) {
@@ -169,30 +193,64 @@ const getAllCourseUser = async (userId) => {
 const findCourseUserState1 = async (userId) => {
   try {
     const user = await db.User.findOne({
-      where: {
-        id: userId,
-      },
+      where: { id: userId },
       include: [
-        // user follow
         {
           model: db.UserFollow,
           attributes: ["userID"],
           as: "userFollows",
           include: [
-            // course
             {
               model: db.Course,
               where: {
-                state: 1,
+                state: 1, // Only courses that are "ON GOING"
               },
-              attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
+              attributes: { exclude: ["createdAt", "updatedAt"] }, // Exclude unnecessary fields
               as: "course",
+              include: [
+                // Include Reviews to calculate total ratings and average rating
+                {
+                  model: db.Review,
+                  attributes: ["review", "rating"],
+                  as: "Review", // Connection to the Review model
+                },
+                // Include Lessons to count the total lessons
+                {
+                  model: db.Lessons,
+                  attributes: ["title"],
+                  as: "Lesson", // Connection to Lessons model
+                },
+                // Include Orders and prices through OrderDetail for more details
+                {
+                  model: db.Orders,
+                  attributes: ["id", "total"],
+                  as: "Orders",
+                  through: {
+                    model: db.OrderDetail,
+                    attributes: ["price"], // Include price in OrderDetail
+                  },
+                },
+                // Include UserFollow to get user info
+                {
+                  model: db.UserFollow,
+                  attributes: ["userID"],
+                  as: "UserFollow",
+                  include: [
+                    {
+                      model: db.User,
+                      attributes: ["userName"],
+                      as: "user", // Get userName from User model
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },
       ],
     });
 
+    // Check if user exists
     if (!user) {
       return {
         EM: "User not found",
@@ -201,10 +259,35 @@ const findCourseUserState1 = async (userId) => {
       };
     } else {
       const courses = user.userFollows.map((userFollow) => userFollow.course);
+
+      // Process each course to calculate average rating, total rating, and total lessons
+      const coursesWithDetails = courses.map((course) => {
+        // Get ratings from reviews for each course
+        const ratings = course.Review.map((review) => review.rating);
+
+        // Calculate average rating
+        const averageRating = ratings.length
+          ? (
+              ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+            ).toFixed(1)
+          : 0; // Default to 0 if no reviews
+
+        // Calculate total number of lessons
+        const totalLessons = course.Lesson ? course.Lesson.length : 0;
+
+        // Add new fields to the course object
+        return {
+          ...course.toJSON(),
+          averageRating: parseFloat(averageRating), // Convert to number
+          totalRating: ratings.length, // Total number of ratings
+          totalLessons, // Total number of lessons
+        };
+      });
+
       return {
         EM: "Get all courses of user successfully",
         EC: 0,
-        DT: courses,
+        DT: coursesWithDetails,
       };
     }
   } catch (error) {
@@ -220,30 +303,64 @@ const findCourseUserState1 = async (userId) => {
 const findCourseUserState2 = async (userId) => {
   try {
     const user = await db.User.findOne({
-      where: {
-        id: userId,
-      },
+      where: { id: userId },
       include: [
-        // user follow
         {
           model: db.UserFollow,
           attributes: ["userID"],
           as: "userFollows",
           include: [
-            // course
             {
               model: db.Course,
               where: {
-                state: 2,
+                state: 2, // Only courses that are "COMPLETED"
               },
-              attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
+              attributes: { exclude: ["createdAt", "updatedAt"] }, // Exclude unnecessary fields
               as: "course",
+              include: [
+                // Include Reviews to calculate total ratings and average rating
+                {
+                  model: db.Review,
+                  attributes: ["review", "rating"],
+                  as: "Review", // Connection to the Review model
+                },
+                // Include Lessons to count the total lessons
+                {
+                  model: db.Lessons,
+                  attributes: ["title"],
+                  as: "Lesson", // Connection to Lessons model
+                },
+                // Include Orders and prices through OrderDetail for more details
+                {
+                  model: db.Orders,
+                  attributes: ["id", "total"],
+                  as: "Orders",
+                  through: {
+                    model: db.OrderDetail,
+                    attributes: ["price"], // Include price in OrderDetail
+                  },
+                },
+                // Include UserFollow to get user info
+                {
+                  model: db.UserFollow,
+                  attributes: ["userID"],
+                  as: "UserFollow",
+                  include: [
+                    {
+                      model: db.User,
+                      attributes: ["userName"],
+                      as: "user", // Get userName from User model
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },
       ],
     });
 
+    // Check if user exists
     if (!user) {
       return {
         EM: "User not found",
@@ -252,10 +369,35 @@ const findCourseUserState2 = async (userId) => {
       };
     } else {
       const courses = user.userFollows.map((userFollow) => userFollow.course);
+
+      // Process each course to calculate average rating, total rating, and total lessons
+      const coursesWithDetails = courses.map((course) => {
+        // Get ratings from reviews for each course
+        const ratings = course.Review.map((review) => review.rating);
+
+        // Calculate average rating
+        const averageRating = ratings.length
+          ? (
+              ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+            ).toFixed(1)
+          : 0; // Default to 0 if no reviews
+
+        // Calculate total number of lessons
+        const totalLessons = course.Lesson ? course.Lesson.length : 0;
+
+        // Add new fields to the course object
+        return {
+          ...course.toJSON(),
+          averageRating: parseFloat(averageRating), // Convert to number
+          totalRating: ratings.length, // Total number of ratings
+          totalLessons, // Total number of lessons
+        };
+      });
+
       return {
         EM: "Get all courses of user successfully",
         EC: 0,
-        DT: courses,
+        DT: coursesWithDetails,
       };
     }
   } catch (error) {
