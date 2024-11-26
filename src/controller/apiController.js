@@ -72,8 +72,26 @@ const handleLogout = async (req, res) => {
   }
 };
 
+const changePassword = async (req, res) => {
+  try {
+    let data = await loginRegisterService.changePassword(req.body);
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC,
+      DT: data.DT,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      EM: "error from sever", //error message
+      EC: 2, //error code
+      DT: "", // data
+    });
+  }
+};
+
 module.exports = {
   handleRegister,
   handleLogin,
   handleLogout,
+  changePassword,
 };

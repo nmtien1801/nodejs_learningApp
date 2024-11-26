@@ -328,7 +328,7 @@ const findCourseSimilar = async (id) => {
     return {
       EM: "findCourseSimilar successfully",
       EC: 0,
-      DT: coursesWithAverageRating,
+      DT: coursesWithAverageRating.sort((a, b) => b.totalLessons - a.totalLessons),
     };
   } catch (error) {
     console.error("Error in findCourseSimilar:", error);
@@ -526,6 +526,87 @@ const deleteCourse = async (id) => {
   }
 }
 
+const findInspireCourses = async () => {
+  try {
+    // Lấy danh sách khóa học và thông tin review, rating
+    let courses = await db.Course.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
+      include: [
+        {
+          model: db.Review,
+          attributes: ["review", "rating"],
+          as: "Review", // Kết nối với bảng Review
+        },
+        // lấy ds lesson
+        {
+          model: db.Lessons,
+          attributes: ["title"],
+          as: "Lesson",
+        },
+        // lấy price trong orderDetail
+        {
+          model: db.Orders, // Bao gồm bảng Order qua bảng trung gian
+          attributes: ["id", "total"],
+          as: "Orders", // Khớp với as trong mối quan hệ belongsToMany
+          through: {
+            model: db.OrderDetail, // Chỉ định bảng trung gian
+            attributes: ["price"], // Chỉ lấy giá
+          },
+        },
+        // lấy ra teacher dạy trong userFollow
+        {
+          model: db.UserFollow,
+          attributes: ["userID"],
+          as: "UserFollow",
+          include: [
+            {
+              model: db.User,
+              attributes: ["userName"],
+              as: "user",
+            },
+          ],
+        },
+      ],
+    });
+
+    // Tính trung bình rating cho từng khóa học
+    const coursesWithAverageRating = courses.map((course) => {
+      // Lấy danh sách các rating của review cho khóa học
+      const ratings = course.Review.map((review) => review.rating);
+
+      // Tính trung bình của các rating
+      const averageRating =
+        ratings.length > 0
+          ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+          : 0; // Nếu không có rating nào thì để giá trị mặc định là 0
+
+      // Tổng số bài giảng
+      const totalLessons = course.Lesson ? course.Lesson.length : 0;
+      return {
+        ...course.toJSON(), // Chuyển đổi khóa học thành đối tượng JSON
+        averageRating, // Thêm trường trung bình rating
+        totalRating: ratings.length, // Thêm trường tổng số rating
+        totalLessons, // Thêm trường tổng số bài giảng
+      };
+    }
+    );
+
+    return {
+      EM: "find inspire courses successfully",
+      EC: 0,
+      DT: coursesWithAverageRating.sort((a, b) => b.totalRating - a.totalRating),
+    };
+  }
+  catch (error) {
+    console.error("Error in findInspireCourses:", error);
+    return {
+      EM: "Something went wrong in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+}
+
 module.exports = {
   findAllCourses,
   findCourseByID,
@@ -535,4 +616,5 @@ module.exports = {
   searchCourse,
   updateCourse,
   deleteCourse,
+  findInspireCourses,
 };

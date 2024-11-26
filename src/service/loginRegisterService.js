@@ -63,6 +63,7 @@ const registerNewUser = async (rawUserData) => {
   }
 };
 
+// giải mã password
 const checkPassword = (userPassWord, hashPassWord) => {
   return bcrypt.compareSync(userPassWord, hashPassWord); // true or false
 };
@@ -112,9 +113,52 @@ const handleUserLogin = async (rawData) => {
   }
 };
 
+const changePassword = async (rawData) => {
+  try {
+    let user = await db.User.findOne({
+      where: {
+        email: rawData.email,
+      },
+      raw: true,
+    });
+    if (user) {
+      let isCorrectPassword = checkPassword(rawData.currentPassword, user.password);
+      if (isCorrectPassword === true) {
+        let CheckHashPass = hashPassWord(rawData.newPassword);
+        await db.User.update(
+          { password: CheckHashPass },
+          {
+            where: {
+              email: rawData.email,
+            },
+          }
+        );
+        return {
+          EM: "Change password successfully",
+          EC: 0,
+          DT: "",
+        };
+      }
+    }
+    return {
+      EM: "your email | phone or password is incorrect",
+      EC: 1,
+      DT: "",
+    };
+  } catch (error) {
+    console.log(">>>>check Err change password: ", error);
+    return {
+      EM: "something wrong in service ...",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
+
 module.exports = {
   registerNewUser,
   handleUserLogin,
   hashPassWord,
   checkEmailExists,
+  changePassword,
 };

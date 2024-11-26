@@ -26,12 +26,14 @@ const initApiRoutes = (app) => {
   router.post("/register", apiController.handleRegister);
   router.post("/login", apiController.handleLogin);
   router.post("/logout", apiController.handleLogout);
+  router.post("/changePassword", apiController.changePassword);
 
   // course router
   router.get("/ ", courseController.handleFindCourse);
   router.get("/findAllCourses", courseController.handleFindCourse);
   router.get("/findCourseByID/:id", courseController.handleFindCourseByID);
   router.get("/findPopularCourses", courseController.handleFindPopularCourses);
+  router.get("/findInspireCourses", courseController.findInspireCourses);
   router.get(
     "/findCourseSimilar/:id",
     courseController.handleFindCourseSimilar
@@ -104,6 +106,7 @@ const initApiRoutes = (app) => {
     orderController.handleGetOrderByUserID
   );
 
+  router.post("/buyCourses", orderController.handleBuyCourses);
   return app.use("/api", router);
 };
 
