@@ -5,7 +5,7 @@ const review = require("../models/review");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert(
-      "Reviews",
+      "Reviews", //8 data
       [
         {
           userID: 1,
@@ -22,7 +22,7 @@ module.exports = {
           createdAt: "2024-11-17 10:30:00",
         },
         {
-          userID: 2,
+          userID: 3,
           courseID: 2,
           review:
             "The course was excellent, but I wish it had more advanced content.",
