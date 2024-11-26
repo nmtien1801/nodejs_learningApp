@@ -105,7 +105,6 @@ const getAllCourseUser = async (userId) => {
               model: db.Course,
               attributes: { exclude: ["createdAt", "updatedAt"] }, // Không lấy trường trong exclude
               as: "course",
-
               // review
               include: [
                 {
@@ -121,9 +120,7 @@ const getAllCourseUser = async (userId) => {
                     },
                   ],
                 },
-              ],
-              // category
-              include: [
+                // category
                 {
                   model: db.Category,
                   attributes: ["name"],
