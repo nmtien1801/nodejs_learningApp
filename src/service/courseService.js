@@ -62,6 +62,11 @@ const findAllCourses = async () => {
 
       // Tổng số bài giảng
       const totalLessons = course.Lesson ? course.Lesson.length : 0;
+
+      // ảnh
+      // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
+      course.image = Buffer.from(course.image, "base64").toString("binary");
+
       return {
         ...course.toJSON(), // Chuyển đổi khóa học thành đối tượng JSON
         averageRating, // Thêm trường trung bình rating
@@ -232,6 +237,10 @@ const findPopularCourses = async () => {
       // Tổng số bài giảng
       const totalLessons = course.Lesson ? course.Lesson.length : 0;
 
+      // ảnh
+      // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
+      course.image = Buffer.from(course.image, "base64").toString("binary");
+
       return {
         ...course.toJSON(), // Chuyển đổi khóa học thành đối tượng JSON
         averageRating, // Thêm trường trung bình rating
@@ -248,7 +257,9 @@ const findPopularCourses = async () => {
     return {
       EM: "find popular courses successfully",
       EC: 0,
-      DT: coursesWithAverageRating.sort((a, b) => b.totalLessons - a.totalLessons),
+      DT: coursesWithAverageRating.sort(
+        (a, b) => b.totalLessons - a.totalLessons
+      ),
     };
   } catch (error) {
     console.error("Error in findPopularCourses:", error);
@@ -328,7 +339,9 @@ const findCourseSimilar = async (id) => {
     return {
       EM: "findCourseSimilar successfully",
       EC: 0,
-      DT: coursesWithAverageRating.sort((a, b) => b.totalLessons - a.totalLessons),
+      DT: coursesWithAverageRating.sort(
+        (a, b) => b.totalLessons - a.totalLessons
+      ),
     };
   } catch (error) {
     console.error("Error in findCourseSimilar:", error);
@@ -511,7 +524,7 @@ const deleteCourse = async (id) => {
         courseID: id,
       },
     });
-    
+
     return {
       EM: "deleteCourse successfully",
       EC: 0,
@@ -525,7 +538,7 @@ const deleteCourse = async (id) => {
       DT: "",
     };
   }
-}
+};
 
 const findInspireCourses = async () => {
   try {
@@ -583,22 +596,27 @@ const findInspireCourses = async () => {
 
       // Tổng số bài giảng
       const totalLessons = course.Lesson ? course.Lesson.length : 0;
+
+      // ảnh
+      // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
+      course.image = Buffer.from(course.image, "base64").toString("binary");
+      
       return {
         ...course.toJSON(), // Chuyển đổi khóa học thành đối tượng JSON
         averageRating, // Thêm trường trung bình rating
         totalRating: ratings.length, // Thêm trường tổng số rating
         totalLessons, // Thêm trường tổng số bài giảng
       };
-    }
-    );
+    });
 
     return {
       EM: "find inspire courses successfully",
       EC: 0,
-      DT: coursesWithAverageRating.sort((a, b) => b.totalRating - a.totalRating),
+      DT: coursesWithAverageRating.sort(
+        (a, b) => b.totalRating - a.totalRating
+      ),
     };
-  }
-  catch (error) {
+  } catch (error) {
     console.error("Error in findInspireCourses:", error);
     return {
       EM: "Something went wrong in the service",
@@ -606,7 +624,7 @@ const findInspireCourses = async () => {
       DT: "",
     };
   }
-}
+};
 
 const findCourseByCategory = async (categoryID) => {
   try {
@@ -692,7 +710,6 @@ const findCourseByCategory = async (categoryID) => {
   }
 };
 
-
 module.exports = {
   findAllCourses,
   findCourseByID,
@@ -703,5 +720,5 @@ module.exports = {
   updateCourse,
   deleteCourse,
   findInspireCourses,
-  findCourseByCategory
+  findCourseByCategory,
 };

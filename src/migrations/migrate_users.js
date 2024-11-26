@@ -18,7 +18,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       image: {
-        type: Sequelize.BLOB("long"),
+        type: Sequelize.STRING,
       },
       description: {
         type: Sequelize.STRING,
@@ -34,23 +34,9 @@ module.exports = {
       },
       roleID: {
         type: Sequelize.INTEGER,
-        // references: {
-        //   model: "Role",
-        //   key: "id",
-        // },
-        // onDelete: "SET NULL",
-        // onUpdate: "CASCADE",
+      
       },
-      // projectID: {
-      //   type: Sequelize.INTEGER,
-      //   // references: {
-      //   //   model: "Project",
-      //   //   key: "id",
-      //   // },
-      //   // onDelete: "SET NULL",
-      //   // onUpdate: "CASCADE",
-      // },
-
+    
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
