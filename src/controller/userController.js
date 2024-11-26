@@ -72,6 +72,7 @@ const findCourseUserState2 = async (req, res) => {
     });
   }
 }
+
 module.exports = {
     getTopTeacher,
     getAllCourseUser,

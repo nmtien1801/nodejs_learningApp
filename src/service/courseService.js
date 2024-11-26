@@ -248,7 +248,7 @@ const findPopularCourses = async () => {
     return {
       EM: "find popular courses successfully",
       EC: 0,
-      DT: coursesWithAverageRating,
+      DT: coursesWithAverageRating.sort((a, b) => b.totalLessons - a.totalLessons),
     };
   } catch (error) {
     console.error("Error in findPopularCourses:", error);
