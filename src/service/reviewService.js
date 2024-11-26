@@ -101,7 +101,7 @@ const getCourseReviewsAndAverageRating = async (courseID) => {
 };
 
 // Đánh giá khóa học
-const addReview = async (courseID, userID, rating, review) => {
+const addReview = async (courseID, userID, rating) => {
   try {
     // Kiểm tra xem userId và courseId có hợp lệ không
     if (!userID || !courseID) {
