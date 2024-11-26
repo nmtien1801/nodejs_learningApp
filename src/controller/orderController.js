@@ -3,6 +3,7 @@ import orderService from "../service/orderService";
 const handleGetOrderByUserID = async (req, res) => {
   try {
     const { userID } = req.params;
+    console.log("userID", userID);
 
     if (!userID) {
       return res.status(400).json({
@@ -11,7 +12,6 @@ const handleGetOrderByUserID = async (req, res) => {
         DT: null,
       });
     }
-
     const result = await orderService.getOrdersByUserId(userID);
 
     // Trả thẳng kết quả từ service mà không bọc thêm
@@ -29,7 +29,7 @@ const handleGetOrderByUserID = async (req, res) => {
 
 const handleBuyCourses = async (req, res) => {
   try {
-    let { userID, courseIDs } = req.query;
+    let { userID, courseIDs } = req.body;
 
     // Chuyển đổi courseIDs thành mảng nếu nó là một chuỗi
     if (typeof courseIDs === "string") {
@@ -45,7 +45,7 @@ const handleBuyCourses = async (req, res) => {
     }
 
     const result = await orderService.buyCourses(userID, courseIDs);
-    return res.status(200).json(result); // Return the result from buyCourses
+    return res.status(200).json(result); // Trả về kết quả từ buyCourses
   } catch (error) {
     console.error("Error in handleBuyCourses:", error);
     return res.status(500).json({
@@ -56,7 +56,7 @@ const handleBuyCourses = async (req, res) => {
   }
 };
 
-export default {
+module.exports = {
   handleGetOrderByUserID,
   handleBuyCourses,
 };

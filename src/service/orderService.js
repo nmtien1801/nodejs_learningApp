@@ -23,7 +23,6 @@ const getOrdersByUserId = async (userId) => {
                 "image",
                 "descProject",
                 "categoryID",
-                "lessonID",
                 "state",
                 "price",
               ],
@@ -31,7 +30,7 @@ const getOrdersByUserId = async (userId) => {
                 {
                   model: db.Review,
                   attributes: ["review", "rating"],
-                  as: "Review", // Bao gồm bài đánh giá
+                  as: "Review",
                 },
                 {
                   model: db.Lessons,
@@ -57,54 +56,54 @@ const getOrdersByUserId = async (userId) => {
       ],
     });
 
-    // Xử lý thêm dữ liệu cần thiết
+    if (orders.length === 0) {
+      return {
+        EM: `Không tìm thấy đơn hàng cho userID ${userId}`,
+        EC: 0,
+        DT: [],
+      };
+    }
+
     const ordersWithDetails = orders.map((order) => {
       const orderDetails = order.OrderDetails || [];
-
-      // Tính tổng giá trị đơn hàng
       const totalPrice = orderDetails.reduce(
         (sum, detail) => sum + detail.price,
         0
       );
-
       const totalCourses = orderDetails.length;
 
-      // Lặp qua từng khóa học trong OrderDetails và tính averageRating
       const coursesWithRatings = orderDetails.map((detail) => {
         const course = detail.Course;
         const ratings = course.Review.map((review) => review.rating).filter(
           Boolean
-        ); // Lọc ra các giá trị rating hợp lệ
-        const averageRating =
-          ratings.length > 0
-            ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
-            : 0; // Tính trung bình nếu có đánh giá
+        );
+        const averageRating = ratings.length
+          ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+          : 0;
+        const totalLessons = course.Lesson ? course.Lesson.length : 0;
 
-        const totalLessons = course.Lesson ? course.Lesson.length : 0; // Tính số bài học
-
-        // Trả về khóa học cùng với các thông tin đã tính
         return {
           ...course.toJSON(),
-          averageRating, // Thêm averageRating vào dữ liệu khóa học
+          averageRating,
           totalLessons,
         };
       });
 
       return {
         ...order.toJSON(),
-        totalPrice, // Tổng giá trị của đơn hàng
-        totalCourses, // Tổng số khóa học trong đơn hàng
-        courses: coursesWithRatings, // Thông tin khóa học đã tính toán averageRating
+        totalPrice,
+        totalCourses,
+        courses: coursesWithRatings,
       };
     });
 
     return {
       EM: "Lấy đơn hàng thành công",
       EC: 0,
-      DT: ordersWithDetails, // Trả về đơn hàng có thêm thông tin khóa học
+      DT: ordersWithDetails,
     };
   } catch (error) {
-    console.error("Lỗi khi lấy đơn hàng theo userID:", error);
+    console.error("Error in getOrdersByUserId:", error);
     return {
       EM: "Không thể lấy đơn hàng. Vui lòng thử lại sau.",
       EC: -2,
@@ -112,6 +111,8 @@ const getOrdersByUserId = async (userId) => {
     };
   }
 };
+
+module.exports = { getOrdersByUserId };
 
 const buyCourse = async (userID, courseID) => {
   try {
@@ -171,20 +172,13 @@ const buyCourse = async (userID, courseID) => {
 const buyCourses = async (userID, courseIDs) => {
   try {
     // Đảm bảo courseIDs là mảng
-    if (
-      !userID ||
-      (!Array.isArray(courseIDs) && typeof courseIDs !== "string")
-    ) {
+    if (!userID || !Array.isArray(courseIDs) || courseIDs.length === 0) {
       throw new Error("userID hoặc courseIDs không hợp lệ");
     }
 
     // Nếu courseIDs là chuỗi, chuyển thành mảng
     if (typeof courseIDs === "string") {
       courseIDs = [courseIDs];
-    }
-
-    if (courseIDs.length === 0) {
-      throw new Error("courseIDs không thể rỗng");
     }
 
     console.log(
@@ -197,22 +191,21 @@ const buyCourses = async (userID, courseIDs) => {
     // Tạo đơn hàng mới
     const newOrder = await db.Orders.create({
       userID: userID,
-      total: 0, // Initialize total to 0
+      total: 0, // Khởi tạo tổng là 0
     });
 
     const orderDetails = [];
     let totalPrice = 0;
+    let failedCourses = [];
 
     // Duyệt qua từng khóa học
     for (let courseID of courseIDs) {
       const course = await db.Course.findByPk(courseID);
       if (!course) {
-        return {
-          EM: `Không tìm thấy khóa học với ID: ${courseID}`,
-          EC: -1,
-          DT: null,
-        };
+        failedCourses.push(courseID); // Lưu lại khóa học không tồn tại
+        continue; // Tiếp tục với khóa học tiếp theo
       }
+
       // Thêm chi tiết đơn hàng cho mỗi khóa học
       const orderDetail = await db.OrderDetail.create({
         orderID: newOrder.id,
@@ -223,9 +216,18 @@ const buyCourses = async (userID, courseIDs) => {
       totalPrice += course.price;
     }
 
+    // Nếu có khóa học không hợp lệ
+    if (failedCourses.length > 0) {
+      return {
+        EM: `Không tìm thấy khóa học với ID: ${failedCourses.join(", ")}`,
+        EC: -1,
+        DT: null,
+      };
+    }
+
     // Cập nhật tổng tiền vào bảng Orders
     await newOrder.update({
-      total: totalPrice, // Set the total price
+      total: totalPrice, // Cập nhật tổng tiền
     });
 
     // Trả về kết quả với đơn hàng và chi tiết
