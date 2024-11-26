@@ -347,6 +347,7 @@ const addNewCourse = async (courseData) => {
       name: courseData.name,
       title: courseData.title,
       description: courseData.description,
+      price: courseData.price,
       image: courseData.image,
       descProject: courseData.descriptionProject,
       state: 0, // Chưa bắt đầu

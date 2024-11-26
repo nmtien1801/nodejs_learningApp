@@ -94,6 +94,7 @@ const handleUserLogin = async (rawData) => {
             address: user.address,
             title: user.title,
             image: user.image,
+            role: user.roleID,
           },
         };
       }
