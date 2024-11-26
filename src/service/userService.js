@@ -114,6 +114,7 @@ const getAllCourseUser = async (userId) => {
                       as: "user",
                     },
                   ],
+                  
                 },
                 {
                   model: db.Lessons,
@@ -141,6 +142,12 @@ const getAllCourseUser = async (userId) => {
                     },
                   ],
                 },
+                // category
+                {
+                  model: db.Category,
+                  attributes: ["name"],
+                  as: "Category",
+                }
               ],
             },
           ],

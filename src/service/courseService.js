@@ -328,6 +328,11 @@ const findCourseSimilar = async (id) => {
 
       // Tổng số bài giảng
       const totalLessons = course.Lesson ? course.Lesson.length : 0;
+
+      // ảnh
+      // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
+      course.image = Buffer.from(course.image, "base64").toString("binary");
+
       return {
         ...course.toJSON(), // Chuyển đổi khóa học thành đối tượng JSON
         averageRating, // Thêm trường trung bình rating
@@ -450,6 +455,10 @@ const searchCourse = async (keyword) => {
           : 0;
 
       const totalLessons = courseJSON.Lesson?.length || 0;
+
+      // ảnh
+      // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
+      courseJSON.image = Buffer.from(courseJSON.image, "base64").toString("binary");
 
       return {
         ...courseJSON,
