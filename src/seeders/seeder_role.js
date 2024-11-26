@@ -3,7 +3,7 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert(
-      "Roles",
+      "Roles", //2 data
       [
         {
           name: "Giáo viên",
@@ -11,10 +11,7 @@ module.exports = {
         },
         {
           name: "Học Sinh",
-          url: "/findAllCourses",
-        },{
-          name: "Học Sinh",
-          url: "/findCourseByState/:state",
+          url: "/user/",
         },
       ],
       {}

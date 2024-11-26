@@ -65,10 +65,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false, // Không cho phép categoryID null
       },
-      lessonID: {
-        type: DataTypes.INTEGER,
-        allowNull: true, // Có thể null nếu khóa học không có bài học
-      },
+      // lessonID: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: true, // Có thể null nếu khóa học không có bài học
+      // },
       state: {
         type: DataTypes.INTEGER,
         allowNull: false, // Trạng thái không thể null

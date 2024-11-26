@@ -41,15 +41,15 @@ module.exports = {
         // onDelete: "SET NULL",
         // onUpdate: "CASCADE",
       },
-      projectID: {
-        type: Sequelize.INTEGER,
-        // references: {
-        //   model: "Project",
-        //   key: "id",
-        // },
-        // onDelete: "SET NULL",
-        // onUpdate: "CASCADE",
-      },
+      // projectID: {
+      //   type: Sequelize.INTEGER,
+      //   // references: {
+      //   //   model: "Project",
+      //   //   key: "id",
+      //   // },
+      //   // onDelete: "SET NULL",
+      //   // onUpdate: "CASCADE",
+      // },
 
       createdAt: {
         allowNull: false,

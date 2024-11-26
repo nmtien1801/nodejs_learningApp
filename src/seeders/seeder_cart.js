@@ -4,6 +4,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     // Chèn dữ liệu mẫu vào bảng Carts
     await queryInterface.bulkInsert("Carts", [
+      // 8 data
       {
         userID: 1,
         courseID: 2,
@@ -23,6 +24,18 @@ module.exports = {
       {
         userID: 2,
         courseID: 4,
+      },
+      {
+        userID: 3,
+        courseID: 5,
+      },
+      {
+        userID: 4,
+        courseID: 1,
+      },
+      {
+        userID: 5,
+        courseID: 2,
       },
     ]);
   },
