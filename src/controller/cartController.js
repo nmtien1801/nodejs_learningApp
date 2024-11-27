@@ -26,8 +26,6 @@ const getCartByUser = async (req, res) => {
 const addCourseToCart = async (req, res) => {
   const { userID, courseID } = req.query; // Lấy tham số từ query string
 
-  console.log("userID from query:", userID); // Kiểm tra giá trị của userID
-
   // Kiểm tra nếu userID hoặc courseID không có giá trị
   if (!userID || !courseID) {
     return res.status(400).json({

@@ -28,8 +28,6 @@ const findReviewByCourseID = async (courseID) => {
       ],
     });
 
-    console.log("reviews:", reviews);
-
     return {
       EM: "Find all reviews successfully",
       EC: 0,
@@ -107,9 +105,6 @@ const addReview = async (courseID, userID, rating) => {
     if (!userID || !courseID) {
       throw new Error("userId hoặc courseId không hợp lệ");
     }
-
-    // Log giá trị userID và courseID để kiểm tra
-    console.log("Adding review - userID:", userID, "courseID:", courseID);
 
     // Tạo một đánh giá mới
     const newReview = await db.Review.create({

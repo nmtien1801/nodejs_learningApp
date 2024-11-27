@@ -78,7 +78,6 @@ const handleUserLogin = async (rawData) => {
     });
     if (user) {
       let isCorrectPassword = checkPassword(rawData.password, user.password);
-      console.log("user login: ", user);
       // không bị lỗi
       if (isCorrectPassword === true) {
         return {

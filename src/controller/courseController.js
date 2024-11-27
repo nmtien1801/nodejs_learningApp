@@ -3,7 +3,6 @@ import courseService from "../service/courseService";
 const handleFindCourse = async (req, res) => {
   try {
     let data = await courseService.findAllCourses();
-    console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -23,7 +22,6 @@ const handleFindCourseByID = async (req, res) => {
   try {
     let id = req.params.id;
     let data = await courseService.findCourseByID(id);
-    console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -42,7 +40,6 @@ const handleFindCourseByID = async (req, res) => {
 const handleFindPopularCourses = async (req, res) => {
   try {
     let data = await courseService.findPopularCourses();
-    console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -61,7 +58,6 @@ const handleFindPopularCourses = async (req, res) => {
 const handleFindCourseSimilar = async (req, res) => {
   try {
     let data = await courseService.findCourseSimilar(req.params.id);
-    console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -80,7 +76,6 @@ const handleFindCourseSimilar = async (req, res) => {
 const handleSearchCourse = async (req, res) => {
   try {
     const keyword = req.params.keyword;
-    console.log("keyword:", keyword);
 
     if (!keyword || keyword.trim() === "") {
       return res.status(400).json({
@@ -110,7 +105,6 @@ const handleSearchCourse = async (req, res) => {
 const addNewCourse = async (req, res) => {
   try {
     let data = await courseService.addNewCourse(req.body);
-    console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -129,7 +123,6 @@ const addNewCourse = async (req, res) => {
 const updateCourse = async (req, res) => {
   try {
     let data = await courseService.updateCourse(req.body);
-    console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -149,7 +142,6 @@ const deleteCourse = async (req, res) => {
   try {
     let id = req.params.id;
     let data = await courseService.deleteCourse(id);
-    console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -168,7 +160,6 @@ const deleteCourse = async (req, res) => {
 const findInspireCourses = async (req, res) => {
   try {
     let data = await courseService.findInspireCourses();
-    console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -187,7 +178,6 @@ const findInspireCourses = async (req, res) => {
 const findCourseByCategory = async (req, res) => {
   try {
     let data = await courseService.findCourseByCategory(req.params.CategoryID);
-    console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,

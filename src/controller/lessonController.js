@@ -3,7 +3,6 @@ import lessonService from "../service/lessonService";
 const findAllLesson = async (req, res) => {
   try {
     let data = await lessonService.findAllLesson();
-    console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -23,7 +22,6 @@ const getLessonByCourse = async (req, res) => {
   try {
     let courseID = req.params.courseID;
     let data = await lessonService.getLessonByCourse(courseID);
-    console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -43,7 +41,6 @@ const createLesson = async (req, res) => {
   try {
     let { lessonID, title, courseID, name, urlVideo } = req.body;
     let data = await lessonService.createLesson(lessonID, title, courseID, name, urlVideo);
-    console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -63,7 +60,6 @@ const deleteVideo = async (req, res) => {
   try {
     let videoID = req.params.id;
     let data = await lessonService.deleteVideo(videoID);
-    console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,
@@ -83,7 +79,6 @@ const updateLesson = async (req, res) => {
   try {
     let { videoID, name, urlVideo } = req.body;
     let data = await lessonService.updateLesson(videoID, name, urlVideo);
-    console.log("data:", data);
     return res.status(200).json({
       EM: data.EM,
       EC: data.EC,

@@ -116,13 +116,6 @@ const addCourseToCart = async (userID, courseID) => {
       throw new Error("userID or courseID is missing or invalid");
     }
 
-    // Log giá trị userID và courseID để kiểm tra
-    console.log(
-      "Adding course to cart - userID:",
-      userID,
-      "courseID:",
-      courseID
-    );
 
     // Kiểm tra xem khóa học đã có trong giỏ hàng chưa
     const existingCart = await db.Cart.findOne({
@@ -142,8 +135,6 @@ const addCourseToCart = async (userID, courseID) => {
       userID: userID,
       courseID: courseID, // Thêm khóa học vào giỏ hàng
     });
-
-    console.log("Course added successfully to cart:", newCart);
 
     return newCart; // Trả về kết quả
   } catch (error) {

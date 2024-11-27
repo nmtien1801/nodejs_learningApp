@@ -121,14 +121,6 @@ const buyCourse = async (userID, courseID) => {
       throw new Error("userId hoặc courseId không hợp lệ");
     }
 
-    // Log giá trị userID và courseID để kiểm tra
-    console.log(
-      "Adding course to cart - userID:",
-      userID,
-      "courseID:",
-      courseID
-    );
-
     // Tìm khóa học theo courseId
     const course = await db.Course.findByPk(courseID);
 
@@ -180,13 +172,6 @@ const buyCourses = async (userID, courseIDs) => {
     if (typeof courseIDs === "string") {
       courseIDs = [courseIDs];
     }
-
-    console.log(
-      "Adding courses to cart - userID:",
-      userID,
-      "courseIDs:",
-      courseIDs
-    );
 
     // Tạo đơn hàng mới
     const newOrder = await db.Orders.create({

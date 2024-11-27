@@ -12,7 +12,6 @@ const findCourseByTeacherID_Categories = async (teacherID) => {
 
     // Extract courseIDs
     let courseIDs = courses.map((course) => course.courseID);
-    console.log("courseIDs:", courseIDs);
 
     // If no courses found, return a response
     if (courseIDs.length === 0) {
