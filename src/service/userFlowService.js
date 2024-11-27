@@ -34,6 +34,16 @@ const findCourseByTeacherID_Categories = async (teacherID) => {
       ],
     });
 
+     // ảnh
+    // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
+    if (courseDetails && courseDetails.length > 0) {
+      courseDetails.map((item) => {
+        if (item.image) {
+          item.image = Buffer.from(item.image, "base64").toString("binary"); 
+        }
+      });
+    }
+
     return {
       EM: "find teacher successfully",
       EC: 0,
@@ -129,6 +139,9 @@ const getCourseOfUser = async (userID) => {
       const isState1 = course.state === 1 ? 1 : 0; // Đang học
       const isState2 = course.state === 2 ? 1 : 0; // Đã hoàn thành
 
+        // ảnh
+        // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
+        course.image = Buffer.from(course.image, "base64").toString("binary");
       return {
         userID: userCourse.userID,
         courseID: course.id,

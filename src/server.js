@@ -10,8 +10,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:8081", // Địa chỉ frontend
-    methods: ["GET", "POST"],       // Phương thức được phép
+    origin: "*", // Cho phép tất cả kết nối
   },
 });
 
@@ -27,20 +26,16 @@ configCORS(app);
 initApiRoutes(app);
 
 // ====================== chatbox ======================
-// Sự kiện kết nối
 io.on("connection", (socket) => {
-  console.log("User connected:", socket.id);
+  console.log("User connected");
 
-  // Lắng nghe tin nhắn từ client
-  socket.on("sendMessage", (message) => {
-    console.log("Message received:", message);
-    // Phát tin nhắn cho tất cả client
-    io.emit("receiveMessage", message);
+  socket.on("send_message", (data) => {
+    console.log("Message received: ", data);
+    io.emit("receive_message", data); // Gửi tin nhắn lại cho tất cả client
   });
 
-  // Xử lý ngắt kết nối
   socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
+    console.log("User disconnected");
   });
 });
 

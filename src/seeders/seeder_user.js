@@ -16,7 +16,6 @@ module.exports = {
           phone: "0967273063",
           address: "123 Main St, City, Country",
           roleID: 2, // 1: Admin, 2: User
-          // projectID: 1,
         },
         {
           userName: "MinhTien",
@@ -30,7 +29,6 @@ module.exports = {
           phone: "0967273063",
           address: "1/15/4 Nguyễn Thái Sơn, Phường 3, Gò Vấp, TP HCM",
           roleID: 1, // 1: Admin, 2: User
-          // projectID: 1,
         },
         {
           userName: "AliceJohnson",
@@ -44,7 +42,6 @@ module.exports = {
           address: "789 Oak St, City, Country",
           title: "Data Scientist",
           roleID: 2, // Assuming 3: Data Scientist
-          // projectID: 3,
         },
         {
           userName: "BobBrown",
@@ -58,7 +55,6 @@ module.exports = {
           address: "101 Pine St, City, Country",
           title: "Backend Developer",
           roleID: 2, // Assuming 4: Backend Developer
-          // projectID: 4,
         },
         {
           userName: "CharlieDavis",
@@ -71,7 +67,6 @@ module.exports = {
           address: "202 Maple St, City, Country",
           title: "UI/UX Designer",
           roleID: 2, // Assuming 5: UI/UX Designer
-          // projectID: 5,
         },
         {
           userName: "Hoa",
@@ -84,7 +79,6 @@ module.exports = {
           address: "202 Maple St, City, Country",
           title: "UI/UX Designer",
           roleID: 1, // Assuming 5: UI/UX Designer
-          // projectID: 5,
         },
         {
           userName: "Ly Ly",
@@ -97,7 +91,6 @@ module.exports = {
           address: "202 Maple St, City, Country",
           title: "UI/UX Designer",
           roleID: 1, // Assuming 5: UI/UX Designer
-          // projectID: 5,
         },
       ],
       {}
