@@ -24,11 +24,11 @@ const getCartByUser = async (req, res) => {
 
 // Add course to cart
 const addCourseToCart = async (req, res) => {
-  const { userID, courseID } = req.query; // Lấy tham số từ query string
+  const { userID, courseID } = req.query;
 
-  console.log("userID from query:", userID); // Kiểm tra giá trị của userID
+  console.log("userID from query:", userID);
 
-  // Kiểm tra nếu userID hoặc courseID không có giá trị
+  // Kiểm tra nếu thiếu tham số
   if (!userID || !courseID) {
     return res.status(400).json({
       EM: "userID or courseID is missing",
@@ -37,22 +37,16 @@ const addCourseToCart = async (req, res) => {
     });
   }
 
-  try {
-    // Gọi hàm addCourseToCart từ service với tham số lấy từ query
-    let data = await cartService.addCourseToCart(userID, courseID);
+  // Gọi service để xử lý logic thêm khóa học vào giỏ hàng
+  const result = await cartService.addCourseToCart(userID, courseID);
 
-    return res.status(200).json({
-      EM: "Course added to cart successfully",
-      EC: 0,
-      DT: data,
-    });
-  } catch (error) {
-    console.log("Error:", error);
-    return res.status(500).json({
-      EM: "Error from server",
-      EC: -1,
-      DT: "",
-    });
+  // Phản hồi với trạng thái từ service
+  if (result.EC === 0) {
+    return res.status(200).json(result); // Thành công
+  } else if (result.EC === 1) {
+    return res.status(200).json(result); // Khóa học đã tồn tại
+  } else {
+    return res.status(500).json(result); // Lỗi khác
   }
 };
 
