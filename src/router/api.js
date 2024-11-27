@@ -43,6 +43,9 @@ const initApiRoutes = (app) => {
   router.put("/updateCourse", courseController.updateCourse);
   router.delete("/deleteCourse/:id", courseController.deleteCourse);
   router.get("/findCourseByCategory/:CategoryID", courseController.findCourseByCategory);
+  router.put("/updateSaveCourse", courseController.updateSaveCourse); // state = 4  -> teacher khi tạo mới = 3
+  router.put("/updateBuyCourse", courseController.updateBuyCourse);  // state = 0 
+  router.put("/updateGoIngCourse", courseController.updateGoIngCourse); // state = 2
 
   // 1. review router
   router.get(
@@ -64,8 +67,8 @@ const initApiRoutes = (app) => {
     "/findCourseByTeacherID_Categories/:teacherID",
     userFlowController.handleFindCourseByTeacherID_Categories
   );
-
   router.get("/getCourseOfUser/:userID", userFlowController.getCourseOfUser);
+  router.get("/getSaveCourseOfUser/:userID", userFlowController.getSaveCourseOfUser);
 
   // 4. user router
   router.get("/getTopTeacher", userController.getTopTeacher);

@@ -368,7 +368,7 @@ const addNewCourse = async (courseData) => {
       price: courseData.price,
       image: courseData.image,
       descProject: courseData.descriptionProject,
-      state: 0, // Chưa bắt đầu
+      state: 3, // chưa ai mua và chưa có ai lưu
       categoryID: courseData.categoryID,
     });
 
@@ -463,7 +463,9 @@ const searchCourse = async (keyword) => {
 
       // ảnh
       // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
-      courseJSON.image = Buffer.from(courseJSON.image, "base64").toString("binary");
+      courseJSON.image = Buffer.from(courseJSON.image, "base64").toString(
+        "binary"
+      );
 
       return {
         ...courseJSON,
@@ -498,7 +500,7 @@ const updateCourse = async (courseData) => {
         description: courseData.description,
         image: courseData.image,
         descProject: courseData.descriptionProject,
-        state: 0, // Chưa bắt đầu
+        // state: 0, // Chưa bắt đầu
         categoryID: courseData.categoryID,
       },
       {
@@ -724,6 +726,99 @@ const findCourseByCategory = async (categoryID) => {
   }
 };
 
+const updateSaveCourse = async (courseData) => {
+  try {
+    // Cập nhật thông tin khóa học, nếu state đang là 3 thì cập nhật 4 và ngược lại
+    let updatedCourse = await db.Course.update(
+      {
+        state: courseData.state === 4 ? 3 : 4,
+      },
+      {
+        where: {
+          id: courseData.courseID,
+        },
+      }
+    );
+
+    if (updatedCourse)
+      return {
+        EM:
+          courseData.state === 4
+            ? "unsave course successfully"
+            : "save course successfully",
+        EC: 0,
+        DT: courseData.state === 4 ? false : true,
+      };
+  } catch (error) {
+    console.error("Error in updateSaveCourse service:", error);
+    return {
+      EM: "err updateSaveCourse in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
+
+const updateBuyCourse = async (courseData) => {
+  try {
+    // Cập nhật thông tin khóa học, nếu state đang là 1 thì cập nhật 2 và ngược lại
+    let updatedCourse = await db.Course.update(
+      {
+        state: 0, // đã mua
+      },
+      {
+        where: {
+          id: courseData.courseID,
+        },
+      }
+    );
+
+    if (updatedCourse)
+      return {
+        EM: "successfully",
+        EC: 0,
+        DT: [],
+      };
+  } catch (error) {
+    console.error("Error in updateBuyCourse service:", error);
+    return {
+      EM: "err updateBuyCourse in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
+
+const updateGoIngCourse = async (courseData) => {
+  try {
+    // Cập nhật thông tin khóa học, nếu state đang là 0 thì cập nhật 1 và ngược lại
+    let updatedCourse = await db.Course.update(
+      {
+        state: 1,
+      },
+      {
+        where: {
+          id: courseData.courseID,
+        },
+      }
+    );
+
+    if (updatedCourse)
+      return {
+        EM: "updateGoIngCourse successfully",
+        EC: 0,
+        DT: [],
+      };
+  } catch (error) {
+    console.error("Error in updateGoIngCourse service:", error);
+    return {
+      EM: "err updateGoIngCourse in the service",
+      EC: -2,
+      DT: "",
+    };
+  }
+};
+
 module.exports = {
   findAllCourses,
   findCourseByID,
@@ -735,4 +830,7 @@ module.exports = {
   deleteCourse,
   findInspireCourses,
   findCourseByCategory,
+  updateSaveCourse,
+  updateBuyCourse,
+  updateGoIngCourse,
 };

@@ -203,6 +203,60 @@ const findCourseByCategory = async (req, res) => {
   }
 }
 
+const updateSaveCourse = async (req, res) => {
+  try {
+    let data = await courseService.updateSaveCourse(req.body);
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC,
+      DT: data.DT,
+    });
+  } catch (error) {
+    console.error("Error in updateSaveCourse:", error);
+    return res.status(500).json({
+      EM: "Error from server",
+      EC: -1,
+      DT: "",
+    });
+  }
+}
+
+const updateBuyCourse = async (req, res) => {
+  try {
+    let data = await courseService.updateBuyCourse(req.body);
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC,
+      DT: data.DT,
+    });
+  } catch (error) {
+    console.error("Error in updateBuyCourse:", error);
+    return res.status(500).json({
+      EM: "Error from server",
+      EC: -1,
+      DT: "",
+    });
+  }
+}
+
+const updateGoIngCourse = async (req, res) => {
+  try {
+    let data = await courseService.updateGoIngCourse(req.body);
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC,
+      DT: data.DT,
+    });
+  } catch (error) {
+    console.error("Error in updateGoIngCourse:", error);
+    return res.status(500).json({
+      EM: "Error from server",
+      EC: -1,
+      DT: "",
+    });
+  }
+}
+
 module.exports = {
   handleFindCourse,
   handleFindCourseByID,
@@ -214,5 +268,8 @@ module.exports = {
   updateCourse,
   deleteCourse,
   findCourseByCategory,
+  updateSaveCourse,
+  updateBuyCourse,
+  updateGoIngCourse,
 };
 //done
