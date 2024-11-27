@@ -229,7 +229,7 @@ const findPopularCourses = async () => {
           : 0; // Nếu không có rating nào thì để giá trị mặc định là 0
 
       // Lấy thông tin giá (price) từ OrderDetail
-      const price = course.Orders[0]?.OrderDetail?.price || null; // Nếu không có sẽ trả về null
+      const price = course.price || null; // Nếu không có sẽ trả về null
 
       // Lấy tên giảng viên (userName) từ UserFollow
       const instructor = course.UserFollow[0]?.user?.userName || "Unknown"; // Nếu không có sẽ trả về "Unknown"
