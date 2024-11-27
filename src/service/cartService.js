@@ -116,45 +116,49 @@ const getCartByUserID = async (userID) => {
 // Add course to cart
 const addCourseToCart = async (userID, courseID) => {
   try {
-    // Kiểm tra xem userID và courseID có hợp lệ không
+    // Kiểm tra nếu userID hoặc courseID không hợp lệ
     if (!userID || !courseID) {
-      throw new Error("userID or courseID is missing or invalid");
+      return {
+        EC: -1,
+        EM: "userID or courseID is missing or invalid",
+        DT: "",
+      };
     }
 
-    // Log giá trị userID và courseID để kiểm tra
-    console.log(
-      "Adding course to cart - userID:",
-      userID,
-      "courseID:",
-      courseID
-    );
-
-    // Kiểm tra xem khóa học đã có trong giỏ hàng chưa
+    // Kiểm tra nếu khóa học đã tồn tại trong giỏ hàng
     const existingCart = await db.Cart.findOne({
       where: {
         userID: userID,
-        courseID: courseID, // Kiểm tra để tránh trùng lặp khóa học trong giỏ hàng
+        courseID: courseID,
       },
     });
 
     if (existingCart) {
-      // Nếu khóa học đã có trong giỏ hàng, ném lỗi
-      throw new Error("The course is already in the cart");
+      return {
+        EC: 1,
+        EM: "The course is already in the cart",
+        DT: existingCart, // Trả về dữ liệu khóa học đã tồn tại
+      };
     }
 
-    // Nếu chưa có, thêm khóa học vào giỏ hàng
-    const newCart = await db.Cart.create({
+    // Nếu chưa tồn tại, thêm mới khóa học vào giỏ hàng
+    const data = await db.Cart.create({
       userID: userID,
-      courseID: courseID, // Thêm khóa học vào giỏ hàng
+      courseID: courseID,
     });
 
-    console.log("Course added successfully to cart:", newCart);
-
-    return newCart; // Trả về kết quả
+    return {
+      EC: 0,
+      EM: "Course added to cart successfully",
+      DT: data, // Trả về dữ liệu khóa học vừa thêm
+    };
   } catch (error) {
-    // Nếu có lỗi, log và ném lỗi ra ngoài
     console.error("Error in addCourseToCart:", error);
-    throw error; // Ném lỗi để phía caller có thể xử lý
+    return {
+      EC: -1,
+      EM: "An unexpected error occurred",
+      DT: "",
+    };
   }
 };
 
