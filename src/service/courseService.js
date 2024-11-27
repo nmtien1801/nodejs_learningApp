@@ -698,6 +698,12 @@ const findCourseByCategory = async (categoryID) => {
 
       const totalLessons = courseJSON.Lesson?.length || 0;
 
+      // ảnh
+      // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
+      courseJSON.image = Buffer.from(courseJSON.image, "base64").toString(
+        "binary"
+      );
+
       return {
         ...courseJSON,
         averageRating,
