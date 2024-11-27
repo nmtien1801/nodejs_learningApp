@@ -90,7 +90,12 @@ const getCartByUserID = async (userID) => {
         name: courseJSON.name,
         title: courseJSON.title,
         description: courseJSON.description,
-        image: courseJSON.image,
+        // ảnh
+        image:
+          // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
+          (courseJSON.image = Buffer.from(courseJSON.image, "base64").toString(
+            "binary"
+          )),
         price: courseJSON.price,
         averageRating,
         totalRating: ratings.length,

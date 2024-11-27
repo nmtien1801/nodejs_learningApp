@@ -2,7 +2,6 @@
 import db from "../models/index"; // Import models from sequelize
 require("dotenv").config();
 const { Op } = require("sequelize");
-
 const getOrdersByUserId = async (userId) => {
   try {
     const orders = await db.Orders.findAll({
@@ -20,7 +19,7 @@ const getOrdersByUserId = async (userId) => {
                 "name",
                 "title",
                 "description",
-                "image",
+                "image", // Blob image field
                 "descProject",
                 "categoryID",
                 "state",
@@ -56,6 +55,7 @@ const getOrdersByUserId = async (userId) => {
       ],
     });
 
+    // Kiểm tra nếu không có đơn hàng
     if (orders.length === 0) {
       return {
         EM: `Không tìm thấy đơn hàng cho userID ${userId}`,
@@ -64,6 +64,7 @@ const getOrdersByUserId = async (userId) => {
       };
     }
 
+    // Xử lý đơn hàng và các chi tiết liên quan
     const ordersWithDetails = orders.map((order) => {
       const orderDetails = order.OrderDetails || [];
       const totalPrice = orderDetails.reduce(
@@ -74,16 +75,26 @@ const getOrdersByUserId = async (userId) => {
 
       const coursesWithRatings = orderDetails.map((detail) => {
         const course = detail.Course;
+
+        // Xử lý rating
         const ratings = course.Review.map((review) => review.rating).filter(
           Boolean
         );
         const averageRating = ratings.length
           ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
           : 0;
+
+        // Tổng số bài học
         const totalLessons = course.Lesson ? course.Lesson.length : 0;
+
+        // Chuyển đổi ảnh từ blob sang base64
+        const base64Image = course.image
+          ? Buffer.from(course.image, "base64").toString("binary")
+          : null;
 
         return {
           ...course.toJSON(),
+          image: base64Image, // Gắn ảnh đã chuyển đổi
           averageRating,
           totalLessons,
         };
