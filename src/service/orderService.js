@@ -88,13 +88,14 @@ const getOrdersByUserId = async (userId) => {
         const totalLessons = course.Lesson ? course.Lesson.length : 0;
 
         // Chuyển đổi ảnh từ blob sang base64
-        const base64Image = course.image
-          ? Buffer.from(course.image, "base64").toString("binary")
-          : null;
+        // const base64Image = course.image
+        //   ? Buffer.from(course.image, "base64").toString("binary")
+        //   : null;
 
         return {
           ...course.toJSON(),
-          image: base64Image, // Gắn ảnh đã chuyển đổi
+          // image: base64Image, // Gắn ảnh đã chuyển đổi
+          // ima
           averageRating,
           totalLessons,
         };
