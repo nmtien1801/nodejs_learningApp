@@ -443,6 +443,11 @@ const searchCourse = async (keyword) => {
     const processedCourses = courses.map((course) => {
       const courseJSON = course.toJSON();
 
+      // Convert image to Base64 if it's a Blob or Buffer
+      if (courseJSON.image) {
+        courseJSON.image = courseJSON.image.toString("base64");
+      }
+
       const ratings = courseJSON.Review?.map((review) => review.rating) || [];
       const averageRating =
         ratings.length > 0
@@ -600,7 +605,7 @@ const findInspireCourses = async () => {
       // ảnh
       // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
       course.image = Buffer.from(course.image, "base64").toString("binary");
-      
+
       return {
         ...course.toJSON(), // Chuyển đổi khóa học thành đối tượng JSON
         averageRating, // Thêm trường trung bình rating
