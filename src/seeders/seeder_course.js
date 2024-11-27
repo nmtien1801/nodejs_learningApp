@@ -55,7 +55,7 @@ module.exports = {
           description:
             "Convallis in semper laoreet nibh leo. Vivamus malesuada ipsum pulvinar non rutrum risus dui, risus. Purus massa velit iaculis tincidunt tortor, risus, scelerisque risus... See more",
           image: "",
-          state: 0, // chưa bắt đầu
+          state: 4, // đã lưu trữ -> chưa mua
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
           price: 15,
@@ -66,7 +66,7 @@ module.exports = {
           description:
             "Convallis in semper laoreet nibh leo. Vivamus malesuada ipsum pulvinar non rutrum risus dui, risus. Purus massa velit iaculis tincidunt tortor, risus, scelerisque risus... See more",
           image: "",
-          state: 0, // chưa bắt đầu
+          state: 3, // chưa lưu trữ -> chưa mua
           descProject: "Web development project on front-end technologies ...",
           categoryID: 1,
           price: 16,
