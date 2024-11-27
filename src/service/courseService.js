@@ -448,6 +448,11 @@ const searchCourse = async (keyword) => {
     const processedCourses = courses.map((course) => {
       const courseJSON = course.toJSON();
 
+      // Convert image to Base64 if it's a Blob or Buffer
+      if (courseJSON.image) {
+        courseJSON.image = courseJSON.image.toString("base64");
+      }
+
       const ratings = courseJSON.Review?.map((review) => review.rating) || [];
       const averageRating =
         ratings.length > 0
