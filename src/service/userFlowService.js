@@ -193,13 +193,15 @@ const getCourseOfUser = async (userID) => {
 
 const getSaveCourseOfUser = async (userID) => {
   try {
+    // console.log("userID", userID, "state", state);
+
     const userCourses = await db.UserFollow.findAll({
       where: { userID: userID },
       attributes: ["id", "userID"],
       include: [
         {
           model: db.Course,
-          where: { state: 4 }, // Chỉ lấy khóa học đã lưu chưa mua
+          where: { state: { [Op.in]: [4, 1, 2] } }, // Chỉ lấy khóa học đã lưu chưa mua
           attributes: ["id", "name", "title", "state", "image", "price"],
           as: "course",
           include: [
@@ -271,7 +273,7 @@ const getSaveCourseOfUser = async (userID) => {
       // tổng số Trạng thái khóa học
       const isState1 = course.state === 1 ? 1 : 0; // Đang học
       const isState2 = course.state === 2 ? 1 : 0; // Đã hoàn thành
-
+      const isState4 = course.state === 4 ? 1 : 0; // Đã lưu chưa mua
       // ảnh
       // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
       course.image = Buffer.from(course.image, "base64").toString("binary");
@@ -291,6 +293,7 @@ const getSaveCourseOfUser = async (userID) => {
         state: course.state,
         isState1: isState1,
         isState2: isState2,
+        isState4: isState4,
       };
     });
 
@@ -314,7 +317,7 @@ const getSaveCourseOfUser = async (userID) => {
       },
     };
   } catch (error) {
-    console.error("Error in getSaveCourseOfUser:", error);
+    console.error("Error in getSaveCourseOfUser service:", error);
     return {
       EM: "Something went wrong in the service",
       EC: -2,
