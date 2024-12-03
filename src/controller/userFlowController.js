@@ -40,12 +40,13 @@ const getCourseOfUser = async (req, res) => {
       DT: "",
     });
   }
-}
+};
 
 const getSaveCourseOfUser = async (req, res) => {
   try {
     let userID = req.params.userID;
-    let data = await userFlowService.getSaveCourseOfUser(userID);
+    let state = req.body.state;
+    let data = await userFlowService.getSaveCourseOfUser(userID, state);
 
     return res.status(200).json({
       EM: data.EM,
@@ -60,10 +61,10 @@ const getSaveCourseOfUser = async (req, res) => {
       DT: "",
     });
   }
-}
+};
 
 module.exports = {
   handleFindCourseByTeacherID_Categories,
   getCourseOfUser,
-  getSaveCourseOfUser
+  getSaveCourseOfUser,
 };

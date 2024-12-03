@@ -34,12 +34,12 @@ const findCourseByTeacherID_Categories = async (teacherID) => {
       ],
     });
 
-     // ảnh
+    // ảnh
     // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
     if (courseDetails && courseDetails.length > 0) {
       courseDetails.map((item) => {
         if (item.image) {
-          item.image = Buffer.from(item.image, "base64").toString("binary"); 
+          item.image = Buffer.from(item.image, "base64").toString("binary");
         }
       });
     }
@@ -139,9 +139,9 @@ const getCourseOfUser = async (userID) => {
       const isState1 = course.state === 1 ? 1 : 0; // Đang học
       const isState2 = course.state === 2 ? 1 : 0; // Đã hoàn thành
 
-        // ảnh
-        // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
-        course.image = Buffer.from(course.image, "base64").toString("binary");
+      // ảnh
+      // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
+      course.image = Buffer.from(course.image, "base64").toString("binary");
       return {
         userID: userCourse.userID,
         courseID: course.id,
@@ -151,7 +151,10 @@ const getCourseOfUser = async (userID) => {
         averageRating: averageRating,
         price:
           course.Orders.length > 0 ? course.Orders[0].OrderDetail.price : 0,
-        teacherName: course.UserFollow.length > 0 ? course.UserFollow[0].user.userName : "",
+        teacherName:
+          course.UserFollow.length > 0
+            ? course.UserFollow[0].user.userName
+            : "",
         totalLessons: totalLessons,
         state: course.state,
         isState1: isState1,
@@ -188,7 +191,7 @@ const getCourseOfUser = async (userID) => {
   }
 };
 
-const getSaveCourseOfUser = async (userID) => {
+const getSaveCourseOfUser = async (userID, state) => {
   try {
     const userCourses = await db.UserFollow.findAll({
       where: { userID: userID },
@@ -196,8 +199,8 @@ const getSaveCourseOfUser = async (userID) => {
       include: [
         {
           model: db.Course,
-          where: { state: 4 }, // Chỉ lấy khóa học đã lưu chưa mua
-          attributes: ["id", "name", "title", "state", "image"],
+          where: { state: state }, // Chỉ lấy khóa học đã lưu chưa mua
+          attributes: ["id", "name", "title", "state", "image", "price"],
           as: "course",
           include: [
             {
@@ -269,9 +272,9 @@ const getSaveCourseOfUser = async (userID) => {
       const isState1 = course.state === 1 ? 1 : 0; // Đang học
       const isState2 = course.state === 2 ? 1 : 0; // Đã hoàn thành
 
-        // ảnh
-        // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
-        course.image = Buffer.from(course.image, "base64").toString("binary");
+      // ảnh
+      // chuyển từ blop lưu dưới DB -> base64 để hiển thị ảnh FE
+      course.image = Buffer.from(course.image, "base64").toString("binary");
       return {
         userID: userCourse.userID,
         courseID: course.id,
@@ -279,9 +282,11 @@ const getSaveCourseOfUser = async (userID) => {
         courseTitle: course.title,
         courseImage: course.image,
         averageRating: averageRating,
-        price:
-          course.Orders.length > 0 ? course.Orders[0].OrderDetail.price : 0,
-        teacherName: course.UserFollow.length > 0 ? course.UserFollow[0].user.userName : "",
+        price: course.price,
+        teacherName:
+          course.UserFollow.length > 0
+            ? course.UserFollow[0].user.userName
+            : "",
         totalLessons: totalLessons,
         state: course.state,
         isState1: isState1,
