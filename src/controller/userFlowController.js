@@ -45,8 +45,7 @@ const getCourseOfUser = async (req, res) => {
 const getSaveCourseOfUser = async (req, res) => {
   try {
     let userID = req.params.userID;
-    let state = req.body.state;
-    let data = await userFlowService.getSaveCourseOfUser(userID, state);
+    let data = await userFlowService.getSaveCourseOfUser(userID);
 
     return res.status(200).json({
       EM: data.EM,

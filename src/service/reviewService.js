@@ -111,8 +111,6 @@ const addReview = async (courseID, userID, rating) => {
       courseID: courseID,
       userID: userID,
       rating: rating,
-      // review: review,
-      // time: new Date(),
     });
 
     // Trả về thông báo thành công

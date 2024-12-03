@@ -191,7 +191,7 @@ const getCourseOfUser = async (userID) => {
   }
 };
 
-const getSaveCourseOfUser = async (userID, state) => {
+const getSaveCourseOfUser = async (userID) => {
   try {
     const userCourses = await db.UserFollow.findAll({
       where: { userID: userID },
@@ -199,7 +199,7 @@ const getSaveCourseOfUser = async (userID, state) => {
       include: [
         {
           model: db.Course,
-          where: { state: state }, // Chỉ lấy khóa học đã lưu chưa mua
+          where: { state: 4 }, // Chỉ lấy khóa học đã lưu chưa mua
           attributes: ["id", "name", "title", "state", "image", "price"],
           as: "course",
           include: [
